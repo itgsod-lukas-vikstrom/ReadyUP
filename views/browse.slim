@@ -1,0 +1,41 @@
+
+.container
+
+  p
+
+
+  .row
+    .panel.panel-primary.filterable
+      .panel-heading
+        h3.panel-title Rooms
+        .pull-right
+
+      table.table
+        thead
+          tr.filters
+            th
+              input.form-control disabled="" placeholder="Group name" type="text" /
+            th
+              input.form-control disabled="false" placeholder=("Group size") type="text" /
+            th
+              input.form-control disabled="" placeholder=("Game") type="text" /
+            th
+              input.form-control disabled="" placeholder="Language" type="text" /
+        tbody
+          - for doge in @rooms
+            - if doge.publicity == 'public'
+              tr
+                td
+                  a href="room/#{doge.url}"
+                              p #{doge.name}
+
+                td
+                  a href="room/#{doge.url}"
+                              p #{doge.size}
+                td
+                  a href="room/#{doge.url}"
+                              p #{doge.game}
+                td
+                  a href="room/#{doge.url}"
+                              p #{doge.language}
+

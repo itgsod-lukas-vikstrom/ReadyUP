@@ -1,0 +1,38 @@
+require 'bundler'
+
+namespace :db do
+
+  task :seed do
+
+    # Load gems from Gemfile
+    Bundler.require
+
+    # Load all models etc
+    require_relative 'config/environment'
+
+    # Update the database schema
+    DataMapper.auto_migrate!
+
+    # Add seed data to database
+    require './db/seed'
+    Seeder.seed
+  end
+end
+
+namespace :test do
+
+  require 'rspec/core/rake_task'
+
+  RSpec::Core::RakeTask.new('acceptance') do |t|
+    t.pattern = ['test/acceptance/*_spec.rb']
+  end
+
+  RSpec::Core::RakeTask.new('routes') do |t|
+    t.pattern = ['test/routes/*_test.rb']
+  end
+
+  RSpec::Core::RakeTask.new('models') do |t|
+    t.pattern = ['test/models/*_test.rb']
+  end
+
+end

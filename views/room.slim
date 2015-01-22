@@ -1,0 +1,14 @@
+.title
+  h1 #{@rooms.name}
+.list
+  - for doge in @rooms.user
+    p #{doge.name}
+
+
+.checkin
+  form action='/checkin' method='post'
+    input type='text' name='name'
+    input type='text' name='time'
+    br
+    input type='submit' value='Check IN!'
+    input type="hidden" name="id" value="#{@rooms.id}"

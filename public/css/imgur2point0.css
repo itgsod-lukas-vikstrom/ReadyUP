@@ -1,0 +1,51 @@
+
+.filterable {
+    margin-top: 15px;
+}
+.filterable .panel-heading .pull-right {
+    margin-top: -20px;
+}
+.filterable .filters input[disabled] {
+    background-color: transparent;
+    border: none;
+    cursor: auto;
+    box-shadow: none;
+    padding: 0;
+    height: auto;
+}
+.filterable .filters input[disabled]::-webkit-input-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]::-moz-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]:-ms-input-placeholder {
+    color: #333;
+}
+
+.navbar {
+    margin-right: 40px;
+}
+.panel {
+    width: 50%;
+
+    margin-left: 25%;
+}
+.doge{
+    margin-left: 30%;
+    margin-right: auto;
+}
+.checkin{
+    margin-left: 75%;
+}
+
+.list{
+    margin-left: 40%;
+}
+.btn-toolbar{
+    width: 400px;
+    margin-left: 400px;
+}
+.title {
+    margin-left: 470px;
+}
