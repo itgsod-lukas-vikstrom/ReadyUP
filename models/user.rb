@@ -7,6 +7,6 @@ class User
   property :login_provider, String, :required => true
   property :login_key, String, :required => true
 
-  has n, :room, :through => Resource
+  belongs_to :room
 
 end
