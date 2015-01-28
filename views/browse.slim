@@ -23,7 +23,7 @@
               input.form-control disabled="" placeholder="Language" type="text" /
         tbody
           - for doge in @rooms
-            - if doge.publicity == 'public'
+            - if doge.visibility == 'public'
               tr
                 td
                   a href="room/#{doge.url}"

@@ -2,28 +2,15 @@ class App < Sinatra::Base
   enable :sessions
 
   get '/' do
-    redirect '/index'
+    redirect '/browse'
   end
 
   get '/room/:url' do |url|
     @rooms = Room.first(:url => url)
     @hund = RoomUser.all(room_id: @rooms.id)
     @user = User.first(id: @hund.user)
-   # @rooms.user[0].time.each do |katt|
-   #   katt.split(":")
-   #   if Time.new.hour >= katt.to_f && Time.new.min >= katt[1]
-   #     puts "YOMOSHOW"
-    #end
-   # timesplit = params['time'].split(":")
-
-  #end
     slim :room
 
-
-  end
-
-  get '/index' do
-    slim :index
   end
 
   get '/create' do
@@ -31,7 +18,7 @@ class App < Sinatra::Base
 
   end
   post '/createroom' do
-    Room.create(url: rand(36**10).to_s(36), name: params['groupname'], size: params['size'], publicity: params['publicity'], game: params['game'], language: params['language'])
+    Room.create(url: rand(36**10).to_s(36), name: params['groupname'], size: params['size'], visibility: params['publicity'], game: params['game'], language: params['language'])
     newroom = Room.first(name: params['groupname'])
     redirect "room/#{newroom.url}"
   end
@@ -43,12 +30,18 @@ class App < Sinatra::Base
 
   end
   post '/checkin' do
-    User.create(name: params['name'], time: params['time'])
+    User.create(name: params['name'],admin: "no", login_provider: "stum", login_key: "alft4")
     @dogecoin = User.first(:name => params['name'])
-    RoomUser.create(room_id: params['id'], user_id: @dogecoin.id)
+    p "--XXXXXXXX--"
+    #p params['name']
+
+   RoomUser.create(room_id: params['id'], user_id: @dogecoin.id)
+
     redirect back
 
 
   end
+  post 'remove_checking' do
 
+  end
 end
