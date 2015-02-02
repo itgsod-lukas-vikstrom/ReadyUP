@@ -1,15 +1,10 @@
 
 .container
-
-  p
-
-
   .row
     .panel.panel-primary.filterable
       .panel-heading
         h3.panel-title Rooms
         .pull-right
-
       table.table
         thead
           tr.filters
@@ -22,20 +17,20 @@
             th
               input.form-control disabled="" placeholder="Language" type="text" /
         tbody
-          - for doge in @rooms
-            - if doge.visibility == 'public'
+          - for room in @rooms
+            - if room.visibility == 'public'
               tr
                 td
-                  a href="room/#{doge.url}"
-                              p #{doge.name}
+                  a href="room/#{room.url}"
+                              p #{room.name}
 
                 td
-                  a href="room/#{doge.url}"
-                              p #{doge.size}
+                  a href="room/#{room.url}"
+                              p #{room.size}
                 td
-                  a href="room/#{doge.url}"
-                              p #{doge.game}
+                  a href="room/#{room.url}"
+                              p #{room.game}
                 td
-                  a href="room/#{doge.url}"
-                              p #{doge.language}
+                  a href="room/#{room.url}"
+                              p #{room.language}
 

@@ -1,12 +1,9 @@
 .title
-  h1 id = "dogedoge" #{@rooms.name}
+  h1 #{@rooms.name}
 .list
-  - for doge in @rooms.user
-    p #{doge.name}
-
+  - for person in @rooms.user
+    p #{person.name}
 h2 id = 'countdown'
-
-
 
 .checkin
   form action='/checkin' method='post'

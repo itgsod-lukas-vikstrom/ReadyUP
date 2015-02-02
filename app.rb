@@ -7,8 +7,8 @@ class App < Sinatra::Base
 
   get '/room/:url' do |url|
     @rooms = Room.first(:url => url)
-    @hund = RoomUser.all(room_id: @rooms.id)
-    @user = User.first(id: @hund.user)
+    @roomusers = RoomUser.all(room_id: @rooms.id)
+    @user = User.first(id: @roomusers.user)
     slim :room
 
   end
@@ -23,19 +23,16 @@ class App < Sinatra::Base
     redirect "room/#{newroom.url}"
   end
   get '/browse' do
+
     @rooms = Room.all
-    @kaht = (Room.all).length
-    @members = User.all(id: @rooms[0].id).length
+    #@members = User.first(id: @roomusers.user).length
     slim :browse
 
   end
   post '/checkin' do
-    User.create(name: params['name'],admin: "no", login_provider: "stum", login_key: "alft4")
-    @dogecoin = User.first(:name => params['name'])
-    p "--XXXXXXXX--"
-    #p params['name']
-
-   RoomUser.create(room_id: params['id'], user_id: @dogecoin.id)
+    User.create(name: params['name'],admin: 't', login_provider: "stum", login_key: "alft4")
+    @createduser = User.first(:name => params['name'])
+    RoomUser.create(room_id: params['id'], user_id: @createduser.id)
 
     redirect back
 
