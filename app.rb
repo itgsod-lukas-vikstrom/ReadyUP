@@ -6,9 +6,11 @@ class App < Sinatra::Base
   end
 
   get '/room/:url' do |url|
-    @rooms = Room.first(:url => url)
-    @roomusers = RoomUser.all(room_id: @rooms.id)
-    @user = User.first(id: @roomusers.user)
+    @rooms = Room.first(:url => url) #hämtar informationen om rummet
+    @roomusers = RoomUser.all(room_id: @rooms.id) #hämtar id på alla som har checkat in i det rummet.
+    @users = @rooms.user
+    p @users
+    p "______ZX__X_X_X_ZX_Z_"
     slim :room
 
   end
@@ -18,27 +20,34 @@ class App < Sinatra::Base
 
   end
   post '/createroom' do
-    Room.create(url: rand(36**10).to_s(36), name: params['groupname'], size: params['size'], visibility: params['publicity'], game: params['game'], language: params['language'])
+    Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
+                size: params['size'], public: params['publicity'],
+                game: params['game'], language: params['language'])
     newroom = Room.first(name: params['groupname'])
     redirect "room/#{newroom.url}"
   end
   get '/browse' do
-
     @rooms = Room.all
-    #@members = User.first(id: @roomusers.user).length
     slim :browse
 
   end
   post '/checkin' do
-    User.create(name: params['name'],admin: 't', login_provider: "stum", login_key: "alft4")
-    @createduser = User.first(:name => params['name'])
-    RoomUser.create(room_id: params['id'], user_id: @createduser.id)
+    @rooms = Room.first(id: params['id'])
 
-    redirect back
+    if @rooms.user.length < @rooms.size
+      User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", time: params['time'])
+      @createduser = User.first(:name => params['name'])
+      RoomUser.create(room_id: params['id'], user_id: @createduser.id)
+      redirect back
+    else redirect '/error'
 
-
+    end
   end
   post 'remove_checking' do
 
   end
+  error do
+    raise "ERROR!!!!!!"
+  end
+
 end

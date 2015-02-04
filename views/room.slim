@@ -1,14 +1,20 @@
+
 .title
   h1 #{@rooms.name}
+
 .list
   - for person in @rooms.user
-    p #{person.name}
-h2 id = 'countdown'
+    p #{person.name} |#{person.time}|
+    /*p id="time" #{person.time}
+    /*p#countdown
+
+
+
 
 .checkin
   form action='/checkin' method='post'
-    input type='text' name='name'
-    input type='text' name='time'
+    input type='text' name='name' placeholder="Name"
+    input type='text' name='time' placeholder="Time(N/A)"
     br
     input type='submit' value='Check IN!'
     input type="hidden" name="id" value="#{@rooms.id}"

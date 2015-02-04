@@ -18,7 +18,7 @@
               input.form-control disabled="" placeholder="Language" type="text" /
         tbody
           - for room in @rooms
-            - if room.visibility == 'public'
+            - if room.public == true
               tr
                 td
                   a href="room/#{room.url}"
@@ -26,11 +26,15 @@
 
                 td
                   a href="room/#{room.url}"
-                              p #{room.size}
+                              p #{room.user.length} / #{room.size}
                 td
                   a href="room/#{room.url}"
                               p #{room.game}
                 td
                   a href="room/#{room.url}"
                               p #{room.language}
+                td
+                  a href="room/#{room.url}"
+                    p
+
 

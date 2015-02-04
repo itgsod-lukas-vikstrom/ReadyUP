@@ -1,8 +1,9 @@
 .doge
   form action='/createroom' method='post'
     .radio
-      input type="radio" name="publicity" value="public"Public
-      input type="radio" name="publicity" value="private"Private
+      input type="radio" name="publicity" value="true"Public
+      br
+      input type="radio" name="publicity" value="false"Private
     br
     input type='text' name='groupname' placeholder='Groupname'
     input type='text' name='size' placeholder='Group size'
