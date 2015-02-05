@@ -8,7 +8,7 @@
 .Members
     - for person in @users
       span #{person.name}
-      span id='time' #{}
+      span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until}
       p
 
 
