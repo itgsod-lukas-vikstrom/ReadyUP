@@ -1,6 +1,7 @@
 
 .title
-  h1 #{@rooms.name}
+  marquee behavior="scroll" direction="left"  #{@rooms.name}
+  //h1 #{@rooms.name}
 
 
 .Members
@@ -14,8 +15,8 @@
 
 .checkin
   form action='/checkin' method='post'
-    input type='text' name='name' placeholder="Name"
-    select name ='hour'
+    input type='text' name='name' id='name' placeholder="Name"
+    select name ='hour' id='hour'
       option value="00"  00
       option value="01"  01
       option value="02"  02
@@ -39,8 +40,9 @@
       option value="20"  20
       option value="21"  21
       option value="22"  22
-      option value="23"  2
-    select name ='minute'
+      option value="23"  23
+
+    select name ='minute' id='minute'
       option value="00"  00
       option value="05"  05
       option value="10"  10
