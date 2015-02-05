@@ -42,6 +42,7 @@ class App < Sinatra::Base
     @roomusers = RoomUser.all(room_id: @room.id) #hämtar id på alla som har checkat in i det rummet.
     @users = @room.user
 
+
     slim :room
 
   end
@@ -67,9 +68,9 @@ class App < Sinatra::Base
 
     if @room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
-      User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", time: time)
+      User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", )
       @createduser = User.first(:name => params['name'])
-      RoomUser.create(room_id: params['id'], user_id: @createduser.id)
+      RoomUser.create(room_id: params['id'], user_id: @createduser.id,leader: TRUE, ready_until: time)
       redirect back
     else redirect '/error'
 
