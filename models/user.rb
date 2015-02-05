@@ -8,6 +8,5 @@ class User
   property :login_key, String#, :required => true
   property :time, String
 
-  has n, :room, :through => Resource
-
+  has n, :room, :through => :roomusers
 end
