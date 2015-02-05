@@ -1,6 +1,10 @@
 class App < Sinatra::Base
   enable :sessions
 
+  use OmniAuth::Builder do
+    provider :steam, "7086038880F2FF8DEA78BB990C3FCB3C"
+  end
+
   get '/' do
     redirect '/browse'
   end
@@ -43,9 +47,17 @@ class App < Sinatra::Base
 
     end
   end
+
   post 'remove_checking' do
 
   end
+
+  post "/auth/steam/callback" do
+    content_type "text/plain"
+    request.env["omniauth.auth"].info.to_hash
+    redirect back
+  end
+
   error do
     raise "ERROR!!!!!!"
   end
