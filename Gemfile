@@ -7,6 +7,8 @@ gem 'data_mapper'
 gem 'dm-sqlite-adapter', :group => :development
 gem 'slim'
 gem 'tilt', '~> 1.4.1' #temporary fix
+gem 'omniauth-openid'
+gem 'omniauth-steam'
 
 group :test do
   gem 'rspec'
