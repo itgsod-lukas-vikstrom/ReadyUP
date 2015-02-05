@@ -34,7 +34,8 @@ class App < Sinatra::Base
     @rooms = Room.first(id: params['id'])
 
     if @rooms.user.length < @rooms.size
-      User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", time: params['time'])
+      time = params['hour'] + ':' + params['minute']
+      User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", time: time)
       @createduser = User.first(:name => params['name'])
       RoomUser.create(room_id: params['id'], user_id: @createduser.id)
       redirect back
