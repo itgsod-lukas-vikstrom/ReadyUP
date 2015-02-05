@@ -10,9 +10,9 @@ class App < Sinatra::Base
   end
 
   get '/room/:url' do |url|
-    @rooms = Room.first(:url => url) #hämtar informationen om rummet
-    @roomusers = RoomUser.all(room_id: @rooms.id) #hämtar id på alla som har checkat in i det rummet.
-    @users = @rooms.user
+    @room = Room.first(:url => url) #hämtar informationen om rummet
+    @roomusers = RoomUser.all(room_id: @room.id) #hämtar id på alla som har checkat in i det rummet.
+    @users = @room.user
 
     slim :room
 
@@ -35,9 +35,9 @@ class App < Sinatra::Base
 
   end
   post '/checkin' do
-    @rooms = Room.first(id: params['id'])
+    @room = Room.first(id: params['id'])
 
-    if @rooms.user.length < @rooms.size
+    if @room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
       User.create(name: params['name'],admin: 'false', login_provider: "", login_key: "", time: time)
       @createduser = User.first(:name => params['name'])
@@ -52,10 +52,10 @@ class App < Sinatra::Base
 
   end
 
-  post "/auth/steam/callback" do
-    content_type "text/plain"
-    request.env["omniauth.auth"].info.to_hash
-    redirect back
+  post ":room_id/auth/steam/callback" do |room_id|
+    @steam_info = request.env["omniauth.auth"]
+    @room_id = room_id
+    redirect '/login'
   end
 
   error do

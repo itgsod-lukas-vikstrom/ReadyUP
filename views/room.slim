@@ -1,6 +1,6 @@
 
 .title
-  marquee behavior="scroll" direction="left"  #{@rooms.name}
+  marquee behavior="scroll" direction="left"  #{@room.name}
   //h1 #{@rooms.name}
 
 
@@ -59,6 +59,6 @@ a href="/auth/steam"  Authenticate with Steam
       option value="00"  00
     br
     input type='submit' value='Check IN!'
-    input type="hidden" name="id" value="#{@rooms.id}"
+    input type="hidden" name="id" value="#{@room.id}"
 
 //input type='text' name='time' placeholder="Time(N/A)"
