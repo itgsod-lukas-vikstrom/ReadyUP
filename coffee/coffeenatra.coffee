@@ -1,9 +1,11 @@
 $ ->
-  hund = document.getElementById("time")
-  CountDownTimer hund.innerHTML, "countdown"
 
-  setInterval
-CountDownTimer = (time, id) ->
+ #CountDownTimer hund.innerHTML, "countdown"
+
+  #setInterval 'autoRefresh_div', 5000
+
+
+###CountDownTimer = (time, id) ->
   selector = document.getElementById(id)
   end = new Date("02/02/2015 #{time}" )
   _second = 1000
@@ -23,8 +25,15 @@ CountDownTimer = (time, id) ->
     if minutes < 10
       minutes = "0" + minutes
     selector.innerHTML = ("#{hours}:#{minutes}:#{seconds}");
-  timer = setInterval showRemaining, 1000
+  timer = setInterval showRemaining, 1000###
 
-Popup = (name, time) ->
-  alert 'Name = ' + name + ' URL = ' + url
-  return
+setInterval () ->
+  $("#Members").load(location.href + " #Members");
+  console.log('reloaded')
+,2000
+
+#setInterval 'autoRefresh()', 5000
+
+#Popup = (name, time) ->
+ # alert 'Name = ' + name + ' URL = ' + url
+ # return

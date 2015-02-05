@@ -9,8 +9,7 @@ class App < Sinatra::Base
     @rooms = Room.first(:url => url) #hämtar informationen om rummet
     @roomusers = RoomUser.all(room_id: @rooms.id) #hämtar id på alla som har checkat in i det rummet.
     @users = @rooms.user
-    p @users
-    p "______ZX__X_X_X_ZX_Z_"
+
     slim :room
 
   end

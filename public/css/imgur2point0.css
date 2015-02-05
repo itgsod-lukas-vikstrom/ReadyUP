@@ -39,8 +39,10 @@
     margin-left: 75%;
 }
 
-.list{
+.Members{
     margin-left: 40%;
+    width: 150px;
+    height: 95%;
 }
 .btn-toolbar{
     width: 400px;
