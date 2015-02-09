@@ -1,7 +1,7 @@
 
 .title
-  //marquee behavior="scroll" direction="left"  #{@room.name}
-  h1 #{@room.name}
+  marquee behavior="scroll" direction="left"  #{@room.name}
+  //h1 #{@room.name}
   h1  #{@users.length} / #{@room.size}
 
 
@@ -18,47 +18,22 @@ a href="/auth/steam"  Authenticate with Steam
 .checkin
   form action='/checkin' method='post'
     input type='text' name='name' id='name' placeholder="Name"
-    select name ='hour' id='hour'
-      option value="00"  00
-      option value="01"  01
-      option value="02"  02
-      option value="03"  03
-      option value="04"  04
-      option value="05"  05
-      option value="06"  06
-      option value="07"  07
-      option value="08"  08
-      option value="09"  09
-      option value="10"  10
-      option value="11"  11
-      option selected="selected" value="12"  12
-      option value="13"  13
-      option value="14"  14
-      option value="15"  15
-      option value="16"  16
-      option value="17"  17
-      option value="18"  18
-      option value="19"  19
-      option value="20"  20
-      option value="21"  21
-      option value="22"  22
-      option value="23"  23
 
-    select name ='minute' id='minute'
-      option value="00"  00
-      option value="05"  05
-      option value="10"  10
-      option value="15"  15
-      option value="20"  20
-      option value="25"  25
-      option value="30"  30
-      option value="35"  35
-      option value="40"  40
-      option value="45"  45
-      option value="50"  50
-      option value="55"  55
-      option value="00"  00
-    br
+      select name ='hour' id='hour'
+        - x = 0
+        - 24.times do
+          - y = "%02d" % x
+          option value="#{y}"  #{y}
+          - x += 1
+
+      select name ='minute' id='minute'
+        - x = 0
+        - 12.times do
+          - y = "%02d" % x
+          option value="#{y}"  #{y}
+          - x += 5
+
+      br
     input type='submit' value='Check IN!'
     input type="hidden" name="id" value="#{@room.id}"
 
