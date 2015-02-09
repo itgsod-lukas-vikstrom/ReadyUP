@@ -1,15 +1,14 @@
+div id="Members"
+  .title
+    h1 #{@room.name}
+    h1  #{@users.length} / #{@room.size}
 
-.title
-  //marquee behavior="scroll" direction="left"  #{@room.name}
-  h1 #{@room.name}
-  h1  #{@users.length} / #{@room.size}
 
 
-.Members
-    - for person in @users
-      span #{person.name}
-      span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.strftime("%H:%M")}
-      p
+  - for person in @users
+    span #{person.name}
+    span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.strftime("%H:%M")}
+    p
 
 
 a href="/auth/steam"  Authenticate with Steam

@@ -1,4 +1,5 @@
 $ ->
+  $("#Members").load(location.href + " #Members")
 
  #CountDownTimer hund.innerHTML, "countdown"
 
@@ -28,7 +29,7 @@ $ ->
   timer = setInterval showRemaining, 1000###
 
 setInterval () ->
-  $("#Members").load(location.href + " #Members");
+  $("#Members").load(location.href + " #Members")
   console.log('reloaded')
 ,2000
 
