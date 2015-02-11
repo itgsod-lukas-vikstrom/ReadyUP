@@ -9,11 +9,8 @@ div id="Members"
     span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.strftime("%H:%M")}
     p
 
-
-a href="/auth/steam"  Authenticate with Steam
-
-
 .checkin
+  p #{@name}
   form action='/checkin' method='post'
     input type='text' name='name' id='name' placeholder="Name"
 
