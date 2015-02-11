@@ -6,7 +6,7 @@ class Seeder
   end
 
   def self.room
-    Room.create(url: 'ddhwbz', name: 'dogecoin', size: 5, public: 'public', game: 'Dota2', language: 'Swedish')
+    Room.create(url: 'ddhwbz', name: 'dogecoin', size: 5, public: TRUE, game: 'Dota2', language: 'Swedish')
   end
   def self.user
     User.create(name: 'GaemMastar', admin: true, login_provider: 'Steam', login_key: '%hjh34hhg2_jkh5j2' )
