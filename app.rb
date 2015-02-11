@@ -5,35 +5,44 @@ class App < Sinatra::Base
     provider :steam, '7086038880F2FF8DEA78BB990C3FCB3C'
   end
 
-  use Warden::Manager do |config|
-    config.serialize_into_session{|user| user.id }
-    config.serialize_from_session{|id| User.get(id) }
-    config.scope_defaults :default,
-                          strategies: [:auth],
-                          action: 'auth/unauthenticated'
-    config.failure_app = self
-  end
-
-  Warden::Manager.before_failure do |env, opts|
-    env['REQUEST_METHOD'] = 'POST'
-  end
-
-  Warden::Strategies.add(:auth) do
-
-    def authenticate!
-      user = User.first(login_key: @steam_info.uid)
-
-      if user.nil?
-        puts "FAILED"
-        fail!("The user does not exist.")
-      elsif user.authenticate(@steam_info.uid)
-        success!(user)
-        puts "SUCCESS MOTHERFUCKER"
-      else
-        puts "FAILED"
-        fail!("Could not log in")
-      end
+  helpers do
+    def member?
+      session[:member]
     end
+  end
+
+  get '/public' do
+    "This is the public page - everybody is welcome!"
+  end
+
+  get '/private' do
+    halt(401,'Not Authorized') unless member?
+    "This is the private page - members only"
+  end
+
+  get '/login/:login_provider' do |login_provider|
+    redirect to("/auth/steam") if session[:member] == nil && login_provider == 'steam'
+    session[:member] = true
+    redirect back
+  end
+
+  post '/auth/steam/callback' do
+    env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
+    if User.first(login_key: env['omniauth.auth']['uid']).nil?
+      User.create(name: env['omniauth.auth']['info']['nickname'], admin: 'f', login_provider: 'Steam', login_key: env['omniauth.auth']['uid'])
+    end
+    session[:name] = env['omniauth.auth']['info']['nickname']
+    session[:login_key] = env['omniauth.auth']['uid']
+    redirect '/login/steam'
+  end
+
+  get '/auth/failure' do
+    params[:message]
+  end
+
+  get '/logout' do
+    session.clear
+    redirect back
   end
 
   get '/' do
@@ -44,10 +53,9 @@ class App < Sinatra::Base
     @room = Room.first(:url => url) #hämtar informationen om rummet
     @roomusers = RoomUser.all(room_id: @room.id) #hämtar id på alla som har checkat in i det rummet.
     @users = @room.user
-
-
+    @name = session[:name]
+    p session[:member]
     slim :room
-
   end
 
   get '/create' do
@@ -82,15 +90,6 @@ class App < Sinatra::Base
 
   post '/remove_checkin' do
 
-  end
-
-  post "/auth/steam/callback" do
-    @steam_info = request.env["omniauth.auth"]
-    if User.first(login_key: @steam_info.uid).nil?
-      User.create(name: @steam_info['info'].nickname, admin: 'f', login_provider: 'Steam', login_key: @steam_info.uid)
-    end
-    env['warden'].authenticate!
-    redirect '/browse' #'/auth/login'
   end
 
   error do
