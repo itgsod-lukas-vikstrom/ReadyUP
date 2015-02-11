@@ -43,14 +43,11 @@
   }, 2000);
 
   fullroom = function(runs) {
-    var audio;
     if (window.currentusers === window.roomsize && runs === 0) {
+      document.getElementById('siren').play();
       alert("Alla är redo");
-      audio = new Audio("/alertljud.mp3");
-      audio.play();
+      return window.runs = 1;
     }
-    window.runs = 1;
-    return console.log("hej");
   };
 
 }).call(this);

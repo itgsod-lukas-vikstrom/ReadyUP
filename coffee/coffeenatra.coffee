@@ -41,12 +41,10 @@ setInterval () ->
 
 fullroom = (runs) ->
   if window.currentusers == window.roomsize && runs == 0
+    document.getElementById('siren').play();
     alert("Alla är redo")
-    audio = new Audio("/alertljud.mp3")
-    audio.play()
+    window.runs = 1
 
-  window.runs = 1
-  console.log("hej")
 #setInterval 'autoRefresh()', 5000
 
 #Popup = (name, time) ->

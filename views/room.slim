@@ -2,8 +2,8 @@ div id="Members"
   .title
     h1 #{@room.name}
     h1  #{@users.length} / #{@room.size}
-    h1 id="current" #{@users.length}
-    h1 id="roomsize" #{@room.size}
+    p id="current" #{@users.length}
+    p id="roomsize" #{@room.size}
 
 
   - for person in @users
