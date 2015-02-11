@@ -9,4 +9,12 @@ class User
   property :time, String
 
   has n, :room, :through => :roomusers
+
+  def authenticate(login_key)
+    if self.login_key == login_key
+      true
+    else
+      false
+    end
+  end
 end
