@@ -21,8 +21,10 @@ body
               .span6
                 h1.muted ReadyUP
               .span4.offset2 style="margin-top:15px;"
-                button.btn.pull-right type="button"  Sign In
-                button.btn.pull-right type="button" onclick="location.href='/login/steam'" Authenticate with Steam
+                - if session[:member] == nil
+                  button.btn.pull-right type="button" onclick="location.href='/login/steam'" Authenticate with Steam
+                - else
+                  p Welcome #{session[:name]}
           .navbar
             .navbar-inner
               .container

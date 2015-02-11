@@ -9,3 +9,5 @@ db/*.sqlite
 db/app-dev.sqlite
 
 *.sqlite
+
+*.sqlite
