@@ -13,7 +13,6 @@ div id="Members"
 
 
 .checkin
-  p #{@name}
 
 
 
@@ -22,26 +21,27 @@ div id="Members"
 
 
   form action='/checkin' method='post'
-    input type='text' name='name' id='name' placeholder="Name"
+    p #{@name}
 
-      select  name ='hour' id='hour'
+    select name ='hour' id='hour'
 
-        - x = 0
-        - 24.times do
-          - y = "%02d" % x
-          option value="#{y}"  #{y}
+      - x = 0
+      - 24.times do
+        - y = "%02d" % x
+        option value="#{y}"  #{y}
 
-          - x += 1
+        - x += 1
 
-      select name ='minute' id='minute'
-        - x = 0
-        - 12.times do
-          - y = "%02d" % x
-          option value="#{y}"  #{y}
-          - x += 5
+    select name ='minute' id='minute'
+      - x = 0
+      - 12.times do
+        - y = "%02d" % x
+        option value="#{y}"  #{y}
+        - x += 5
 
-      br
-    input type='submit' value='Check IN!'
+    br
+    - if session[:member] == true
+      input type='submit' value='Check IN!'
     input type="hidden" name="id" value="#{@room.id}"
 
 //input type='text' name='time' placeholder="Time(N/A)"
