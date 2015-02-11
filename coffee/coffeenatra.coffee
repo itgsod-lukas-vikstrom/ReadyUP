@@ -1,7 +1,7 @@
 $ ->
   $("#Members").load(location.href + " #Members")
-
- #CountDownTimer hund.innerHTML, "countdown"
+  window.runs = 0
+#CountDownTimer hund.innerHTML, "countdown"
 
   #setInterval 'autoRefresh_div', 5000
 
@@ -31,7 +31,19 @@ $ ->
 setInterval () ->
   $("#Members").load(location.href + " #Members")
   console.log('reloaded')
+  window.currentusers = document.getElementById("current").innerHTML
+  window.roomsize = document.getElementById("roomsize").innerHTML
+  fullroom(window.runs)
+  if window.currentusers != window.roomsize
+    window.runs = 0
+
 ,2000
+
+fullroom = (runs) ->
+  if window.currentusers == window.roomsize && runs == 0
+    document.getElementById('siren').play();
+    alert("Alla är redo")
+    window.runs = 1
 
 #setInterval 'autoRefresh()', 5000
 
