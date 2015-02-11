@@ -52,12 +52,14 @@
 
 #Members{
     float: left;
-    margin-top: 3%;
+    margin-top: -1%;
     margin-left: 24%;
+    padding-bottom: 400px;
+
     width: 50%;
     height: 400px;
     font-size: 20px;
-    margin-right: 0%;
+
 
 }
 #time{
@@ -73,3 +75,6 @@
 }
 
 
+h1#current, h1#roomsize{
+    visibility: hidden;
+}

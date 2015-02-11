@@ -2,6 +2,8 @@ div id="Members"
   .title
     h1 #{@room.name}
     h1  #{@users.length} / #{@room.size}
+    h1 id="current" #{@users.length}
+    h1 id="roomsize" #{@room.size}
 
 
   - for person in @users
@@ -10,18 +12,22 @@ div id="Members"
     p
 
 
+
 a href="/auth/steam"  Authenticate with Steam
 
 
 .checkin
+  - t = Time.now
   form action='/checkin' method='post'
     input type='text' name='name' id='name' placeholder="Name"
 
-      select name ='hour' id='hour'
+      select  name ='hour' id='hour'
+
         - x = 0
         - 24.times do
           - y = "%02d" % x
           option value="#{y}"  #{y}
+
           - x += 1
 
       select name ='minute' id='minute'
