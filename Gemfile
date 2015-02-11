@@ -9,7 +9,6 @@ gem 'slim'
 gem 'tilt', '~> 1.4.1' #temporary fix
 gem 'omniauth-openid'
 gem 'omniauth-steam'
-gem 'warden'
 
 group :test do
   gem 'rspec'
