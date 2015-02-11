@@ -37,16 +37,19 @@
     window.currentusers = document.getElementById("current").innerHTML;
     window.roomsize = document.getElementById("roomsize").innerHTML;
     fullroom(window.runs);
-    if (windows.currentusers !== window.roomsize) {
+    if (window.currentusers !== window.roomsize) {
       return window.runs = 0;
     }
   }, 2000);
 
   fullroom = function(runs) {
+    var audio;
     if (window.currentusers === window.roomsize && runs === 0) {
       alert("Alla är redo");
-      window.runs = 1;
+      audio = new Audio("/alertljud.mp3");
+      audio.play();
     }
+    window.runs = 1;
     return console.log("hej");
   };
 
