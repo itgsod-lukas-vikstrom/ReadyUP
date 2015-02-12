@@ -25,6 +25,7 @@ body
                   button.btn.pull-right type="button" onclick="location.href='/login/steam'" Authenticate with Steam
                 - else
                   p Welcome #{session[:name]}
+                  button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
           .navbar
             .navbar-inner
               .container
