@@ -51,10 +51,8 @@ class App < Sinatra::Base
 
   get '/room/:url' do |url|
     @room = Room.first(:url => url) #hämtar informationen om rummet
-    @roomusers = RoomUser.all(room_id: @room.id) #hämtar id på alla som har checkat in i det rummet.
     @users = @room.user
     @name = session[:name]
-    p session[:member]
     slim :room
   end
 
