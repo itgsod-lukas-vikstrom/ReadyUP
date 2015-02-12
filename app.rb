@@ -33,7 +33,6 @@ class App < Sinatra::Base
     redirect to("/auth/steam") if session[:member] == nil && login_provider == 'steam'
     redirect to("/auth/google_oauth2") if session[:member] == nil && login_provider == 'google'
     redirect to("/auth/facebook") if session[:member] == nil && login_provider == 'facebook'
-    session[:member] = true
     redirect back
   end
 
@@ -45,29 +44,32 @@ class App < Sinatra::Base
     session[:name] = env['omniauth.auth']['info']['nickname']
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
+    session[:member] = true
     redirect '/login/steam'
   end
 
   get '/auth/google_oauth2/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    if User.first(login_key: env['omniauth.auth']['extra']['id_token']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['extra']['id_token'], avatar: env['omniauth.auth']['info']['image'])
+    pp(env['omniauth.auth'])
+    if User.first(login_key: env['omniauth.auth']['uid']).nil?
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png')
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
-    session[:login_key] = env['omniauth.auth']['extra']['id_token']
-    session[:avatar] = env['omniauth.auth']['info']['image']
+    session[:login_key] = env['omniauth.auth']['uid']
+    session[:avatar] = '/img/google_logo.png'
+    session[:member] = true
     redirect '/login/google'
   end
 
   get '/auth/facebook/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '')
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/fb_logo.png')
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
-    session[:avatar] = ''
+    session[:avatar] = '/img/fb_logo.png'
+    session[:member] = true
     redirect '/login/facebook'
   end
 
