@@ -86,8 +86,10 @@ class App < Sinatra::Base
     end
   end
 
-  post '/remove_checkin' do
-
+  post '/checkout' do
+    @room = Room.first(id: params['id'])
+    RoomUser.first(user: User.first(login_key: session[:login_key]), room: @room).destroy
+    redirect back
   end
 
   error do
