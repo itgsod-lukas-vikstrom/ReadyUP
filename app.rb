@@ -29,10 +29,11 @@ class App < Sinatra::Base
   post '/auth/steam/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      User.create(name: env['omniauth.auth']['info']['nickname'], admin: 'f', login_provider: 'Steam', login_key: env['omniauth.auth']['uid'])
+      User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'])
     end
     session[:name] = env['omniauth.auth']['info']['nickname']
     session[:login_key] = env['omniauth.auth']['uid']
+    session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
     redirect '/login/steam'
   end
 
@@ -60,6 +61,7 @@ class App < Sinatra::Base
     slim :create
 
   end
+
   post '/createroom' do
     Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
                 size: params['size'], public: params['publicity'],
@@ -67,11 +69,13 @@ class App < Sinatra::Base
     newroom = Room.first(name: params['groupname'])
     redirect "room/#{newroom.url}"
   end
+
   get '/browse' do
     @rooms = Room.all
     slim :browse
 
   end
+
   post '/checkin' do
     @room = Room.first(id: params['id'])
 
