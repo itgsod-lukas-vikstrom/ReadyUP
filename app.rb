@@ -4,7 +4,14 @@ class App < Sinatra::Base
 
   use OmniAuth::Builder do
     provider :steam, '7086038880F2FF8DEA78BB990C3FCB3C'
-    provider :google_oauth2, '643100737378-kemmav0q39h9bg1t2t0v8r3n0gc60isd.apps.googleusercontent.com', 'hPvsDKRvLAmnd0QcCuz5udAj'
+    provider :google_oauth2, '643100737378-kemmav0q39h9bg1t2t0v8r3n0gc60isd.apps.googleusercontent.com', 'hPvsDKRvLAmnd0QcCuz5udAj',
+      {
+        :image_size => 30
+      }
+    provider :facebook, '746174555501363', 'b50af27608013d97dea2035b0e444bde'
+      {
+          :image_size => 30
+      }
   end
 
   helpers do
@@ -25,6 +32,7 @@ class App < Sinatra::Base
   get '/login/:login_provider' do |login_provider|
     redirect to("/auth/steam") if session[:member] == nil && login_provider == 'steam'
     redirect to("/auth/google_oauth2") if session[:member] == nil && login_provider == 'google'
+    redirect to("/auth/facebook") if session[:member] == nil && login_provider == 'facebook'
     session[:member] = true
     redirect back
   end
@@ -42,7 +50,6 @@ class App < Sinatra::Base
 
   get '/auth/google_oauth2/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['extra']['id_token']).nil?
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['extra']['id_token'], avatar: env['omniauth.auth']['info']['image'])
     end
@@ -52,11 +59,24 @@ class App < Sinatra::Base
     redirect '/login/google'
   end
 
+  get '/auth/facebook/callback' do
+    env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
+    pp(env['omniauth.auth'])
+    if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '')
+    end
+    session[:name] = env['omniauth.auth']['info']['first_name']
+    session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
+    session[:avatar] = ''
+    redirect '/login/facebook'
+  end
+
   get '/auth/failure' do
     params[:message]
   end
 
   get '/logout' do
+    RoomUser.all(user_id: (User.first(login_key: session[:login_key])).id).destroy
     session.clear
     redirect back
   end
