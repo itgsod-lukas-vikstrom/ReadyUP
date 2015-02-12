@@ -22,10 +22,12 @@ body
                 h1.muted ReadyUP
               .span4.offset2 style="margin-top:15px;"
                 - if session[:member] == nil
-                  button.btn.pull-right type="button" onclick="location.href='/login/steam'" Authenticate with Steam
+                  button.btn.pull-right type="button" onclick="location.href='/login/steam'" Steam
+                  button.btn.pull-right type="button" onclick="location.href='/login/google'" Google+
                 - else
-                  span Welcome #{session[:name]}
                   img src='#{session[:avatar]}'
+                  span Welcome #{session[:name]}
+
 
                   button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
           .navbar
