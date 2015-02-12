@@ -7,30 +7,22 @@ div id="Members"
 
 
   - for person in @users
+    span
+      img src="#{person.avatar}"
     span #{person.name}
     span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.strftime("%H:%M")}
     p
 
-
 .checkin
-
-
-
-
-.checkin
-
-
   form action='/checkin' method='post'
+    p #{@name}
     - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) == nil
-      p #{@name}
 
       select name ='hour' id='hour'
-
         - x = 0
         - 24.times do
           - y = "%02d" % x
           option value="#{y}"  #{y}
-
           - x += 1
 
       select name ='minute' id='minute'
@@ -40,11 +32,9 @@ div id="Members"
           option value="#{y}"  #{y}
           - x += 5
       br
-      input type='submit' value='Check IN!'
+      input type='submit' value='Check in!'
     input type="hidden" name="id" value="#{@room.id}"
   form action='/checkout' method='post'
     - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
       input type='submit' value='Check out!'
     input type="hidden" name="id" value="#{@room.id}"
-
-//input type='text' name='time' placeholder="Time(N/A)"

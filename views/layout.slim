@@ -24,7 +24,9 @@ body
                 - if session[:member] == nil
                   button.btn.pull-right type="button" onclick="location.href='/login/steam'" Authenticate with Steam
                 - else
-                  p Welcome #{session[:name]}
+                  span Welcome #{session[:name]}
+                  img src='#{session[:avatar]}'
+
                   button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
           .navbar
             .navbar-inner
