@@ -43,6 +43,7 @@ fullroom = (runs) ->
   if window.currentusers == window.roomsize && runs == 0
     document.getElementById('siren').play();
     alert("Alla är redo")
+    document.getElementById('siren').pause()
     window.runs = 1
 
 #setInterval 'autoRefresh()', 5000
