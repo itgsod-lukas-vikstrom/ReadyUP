@@ -1,3 +1,6 @@
+link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" /
+script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"
+
 .doge
   form action='/createroom' method='post'
     .radio
@@ -9,10 +12,43 @@
     input type='text' name='size' id='size' placeholder='Group size'
     br
     input type='text' name='game' id='game' placeholder='Game'
-    select name ='hour' id='language'
-      option value="SWE"  SWE
-      option value="RUS"  RUS
-      option value="ENG"  ENG
+    datalist id="languages"
+      option value="Albanian" Albanian
+      option value="Arabic" Arabic
+      option value="Armenian" Armenian
+      option value="Bosnian" Bosnian
+      option value="Bulgarian" Bulgarian
+      option value="Chinese" Chinese
+      option value="Croatian" Croatian
+      option value="Czech" Czech
+      option value="Danish" Danish
+      option value="Dutch" Dutch
+      option value="Estonian" Estonian
+      option value="English" English
+      option value="Finnish" Finnish
+      option value="French" French
+      option value="Georgian" Georgian
+      option value="German" German
+      option value="Greek" Greek
+      option value="Hindi" Hindi
+      option value="Hungarian" Hungarian
+      option value="Icelandic" Icelandic
+      option value="Indonesian" Indonesian
+      option value="Irish" Irish
+      option value="Italian" Italian
+      option value="Japanese" Japanese
+      option value="Korean" Korean
+      option value="Ryss" s
+      option value="Nor" s
+      option value="Russi" s
+      option value="Rumba" s
+      option value="Russel" s
+      option value="Russka" s
+      option value="Ryss" s
+    input list="languages" id="language" type="text" name='language' autocomplete="off" /
     br
     input type='submit' value='Create room'
+
+
+
 
