@@ -10,6 +10,7 @@ gem 'tilt', '~> 1.4.1' #temporary fix
 gem 'omniauth-openid'
 gem 'omniauth-steam'
 gem 'omniauth-google-oauth2'
+gem 'omniauth-facebook'
 
 group :test do
   gem 'rspec'
