@@ -35,19 +35,21 @@
     margin-left: 30%;
     margin-right: auto;
 }
+#groupname,#game,#size,#language{
+    height: 30px;
+    width: 200px;
+
+}
+
 .checkin{
     margin-top: 5%;
 }
-#name{
-    width: 150px;
-    height: 30px;
-    margin-right: 5px;
 
-}
 #hour,#minute{
     width: 50px;
     margin-left: 2px;
 }
+
 
 
 #Members{
