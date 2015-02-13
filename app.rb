@@ -119,6 +119,10 @@ class App < Sinatra::Base
     if @room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
       RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
+      @user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+      if @user.ready_until < DateTime.now
+        @user.update(ready_until: (@user.ready_until) + 1)
+      end
       redirect back
     else redirect '/error'
 
