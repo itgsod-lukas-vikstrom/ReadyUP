@@ -91,6 +91,13 @@ class App < Sinatra::Base
     @room = Room.first(:url => url) #hämtar informationen om rummet
     @users = @room.user
     @name = session[:name]
+    @roomuser = RoomUser.all(room_id: @room.id)
+    @roomuser.each do |user|
+      @arraywithtime = user.ready_until.split(",")
+      if "#{@arraywithtime[3]}" <= "#{Time.now.hour}" + ":" "#{Time.now.min}" && "#{Time.now.day}" == @arraywithtime[2] && @arraywithtime != nil
+        RoomUser.first(user_id: user.user_id, room_id: @room.id).destroy
+      end
+    end
     slim :room
   end
 
@@ -115,10 +122,14 @@ class App < Sinatra::Base
 
   post '/checkin' do
     @room = Room.first(id: params['id'])
-
     if @room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
-      RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
+      day = "#{Time.now.day}"
+      if time <= "#{Time.now.hour}" + ":" + "#{Time.now.min}"
+        day = Time.now.day+1
+      end
+      dateandtime = "#{Time.now.year},#{Time.now.month},#{day},#{time}"
+      RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: dateandtime)
       redirect back
     else redirect '/error'
 

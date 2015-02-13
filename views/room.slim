@@ -10,7 +10,7 @@ div id="Members"
     span
       img src="#{person.avatar}"
     span #{person.name}
-    span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.strftime("%H:%M")}
+    span id='time'  #{(RoomUser.first(user_id: person.id,room_id: @room.id)).ready_until.split(",")[3]}
     p
 
 .checkin

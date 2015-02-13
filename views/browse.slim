@@ -5,6 +5,7 @@ script src="http://listjs.com/no-cdn/list.js"
       .panel-heading
         h3.panel-title Rooms
         .pull-right
+
       div id="users"
          table.table
            thead
@@ -28,7 +29,8 @@ script src="http://listjs.com/no-cdn/list.js"
                    td.game #{room.game}
                    td.langauge #{room.language}
                    td
-                     a href ="room/#{room.url}"
-                       img Join
+                     button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
+
+
 
 
