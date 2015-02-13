@@ -9,7 +9,7 @@ class RoomUser
   belongs_to :user
 
   def check_time
-    if self.ready_until <= DateTime.now + 0.041666
+    if self.ready_until <= DateTime.now + 1/24.to_f
       self.destroy
     end
   end
