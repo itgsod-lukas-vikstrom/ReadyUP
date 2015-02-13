@@ -4,32 +4,41 @@ script src="http://listjs.com/no-cdn/list.js"
     .panel.panel-primary.filterable
       .panel-heading
         h3.panel-title Rooms
-        .pull-right
+          .pull-right
 
-      div id="users"
-         table.table
-           thead
-             tr.filters
-               th
-                 input.form-control enabled="" placeholder="Group name" type="text" /
-               th
-                 input.form-control enabled="" placeholder=("Group size") type="text" /
-               th
-                 input.form-control enabled="" placeholder=("Game") type="text" /
-               th
-                 input.form-control enabled="" placeholder=("Language") type="text" /
-               th
+      #users
+        table.table
+          thead
+            tr.filters
+              th
+                input.search placeholder="Argument 1"
+                button.sort data-sort="name" Name
+              th
+                button.sort data-sort="size" Size
+              th
+                input.search placeholder="Argument 2"
+                button.sort data-sort="game" Game
+              th
+                button.sort data-sort="language" Language
+              th
+          tbody.list
+            - for room in @rooms
+              - if room.public == true
+                tr
+                  td.name #{room.name.capitalize}
+                  td.size #{room.user.length} / #{room.size}
+                  td.game #{room.game}
+                  td.language #{room.language}
+                  td
+                    button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
 
-           tbody.list
-             - for room in @rooms
-               - if room.public == true
-                 tr
-                   td.name #{room.name}
-                   td.size #{room.user.length} / #{room.size}
-                   td.game #{room.game}
-                   td.langauge #{room.language}
-                   td
-                     button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
+
+script src="../public/js/list.js"
+javascript:
+  var options = {
+    valueNames: [ 'name', 'size', 'game', 'language' ]};
+  var userList = new List('users', options);
+
 
 
 
