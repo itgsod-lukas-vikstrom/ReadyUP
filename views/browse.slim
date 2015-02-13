@@ -1,41 +1,36 @@
-
+script src="http://listjs.com/no-cdn/list.js"
 .container
   .row
     .panel.panel-primary.filterable
       .panel-heading
         h3.panel-title Rooms
         .pull-right
-      table.table
-        thead
-          tr.filters
-            th
-              input.form-control disabled="" placeholder="Group name" type="text" /
-            th
-              input.form-control disabled="false" placeholder=("Group size") type="text" /
-            th
-              input.form-control disabled="" placeholder=("Game") type="text" /
-            th
-              input.form-control disabled="" placeholder="Language" type="text" /
-        tbody
-          - for room in @rooms
-            - if room.public == true
-              tr
-                td
-                              p #{room.name}
 
-                td
+      div id="users"
+         table.table
+           thead
+             tr.filters
+               th
+                 input.form-control enabled="" placeholder="Group name" type="text" /
+               th
+                 input.form-control enabled="" placeholder=("Group size") type="text" /
+               th
+                 input.form-control enabled="" placeholder=("Game") type="text" /
+               th
+                 input.form-control enabled="" placeholder=("Language") type="text" /
+               th
 
-                              p #{room.user.length} / #{room.size}
-                td
+           tbody.list
+             - for room in @rooms
+               - if room.public == true
+                 tr
+                   td.name #{room.name}
+                   td.size #{room.user.length} / #{room.size}
+                   td.game #{room.game}
+                   td.langauge #{room.language}
+                   td
+                     button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
 
-                              p #{room.game}
-                td
 
-                              p #{room.language}
-                td
-
-                td
-                  a href ="room/#{room.url}"
-                              img Join
 
 

@@ -52,3 +52,11 @@
   };
 
 }).call(this);
+
+var options, userList;
+
+options = {
+    valueNames: ['name', 'born']
+};
+
+userList = new List('users', options);
