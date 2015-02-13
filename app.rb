@@ -122,7 +122,6 @@ class App < Sinatra::Base
 
   post '/checkin' do
     @room = Room.first(id: params['id'])
-    @day
     if @room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
       day = "#{Time.now.day}"
