@@ -2,7 +2,7 @@ class RoomUser
   include DataMapper::Resource
 
   property :id, Serial
-  property :ready_until, String, :required => true
+  property :ready_until, DateTime, :required => true
   property :leader, Boolean, :required => true
 
   belongs_to :room
