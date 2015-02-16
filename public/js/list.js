@@ -1,5 +1,7 @@
-var options = {
-    valueNames: [ 'name', 'born' ]
-};
+$(document).ready(function () {
+    $('#table').dataTable({
+        "info": false,
+        "bLengthChange": false,
 
-var userList = new List('users', options);
+    });
+});

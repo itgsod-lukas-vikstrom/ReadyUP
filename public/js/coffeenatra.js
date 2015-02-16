@@ -53,10 +53,8 @@
 
 }).call(this);
 
-var options, userList;
-
-options = {
-    valueNames: ['name', 'born']
-};
+$(document).ready( function () {
+    $('#table_id').DataTable();
+} );
 
 userList = new List('users', options);
