@@ -10,4 +10,5 @@ class Room
   property :language, String
 
   has n, :user, :through => Resource
+
 end

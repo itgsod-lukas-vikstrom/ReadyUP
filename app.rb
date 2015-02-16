@@ -37,10 +37,18 @@ class App < Sinatra::Base
   end
 
   post '/auth/steam/callback' do
+
+
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
       User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'])
     end
+    user = User.first(login_key: env['omniauth.auth']['uid'])
+    if user.banned?
+      session[:member] = nil
+      redirect '/banned'
+    end
+
     session[:name] = env['omniauth.auth']['info']['nickname']
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
@@ -54,6 +62,11 @@ class App < Sinatra::Base
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png')
     end
+    user = User.first(login_key: env['omniauth.auth']['uid'])
+    if user.banned?
+      session[:member] = nil
+      redirect '/banned'
+    end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = '/img/google_logo.png'
@@ -65,6 +78,11 @@ class App < Sinatra::Base
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/fb_logo.png')
+    end
+    user = User.first(login_key: env['omniauth.auth']['uid'])
+    if user.banned?
+      session[:member] = nil
+      redirect '/banned'
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
@@ -135,8 +153,39 @@ class App < Sinatra::Base
     redirect back
   end
 
+  post '/sendreport' do
+    user = User.first(name: params['reportname'])
+    Report.create(comment: params['reportdescription'], user_id: user.id)
+    redirect back
+  end
+
+
+
   error do
     raise "ERROR!!!!!!"
+  end
+
+  get '/reports' do
+    user = User.first(login_key: session[:login_key])
+    @reports = Report.all
+    if session[:login_key] != nil && user.admin == true
+      slim :report
+    else redirect '/error'
+    end
+
+  end
+
+  post '/removereport' do
+    p params['hidden']
+    Report.first(id: params['id']).destroy
+    redirect back
+
+  end
+
+  post '/sendviolation' do
+    Violation.create(end_date: params['date'],user_id: params['userid'])
+    Report.first(id: params['id']).destroy
+    redirect back
   end
 
 end
