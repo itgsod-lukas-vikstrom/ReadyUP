@@ -8,12 +8,13 @@ script src="../js/list.js"
 
       table#table.display
           thead
-            tr.filters
+            tr
               th Name
               th Size
               th Game
               th Language
               th
+
           tbody
             - for room in @rooms
               - if room.public == true
