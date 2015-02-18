@@ -6,6 +6,7 @@ div id="Members"
     p id="roomsize" #{@room.size}
 
   - for person in @users
+
     span
       img src="#{person.avatar}"
     span #{person.name}
@@ -14,10 +15,9 @@ div id="Members"
     - if @room.creator_id == session[:login_key]
       form action='/removeplayer/#{person.id}' method='post'
         input type='image' src="/img/cross.png"
-
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
-
+    p
 
 
 
