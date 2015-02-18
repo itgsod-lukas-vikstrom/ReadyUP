@@ -3,10 +3,11 @@ $(document).ready(function() {
         "info": false,
         "bLengthChange": false
     });
-    $('#empty').click( function() {
+    $('#empty, #full').click( function() {
         table.draw();
     } );
 } );
+// Don't show empty groups
 $.fn.dataTable.ext.search.push(
     function( settings, data ) {
         var players = parseFloat(data[1]) || 0;
@@ -15,11 +16,29 @@ $.fn.dataTable.ext.search.push(
         } else {
             num = 0
         }
-        var min = parseInt( $('#min').val(), 10 );
-        if (isNaN(num) ||
-            num <= players) {
+        if (num <= players) {
             return true;
         }
         return false;
+    }
+);
+//Don't show full groups
+$.fn.dataTable.ext.search.push(
+    function( settings, data ) {
+        var players = parseFloat(data[1]) || 0;
+        var all = String(data[1]) || 0;
+        var max
+        var last = all.split("/").pop();
+        max = parseInt(last)
+        if($('#full').prop('checked')) {
+            num2 = max
+        } else {
+            num2 = -1
+        }
+        if (num2 == players) {
+           return false;
+        }
+        return true;
+
     }
 );
