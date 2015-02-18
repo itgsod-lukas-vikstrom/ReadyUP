@@ -45,10 +45,8 @@ div id="Members"
     - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
       input type='submit' value='Check out!'
     input type="hidden" name="id" value="#{@room.id}"
-
-
-    form action='/sendreport' method='post'
-      select name='reportname'
-        -for person in @users
-          option value="#{person.name}" #{person.name}"
-      input type="text" name='reportdescription'
+  form action='/sendreport' method='post'
+    select name='reportname'
+      -for person in @users
+        option value="#{person.name}" #{person.name}"
+    input type="text" name='reportdescription'
