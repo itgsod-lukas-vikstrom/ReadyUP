@@ -53,8 +53,3 @@
 
 }).call(this);
 
-$(document).ready( function () {
-    $('#table_id').DataTable();
-} );
-
-userList = new List('users', options);
