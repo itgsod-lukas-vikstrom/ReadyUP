@@ -8,6 +8,7 @@ class Room
   property :public, Boolean, :required => true
   property :game, String
   property :language, String
+  property :creator_id, String
 
   has n, :user, :through => Resource
 
