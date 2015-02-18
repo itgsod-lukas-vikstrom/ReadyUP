@@ -114,7 +114,7 @@ class App < Sinatra::Base
   post '/createroom' do
     Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
                 size: params['size'], public: params['publicity'],
-                game: params['game'], language: params['language'])
+                game: params['game'], language: params['language'],creator_id: session[:login_key])
     newroom = Room.first(name: params['groupname'])
     redirect "room/#{newroom.url}"
   end
@@ -173,6 +173,10 @@ class App < Sinatra::Base
     Report.first(id: params['id']).destroy
     redirect back
 
+  end
+  post '/removeplayer/:id' do |id|
+    RoomUser.first(user_id: id).destroy
+    redirect back
   end
 
   post '/sendviolation' do
