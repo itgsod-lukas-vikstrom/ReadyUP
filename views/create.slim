@@ -1,12 +1,13 @@
 link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" /
 script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"
+script src="../js/private.js"
 
 .doge
   form action='/createroom' method='post'
     .radio
-      input checked="" type="radio" name="publicity" value="true"Public
+      input checked="" type="radio" name="publicity" onchange="hideA(this)" value="true"Public
       br
-      input type="radio" name="publicity" value="false"Private
+      input type="radio" name="publicity" onchange="hideB(this)" value="false"Private
     br
     input type='text' name='groupname' id='groupname' placeholder='Groupname' autocomplete="off"
     input type='text' name='size' id='size' placeholder='Group size' autocomplete="off"
