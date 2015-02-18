@@ -4,14 +4,8 @@ class App < Sinatra::Base
 
   use OmniAuth::Builder do
     provider :steam, '7086038880F2FF8DEA78BB990C3FCB3C'
-    provider :google_oauth2, '643100737378-kemmav0q39h9bg1t2t0v8r3n0gc60isd.apps.googleusercontent.com', 'hPvsDKRvLAmnd0QcCuz5udAj',
-             {
-                 :image_size => 30
-             }
+    provider :google_oauth2, '643100737378-kemmav0q39h9bg1t2t0v8r3n0gc60isd.apps.googleusercontent.com', 'hPvsDKRvLAmnd0QcCuz5udAj'
     provider :facebook, '746174555501363', 'b50af27608013d97dea2035b0e444bde'
-    {
-        :image_size => 30
-    }
   end
 
   helpers do
@@ -128,7 +122,6 @@ class App < Sinatra::Base
   get '/browse' do
     @rooms = Room.all
     slim :browse
-
   end
 
   post '/checkin' do
