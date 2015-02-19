@@ -49,6 +49,6 @@ div id="Members"
     input type="hidden" name="id" value="#{@room.id}"
   form action='/sendreport' method='post'
     select name='reportname' id='reportname' style="visibility: hidden"
-        option value="Ban from room" Ban from room
-        option value="Report" Global report
+      -for person in @users
+        option value="#{person.name}" #{person.name}
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
