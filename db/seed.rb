@@ -24,6 +24,7 @@ class Seeder
     User.create(name: 'Håkan', admin: FALSE, login_provider: 'Steam', login_key: '214891025801', avatar: '/img/steam_logo.png')
     User.create(name: 'Albin', admin: FALSE, login_provider: 'Steam', login_key: '59302589032', avatar: '/img/steam_logo.png')
     User.create(name: 'Lukas', admin: TRUE, login_provider: 'Google', login_key: '109448850811394477033', avatar: '/img/google_logo.png')
+    User.create(name: 'Ludwig', admin: TRUE, login_provider: 'Google', login_key: '117555853306123120083', avatar: '/img/google_logo.png')
   end
 
   def self.room_users
