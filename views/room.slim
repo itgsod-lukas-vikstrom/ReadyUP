@@ -19,7 +19,7 @@ div id="Members"
         input type='image' src="/img/cross.png"
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
-
+    br
 
 
 
