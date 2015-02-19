@@ -12,7 +12,7 @@ class Seeder
     Room.create(url: "k4kyubiir3", name: 'ADK games', size: 2, public: TRUE, game: 'Achtung Die Kurwe', language: 'Russian')
     Room.create(url: "insj4ie8ul", name: 'Please join :(', size: 4, public: TRUE, game: 'Diablo 2', language: 'Russian')
     Room.create(url: "jdwail32ld", name: 'HoN MM (3000+ MMR)', size: 5, public: FALSE, game: 'Heroes of Newerth', language: 'Icelandic')
-    Room.create(url: "ngui1dk2lo", name: 'No-scoping MW2', size: 8, public: FALSE, game: 'Call of Duty', language: 'English')
+    Room.create(url: "ngui1dk2lo", name: 'No-scoping MW2', size: 8, public: TRUE, game: 'Call of Duty', language: 'English')
   end
 
   def self.user
