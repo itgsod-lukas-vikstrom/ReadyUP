@@ -16,3 +16,17 @@ function hideB(x)
         // document.getElementById("password").style.visibility="visible";
     }
 }
+var visible = false
+function hidereport() {
+    if(visible){
+        document.getElementById("reportname").style.visibility="hidden";
+        document.getElementById("reportdescription").style.visibility="hidden";
+        visible = false
+    } else {
+        document.getElementById("reportname").style.visibility="visible";
+        document.getElementById("reportdescription").style.visibility="visible";
+        visible = true
+    }
+console.log(visible)
+
+};

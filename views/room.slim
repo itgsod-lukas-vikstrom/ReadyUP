@@ -1,3 +1,5 @@
+script src="../js/private.js"
+
 div id="Members"
   .title
     h1 #{@room.name}
@@ -10,8 +12,8 @@ div id="Members"
     span
       img src="#{person.avatar}"
     span #{person.name}
-    a href="/reportplayer"
-      img src="/img/flag.png"
+    a href="#" onclick="hidereport();"
+      img src="/img/flag.png" id="flag" style="cursor:pointer"
     - if @room.creator_id == session[:login_key]
       form action='/removeplayer/#{person.id}' method='post' style='display:inline;'
         input type='image' src="/img/cross.png"
@@ -46,7 +48,7 @@ div id="Members"
       input type='submit' value='Check out!'
     input type="hidden" name="id" value="#{@room.id}"
   form action='/sendreport' method='post'
-    select name='reportname'
-      -for person in @users
-        option value="#{person.name}" #{person.name}"
-    input type="text" name='reportdescription'
+    select name='reportname' id='reportname' style="visibility: hidden"
+        option value="Ban from room" Ban from room
+        option value="Report" Global report
+    input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
