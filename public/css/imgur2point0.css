@@ -73,3 +73,17 @@ button.btn.pull-right{
     margin-right: 5px;
 }
 
+#loginimages {
+    margin-left: 30%;
+    margin-right: 70%;
+}
+#google{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+h1#title {
+    margin-left: 32%;
+    margin-right: auto;
+}

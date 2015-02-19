@@ -71,7 +71,7 @@ class App < Sinatra::Base
   get '/auth/facebook/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/fb_logo.png')
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/facebook_logo.png')
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
@@ -80,7 +80,7 @@ class App < Sinatra::Base
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
-    session[:avatar] = '/img/fb_logo.png'
+    session[:avatar] = '/img/facebook_logo.png'
     session[:member] = true
     redirect '/login/facebook'
   end
@@ -111,7 +111,11 @@ class App < Sinatra::Base
   end
 
   get '/create' do
-    slim :create
+
+    if session[:login_key] == nil
+      redirect '/login'
+    else slim :create
+    end
 
   end
 
@@ -152,6 +156,15 @@ class App < Sinatra::Base
     @room = Room.first(id: params['id'])
     RoomUser.first(user: User.first(login_key: session[:login_key]), room: @room).destroy
     redirect back
+  end
+
+  get '/login' do
+
+    if session[:login_key] != nil
+      redirect '/create'
+    else
+      slim :login
+    end
   end
 
   post '/sendreport' do

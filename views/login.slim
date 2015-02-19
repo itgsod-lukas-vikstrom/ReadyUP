@@ -1,6 +1,7 @@
-form action='/login' method='post'
-  label for='username' Username
-  input type='text' id='username' name='username'
-  label for='password' Password
-  input type='password' id='password' name='password'
-  button type='submit' Log in!
+h1 id="title" Please login to continue
+div id="loginimages"
+
+  - if session[:member] == nil
+    input type='image' src="/img/steam_banner.png" onclick="location.href='/login/steam'"
+    input type='image' id="google" src="/img/google_banner.png" onclick="location.href='/login/google'"
+    input type='image' src="/img/facebook_banner.png" onclick="location.href='/login/facebook'"
