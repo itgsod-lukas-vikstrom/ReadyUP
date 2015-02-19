@@ -20,10 +20,10 @@ script src="../js/list.js"
             - for room in @rooms
               - if room.public == true
                 tr
-                  td.name #{room.name.capitalize}
+                  td.name #{room.name}
                   td.size #{room.user.length} / #{room.size}
-                  td.game #{room.game.capitalize}
-                  td.language #{room.language.capitalize}
+                  td.game #{room.game}
+                  td.language #{room.language}
                   td
                     button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
                     - if @admin == true
