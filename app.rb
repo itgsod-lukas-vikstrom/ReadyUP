@@ -100,6 +100,10 @@ class App < Sinatra::Base
   end
 
   get '/room/:url' do |url|
+
+    if Room.first(:url => url) == nil
+      redirect "/browse"
+    end
     @room = Room.first(:url => url) #hämtar informationen om rummet
     @users = @room.user
     @name = session[:name]
@@ -183,6 +187,11 @@ class App < Sinatra::Base
     redirect back
   end
   post '/removeroom/:id' do |id|
+    @roomusers = RoomUser.all(room_id: id)
+    @roomusers.each do |user|
+      User.get(id: user.user_id)
+        user.destroy
+      end
     Room.first(id: id).destroy
     redirect back
   end
