@@ -26,6 +26,9 @@ script src="../js/list.js"
                   td.language #{room.language.capitalize}
                   td
                     button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
+                    - if @admin == true
+                      form action='/removeroom/#{room.id}' method='post' style='display:inline;'
+                        input type='image' src="/img/cross.png"
 
 
 

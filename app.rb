@@ -121,6 +121,10 @@ class App < Sinatra::Base
 
   get '/browse' do
     @rooms = Room.all
+    user = User.first(login_key: session[:login_key])
+    if session[:login_key] != nil && user.admin == true
+      @admin = true
+    end
     slim :browse
   end
 
@@ -178,6 +182,11 @@ class App < Sinatra::Base
     RoomUser.first(user_id: id).destroy
     redirect back
   end
+  post '/removeroom/:id' do |id|
+    Room.first(id: id).destroy
+    redirect back
+  end
+
 
   post '/sendviolation' do
     Violation.create(end_date: params['date'],user_id: params['userid'])
