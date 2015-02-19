@@ -13,6 +13,5 @@ class User
 
   def banned?
     Violation.first(user_id: self.id)
-
   end
 end
