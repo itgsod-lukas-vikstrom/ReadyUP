@@ -10,13 +10,6 @@ class User
 
   has n, :room, :through => :roomusers
   has 1, :report
-  def authenticate(login_key)
-    if self.login_key == login_key
-      true
-    else
-      false
-    end
-  end
 
   def banned?
     Violation.first(user_id: self.id)
