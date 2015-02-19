@@ -1,11 +1,16 @@
 $(document).ready(function() {
     var table = $('#table').DataTable({
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': [ 4 ] }
+        ],
         "info": false,
         "bLengthChange": false
+
     });
     $('#empty, #full').click( function() {
         table.draw();
     } );
+
 } );
 // Don't show empty groups
 $.fn.dataTable.ext.search.push(
