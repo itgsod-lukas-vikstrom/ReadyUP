@@ -50,5 +50,6 @@ div id="Members"
   form action='/sendreport' method='post'
     select name='reportname' id='reportname' style="visibility: hidden"
       -for person in @users
-        option value="#{person.name}" #{person.name}
+        option value="#{person.name}" Report #{person.name}
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
+    input type="submit" id="submit" style="visibility: hidden" value="Send report"
