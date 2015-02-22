@@ -13,3 +13,5 @@ db/app-dev.sqlite
 *.sqlite
 
 *.sqlite
+
+*.sqlite

@@ -8,15 +8,22 @@ div id="Members"
     p id="roomsize" #{@room.size}
 
   - for person in @users
-
+    //Avatar image
     span
       img src="#{person.avatar}"
     span #{person.name}
+    //If user logged in with steam, create an "add friend"-button next to their name.
+    - if person.login_provider == "Steam"
+      a href="steam://friends/add/#{person.login_key}" Add
+    //When clicking image, show/hide the report field.
+        Linked to private.js
     a href="#" onclick="hidereport();"
       img src="/img/flag.png" id="flag" style="cursor:pointer"
+    //If you are the creator of the room, show a kick-button next to each player.
     - if @room.creator_id == session[:login_key]
       form action='/removeplayer/#{person.id}' method='post' style='display:inline;'
         input id='remove_button' type='image' src="/img/cross.png"
+    //The time that each player are available to play.
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
     br
