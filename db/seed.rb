@@ -6,13 +6,13 @@ class Seeder
   end
 
   def self.room
-    Room.create(url: "417kd4cyfs", name: 'Dota 2, no noobs', size: 5, public: TRUE, game: 'Dota 2', language: 'Swedish')
-    Room.create(url: "ihtwuw85za", name: 'Double AK+ MM', size: 5, public: TRUE, game: 'CS:GO', language: 'English')
-    Room.create(url: "czrnmssxsn", name: 'T6 Rifts (Paragon >100)', size: 4, public: TRUE, game: 'Diablo 3', language: 'Russian')
-    Room.create(url: "k4kyubiir3", name: 'ADK games', size: 2, public: TRUE, game: 'Achtung Die Kurwe', language: 'Russian')
-    Room.create(url: "insj4ie8ul", name: 'Please join :(', size: 4, public: TRUE, game: 'Diablo 2', language: 'Russian')
-    Room.create(url: "jdwail32ld", name: 'HoN MM (3000+ MMR)', size: 5, public: FALSE, game: 'Heroes of Newerth', language: 'Icelandic')
-    Room.create(url: "ngui1dk2lo", name: 'No-scoping MW2', size: 8, public: TRUE, game: 'Call of Duty', language: 'English')
+    Room.create(url: "417kd4cyfs", name: 'Dota 2, no noobs', size: 5, public: TRUE, game: 'Dota 2', language: 'Swedish', creator_id: 1)
+    Room.create(url: "ihtwuw85za", name: 'Double AK+ MM', size: 5, public: TRUE, game: 'CS:GO', language: 'English', creator_id: 1)
+    Room.create(url: "czrnmssxsn", name: 'T6 Rifts (Paragon >100)', size: 4, public: TRUE, game: 'Diablo 3', language: 'Russian', creator_id: 1)
+    Room.create(url: "k4kyubiir3", name: 'ADK games', size: 2, public: TRUE, game: 'Achtung Die Kurwe', language: 'Russian', creator_id: 1)
+    Room.create(url: "insj4ie8ul", name: 'Please join :(', size: 4, public: TRUE, game: 'Diablo 2', language: 'Russian', creator_id: 1)
+    Room.create(url: "jdwail32ld", name: 'HoN MM (3000+ MMR)', size: 5, public: FALSE, game: 'Heroes of Newerth', language: 'Icelandic', creator_id: 1)
+    Room.create(url: "ngui1dk2lo", name: 'No-scoping MW2', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 1)
   end
 
   def self.user
