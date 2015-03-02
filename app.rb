@@ -52,8 +52,9 @@ class App < Sinatra::Base
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
+      
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
-      redirect '/alias'
+
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
