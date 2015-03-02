@@ -7,6 +7,7 @@ class User
   property :login_provider, String#, :required => true
   property :login_key, Text#, :required => true
   property :avatar, Text
+  property :alias, Text
 
   has n, :room, :through => :roomusers
   has 1, :report
