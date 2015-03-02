@@ -16,16 +16,16 @@ class Seeder
   end
 
   def self.user
-    User.create(name: 'Stefan', admin: TRUE, login_provider: 'Google', login_key: '8594038655935', avatar: '/img/google_logo.png')
-    User.create(name: 'Kalle', admin: FALSE, login_provider: 'Google', login_key: '890128502182', avatar: '/img/google_logo.png')
-    User.create(name: 'Birgit', admin: FALSE, login_provider: 'Facebook', login_key: '12895082019', avatar: '/img/facebook_logo.png')
-    User.create(name: 'Åsa', admin: FALSE, login_provider: 'Facebook', login_key: '58325230142', avatar: '/img/facebook_logo.png')
-    User.create(name: 'Fredrik', admin: FALSE, login_provider: 'Steam', login_key: '58390285093', avatar: '/img/steam_logo.png')
-    User.create(name: 'Håkan', admin: FALSE, login_provider: 'Steam', login_key: '214891025801', avatar: '/img/steam_logo.png')
-    User.create(name: 'Albin', admin: FALSE, login_provider: 'Steam', login_key: '59302589032', avatar: '/img/steam_logo.png')
+    User.create(name: 'Stefan', admin: TRUE, login_provider: 'Google', login_key: '8594038655935', avatar: '/img/google_logo.png', alias: 'Stefan')
+    User.create(name: 'Kalle', admin: FALSE, login_provider: 'Google', login_key: '890128502182', avatar: '/img/google_logo.png', alias: 'Kalle')
+    User.create(name: 'Birgit', admin: FALSE, login_provider: 'Facebook', login_key: '12895082019', avatar: '/img/facebook_logo.png', alias: 'Birgit')
+    User.create(name: 'Åsa', admin: FALSE, login_provider: 'Facebook', login_key: '58325230142', avatar: '/img/facebook_logo.png', alias: 'Åsa')
+    User.create(name: 'Fredrik', admin: FALSE, login_provider: 'Steam', login_key: '58390285093', avatar: '/img/steam_logo.png', alias: 'Fredrik')
+    User.create(name: 'Håkan', admin: FALSE, login_provider: 'Steam', login_key: '214891025801', avatar: '/img/steam_logo.png', alias: 'Håkan')
+    User.create(name: 'Albin', admin: FALSE, login_provider: 'Steam', login_key: '59302589032', avatar: '/img/steam_logo.png', alias: 'Albin')
 
-    User.create(name: 'Ludwig', admin: TRUE, login_provider: 'Google', login_key: '117555853306123120083', avatar: '/img/google_logo.png')
-    User.create(name: 'Alf', admin: TRUE, login_provider: 'Steam', login_key: '76561198033810799', avatar: '/img/steam_logo.png')
+    User.create(name: 'Ludwig', admin: TRUE, login_provider: 'Google', login_key: '117555853306123120083', avatar: '/img/google_logo.png', alias: 'Ludwig')
+    User.create(name: 'Alf', admin: TRUE, login_provider: 'Steam', login_key: '76561198033810799', avatar: '/img/steam_logo.png', alias: 'Alf')
   end
 
   def self.room_users
