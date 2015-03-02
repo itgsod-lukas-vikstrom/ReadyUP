@@ -31,8 +31,6 @@ class App < Sinatra::Base
   end
 
   post '/auth/steam/callback' do
-
-
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
       User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'])
@@ -42,7 +40,6 @@ class App < Sinatra::Base
       session[:member] = nil
       redirect '/banned'
     end
-
     session[:name] = env['omniauth.auth']['info']['nickname']
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
