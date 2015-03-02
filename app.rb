@@ -33,7 +33,7 @@ class App < Sinatra::Base
   post '/auth/steam/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'])
+      User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'], alias: env['omniauth.auth']['info']['nickname'])
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
@@ -41,6 +41,7 @@ class App < Sinatra::Base
       redirect '/banned'
     end
     session[:name] = env['omniauth.auth']['info']['nickname']
+    session[:alias] = user.alias
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
     session[:member] = true
@@ -51,7 +52,7 @@ class App < Sinatra::Base
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png')
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
       redirect '/alias'
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
@@ -60,6 +61,7 @@ class App < Sinatra::Base
       redirect '/banned'
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
+    session[:alias] = user.alias
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = '/img/google_logo.png'
     session[:member] = true
@@ -69,7 +71,7 @@ class App < Sinatra::Base
   get '/auth/facebook/callback' do
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/facebook_logo.png')
+      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/facebook_logo.png', alias: env['omniauth.auth']['info']['first_name'])
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
@@ -77,6 +79,7 @@ class App < Sinatra::Base
       redirect '/banned'
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
+    session[:alias] = user.alias
     session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
     session[:avatar] = '/img/facebook_logo.png'
     session[:member] = true
@@ -184,7 +187,8 @@ class App < Sinatra::Base
   post '/createalias' do
     @user = (User.first(login_key: session[:login_key]))
     p params['newalias']
-    @user.update(name: params['newalias'])
+    @user.update(alias: params['newalias'])
+    session[:alias] = params['newalias']
     redirect back
   end
 
