@@ -11,7 +11,7 @@ div id="Members"
     //Avatar image
     span
       img src="#{person.avatar}"
-    span #{person.name}
+    span #{person.alias}
     //If user logged in with steam, create an "add friend"-button next to their name.
     - if person.login_provider == "Steam"
       a href="steam://friends/add/#{person.login_key}" Add
