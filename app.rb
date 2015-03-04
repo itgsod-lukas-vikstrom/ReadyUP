@@ -249,6 +249,7 @@ class App < Sinatra::Base
   post '/sendviolation' do
     Violation.create(end_date: params['date'],user_id: params['userid'])
     Report.first(id: params['id']).destroy
+    RoomUser.all(user_id: params['userid']).destroy
     redirect back
   end
 
