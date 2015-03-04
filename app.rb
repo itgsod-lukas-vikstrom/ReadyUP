@@ -62,7 +62,6 @@ class App < Sinatra::Base
     env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
     pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
 
     end
@@ -122,6 +121,7 @@ class App < Sinatra::Base
     @users = @room.user
     @user= User.first(login_key:session[:login_key])
     @name = @user.name if @user != nil
+    @amountofusers = 0
     slim :room
   end
 
@@ -162,7 +162,8 @@ class App < Sinatra::Base
         @user.update(ready_until: (@user.ready_until) + 1)
       end
       redirect back
-    else redirect '/error'
+    else
+      redirect '/fullroom'
 
     end
   end
@@ -248,6 +249,11 @@ class App < Sinatra::Base
     Violation.create(end_date: params['date'],user_id: params['userid'])
     Report.first(id: params['id']).destroy
     redirect back
+  end
+
+  get '/fullroom' do
+    slim :error
+    @error = "Room is already full"
   end
 
 end
