@@ -12,6 +12,15 @@ class App < Sinatra::Base
     def member?
       session[:member]
     end
+
+    def protected!
+      return if authorized?
+      halt 401, "Not authorized\n"
+    end
+
+    def authorized?
+      session[:admin] == true
+    end
   end
 
   get '/public' do
@@ -45,6 +54,7 @@ class App < Sinatra::Base
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
     session[:member] = true
+    session[:admin] = true if user.admin?
     redirect '/login/steam'
   end
 
@@ -66,6 +76,7 @@ class App < Sinatra::Base
     session[:login_key] = env['omniauth.auth']['uid']
     session[:avatar] = '/img/google_logo.png'
     session[:member] = true
+    session[:admin] = true if user.admin?
     redirect '/login/google'
   end
 
@@ -84,6 +95,7 @@ class App < Sinatra::Base
     session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
     session[:avatar] = '/img/facebook_logo.png'
     session[:member] = true
+    session[:admin] = true if user.admin?
     redirect '/login/facebook'
   end
 
@@ -198,26 +210,30 @@ class App < Sinatra::Base
   end
 
   get '/reports' do
+    protected!
     user = User.first(login_key: session[:login_key])
     @reports = Report.all
-    if session[:login_key] != nil && user.admin == true
-      slim :report
-    else redirect '/error'
+    slim :report
     end
 
   end
 
   post '/removereport' do
+    protected!
     p params['hidden']
     Report.first(id: params['id']).destroy
     redirect back
 
   end
+
   post '/removeplayer/:id' do |id|
+    protected!
     RoomUser.first(user_id: id).destroy
     redirect back
   end
+
   post '/removeroom/:id' do |id|
+    protected!
     @roomusers = RoomUser.all(room_id: id)
     @roomusers.each do |user|
       User.get(id: user.user_id)
