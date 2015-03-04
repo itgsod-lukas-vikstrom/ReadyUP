@@ -125,6 +125,7 @@ class App < Sinatra::Base
     slim :room
   end
 
+
   get '/create' do
 
     if session[:login_key] == nil
@@ -215,7 +216,7 @@ class App < Sinatra::Base
     user = User.first(login_key: session[:login_key])
     @reports = Report.all
     slim :report
-    end
+
 
   end
 
