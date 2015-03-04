@@ -17,8 +17,9 @@ div id="Members"
       a href="steam://friends/add/#{person.login_key}" Add
     //When clicking image, show/hide the report field.
         Linked to private.js
-    a href="#" onclick="hidereport();"
-      img src="/img/flag.png" id="flag" style="cursor:pointer"
+    - if session[:member] == true
+      a href="#" onclick="hidereport();"
+        img src="/img/flag.png" id="flag" style="cursor:pointer"
     //If you are the creator of the room, show a kick-button next to each player.
     - if @room.creator_id == session[:login_key]
       form action='/removeplayer/#{person.id}' method='post' style='display:inline;'
