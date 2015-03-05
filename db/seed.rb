@@ -3,6 +3,8 @@ class Seeder
     self.room
     self.user
     self.room_users
+    self.game
+    self.language
   end
 
   def self.room
@@ -36,6 +38,58 @@ class Seeder
     RoomUser.create(room_id: 4, user_id: 5, ready_until: "16:50", leader: FALSE)
     RoomUser.create(room_id: 5, user_id: 6, ready_until: "22:30", leader: TRUE)
     RoomUser.create(room_id: 6, user_id: 7, ready_until: "23:40", leader: TRUE)
+  end
+
+  def self.game
+    Game.create(game: "Arma 3")
+    Game.create(game: "CS:1.6")
+    Game.create(game: "CS:GO")
+    Game.create(game: "CS:Source")
+    Game.create(game: "Dayz")
+    Game.create(game: "H1Z1")
+    Game.create(game: "HoN")
+
+  end
+  def self.language
+    Language.create(language: "Albanian")
+    Language.create(language: "Arabic")
+    Language.create(language: "Armenian")
+    Language.create(language: "Bosnian")
+    Language.create(language: "Bulgarian")
+    Language.create(language: "Chinese")
+    Language.create(language: "Croation")
+    Language.create(language: "Czech")
+    Language.create(language: "Danish")
+    Language.create(language: "Dutch")
+    Language.create(language: "Estonian")
+    Language.create(language: "English")
+    Language.create(language: "Finnish")
+    Language.create(language: "French")
+    Language.create(language: "Georgian")
+    Language.create(language: "German")
+    Language.create(language: "Greek")
+    Language.create(language: "Hindi")
+    Language.create(language: "Hungarian")
+    Language.create(language: "Icelandic")
+    Language.create(language: "Indonesian")
+    Language.create(language: "Irish")
+    Language.create(language: "Italian")
+    Language.create(language: "Japanese")
+    Language.create(language: "Korean")
+    Language.create(language: "Indonesian")
+    Language.create(language: "Mandarin")
+    Language.create(language: "Persian")
+    Language.create(language: "Polish")
+    Language.create(language: "Portuguese")
+    Language.create(language: "Punjabi")
+    Language.create(language: "Russian")
+    Language.create(language: "Spanish")
+    Language.create(language: "Swedish")
+    Language.create(language: "Thai")
+    Language.create(language: "Turkish")
+    Language.create(language: "Ukrainian")
+    Language.create(language: "Vietnamese")
+
   end
 end
 

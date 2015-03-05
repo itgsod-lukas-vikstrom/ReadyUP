@@ -127,7 +127,8 @@ class App < Sinatra::Base
 
 
   get '/create' do
-
+    @games = Game.all
+    @language = Language.all
     if session[:login_key] == nil
       redirect '/login'
     else slim :create
