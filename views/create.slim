@@ -20,44 +20,9 @@ script src="../js/private.js"
 
     input list="games" id="game" type="text" name='game' autocomplete="off" placeholder='Game'
     datalist id="languages"
-      option value="Albanian" Albanian
-      option value="Arabic" Arabic
-      option value="Armenian" Armenian
-      option value="Bosnian" Bosnian
-      option value="Bulgarian" Bulgarian
-      option value="Chinese" Chinese
-      option value="Croatian" Croatian
-      option value="Czech" Czech
-      option value="Danish" Danish
-      option value="Dutch" Dutch
-      option value="Estonian" Estonian
-      option selected="selected" value="English" English
-      option value="Finnish" Finnish
-      option value="French" French
-      option value="Georgian" Georgian
-      option value="German" German
-      option value="Greek" Greek
-      option value="Hindi" Hindi
-      option value="Hungarian" Hungarian
-      option value="Icelandic" Icelandic
-      option value="Indonesian" Indonesian
-      option value="Irish" Irish
-      option value="Italian" Italian
-      option value="Japanese" Japanese
-      option value="Korean" Korean
-      option value="Indonesian" Indonesian
-      option value="Mandarin" Mandarin
-      option value="Persian" Persian
-      option value="Polish" Polish
-      option value="Portuguese" Portuguese
-      option value="Punjabi" Punjabi
-      option value="Russian" Russian
-      option value="Spanish" Spanish
-      option value="Swedish" Swedish
-      option value="Thai" Thai
-      option value="Turkish" Turkish
-      option value="Ukrainian" Ukrainian
-      option value="Vietnamese" Vietnamese
+      - @languages.each do |language|
+        option value="#{language}"#{language}
+
     input list="languages" id="language" type="text" name='language' autocomplete="off" placeholder='Language'
     br
     input type='submit' value='Create room'
