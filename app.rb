@@ -63,7 +63,6 @@ class App < Sinatra::Base
     pp(env['omniauth.auth'])
     if User.first(login_key: env['omniauth.auth']['uid']).nil?
       User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
-
     end
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
@@ -190,12 +189,11 @@ class App < Sinatra::Base
   end
 
   get '/alias' do
-    @currentalias = User.first(login_key:session[:login_key])
-    if session[:login_key] != nil && (@currentalias.login_provider == "Google" || @currentalias.login_provider == "Facebook")
+    if session[:member] == true
+      @currentalias = User.first(login_key:session[:login_key])
       slim :alias
     else redirect '/login'
     end
-
   end
 
   post '/createalias' do
