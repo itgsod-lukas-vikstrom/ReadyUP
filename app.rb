@@ -203,9 +203,12 @@ class App < Sinatra::Base
   post '/createalias' do
     @user = (User.first(login_key: session[:login_key]))
     p params['newalias']
-    @user.update(alias: params['newalias'])
-    session[:alias] = params['newalias']
-    redirect back
+    if params['newalias'].length <= 15
+      @user.update(alias: params['newalias'])
+      session[:alias] = params['newalias']
+      redirect back
+    else redirect back
+    end
   end
 
   error do
