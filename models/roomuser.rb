@@ -16,7 +16,7 @@ class RoomUser
 
 
   def timezone_offset
-    if self.ready_until < DateTime.now + 1/24.to_f
+    if @room_user.ready_until < DateTime.now + 1/24.to_f
       self.update(ready_until: (@room_user.ready_until) + 1)
     end
   end
