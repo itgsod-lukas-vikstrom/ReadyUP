@@ -159,7 +159,7 @@ class App < Sinatra::Base
   post '/checkin' do
     room = Room.first(id: params['id'])
 
-    if room.user.length < @room.size
+    if room.user.length < room.size
       time = params['hour'] + ':' + params['minute']
       RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
       user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
