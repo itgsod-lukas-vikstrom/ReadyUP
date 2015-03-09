@@ -162,8 +162,8 @@ class App < Sinatra::Base
     if room.user.length < room.size
       time = params['hour'] + ':' + params['minute']
       RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
-      user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
-      user.timezone_offset
+      @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+      @room_user.timezone_offset
       redirect back
     else
       redirect '/fullroom'
