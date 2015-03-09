@@ -149,11 +149,13 @@ class App < Sinatra::Base
 
   get '/browse' do
     @rooms = Room.all
-    user = User.first(login_key: session[:login_key])
-    if session[:login_key] != nil && user.admin == true
+    @user = User.first(login_key: session[:login_key])
+    if session[:login_key] != nil && @user.admin == true
       @admin = true
     end
     slim :browse
+
+
   end
 
   post '/checkin' do

@@ -30,7 +30,9 @@ script src="../js/list.js"
                       form action='/removeroom/#{room.id}' method='post' style='display:inline;'
                         input type='image' src="/img/cross.png"
 
-
+                    - if @user != nil
+                      - if RoomUser.first(user_id: @user.id,room_id: room.id) != nil
+                        img src="/img/msn.png"
 
 
 

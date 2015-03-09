@@ -35,6 +35,7 @@ div id="Members"
 .checkin
   form action='/checkin' method='post'
     p #{session[:alias]}
+
     - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) == nil && @room.size > @amountofusers
       select name ='hour' id='hour'
         - x = 0
