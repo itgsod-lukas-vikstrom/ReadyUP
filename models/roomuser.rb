@@ -13,10 +13,11 @@ class RoomUser
       self.destroy
     end
   end
-end
 
-def timezone_offset
-  if self.ready_until < DateTime.now + 1/24.to_f
-    self.update(ready_until: (@user.ready_until) + 1)
+
+  def timezone_offset
+    if self.ready_until < DateTime.now + 1/24.to_f
+      self.update(ready_until: (@user.ready_until) + 1)
+    end
   end
 end
