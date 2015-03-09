@@ -154,15 +154,13 @@ class App < Sinatra::Base
   end
 
   post '/checkin' do
-    @room = Room.first(id: params['id'])
+    room = Room.first(id: params['id'])
 
-    if @room.user.length < @room.size
+    if room.user.length < @room.size
       time = params['hour'] + ':' + params['minute']
       RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
-      @user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
-      if @user.ready_until < DateTime.now + 1/24.to_f
-        @user.update(ready_until: (@user.ready_until) + 1)
-      end
+      user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+      user.timezone_offset
       redirect back
     else
       redirect '/fullroom'
