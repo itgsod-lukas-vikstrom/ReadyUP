@@ -8,6 +8,7 @@ div id="Members"
     p id="roomsize" #{@room.size}
 
   - for person in @users
+
     //Avatar image
     span
       img src="#{person.avatar}"
@@ -17,9 +18,7 @@ div id="Members"
       a href="steam://friends/add/#{person.login_key}" Add
     //When clicking image, show/hide the report field.
         Linked to private.js
-    - if session[:member] == true
-      a href="#" onclick="hidereport();"
-        img src="/img/flag.png" id="flag" style="cursor:pointer"
+
     //If you are the creator of the room, show a kick-button next to each player.
     - if @room.creator_id == session[:login_key]
       form action='/removeplayer/#{person.id}' method='post' style='display:inline;'
@@ -29,10 +28,12 @@ div id="Members"
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
     br
+- if session[:member] == true
+  a href="#" onclick="hidereport();"
 
-
-
+    img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
 .checkin
+
   form action='/checkin' method='post'
     p #{session[:alias]}
 
@@ -63,7 +64,7 @@ div id="Members"
   form action='/sendreport' method='post'
     select name='reportname' id='reportname' style="visibility: hidden"
       -for person in @users
-        option value="#{person.name}" Report #{person.name}
+        option value="#{person.alias}" Report #{person.alias}
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
     input type="submit" id="submit" style="visibility: hidden" value="Send report"
 
