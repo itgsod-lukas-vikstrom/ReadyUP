@@ -25,7 +25,7 @@ class Seeder
     User.create(name: 'Fredrik', admin: FALSE, login_provider: 'Steam', login_key: '58390285093', avatar: '/img/steam_logo.png', alias: 'Fredrik')
     User.create(name: 'Håkan', admin: FALSE, login_provider: 'Steam', login_key: '214891025801', avatar: '/img/steam_logo.png', alias: 'Håkan')
     User.create(name: 'Albin', admin: FALSE, login_provider: 'Steam', login_key: '59302589032', avatar: '/img/steam_logo.png', alias: 'Albin')
-
+    User.create(name: 'Lukas', admin: TRUE, login_provider: 'google', login_key: '109448850811394477033', avatar: '/img/google_logo.png', alias: 'Lukas')
     User.create(name: 'Ludwig', admin: TRUE, login_provider: 'Google', login_key: '117555853306123120083', avatar: '/img/google_logo.png', alias: 'Ludwig')
     User.create(name: 'Alf', admin: TRUE, login_provider: 'Steam', login_key: '76561198033810799', avatar: '/img/steam_logo.png', alias: 'Alf')
   end
@@ -89,7 +89,6 @@ class Seeder
     Language.create(language: "Turkish")
     Language.create(language: "Ukrainian")
     Language.create(language: "Vietnamese")
-
   end
 end
 

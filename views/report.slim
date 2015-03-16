@@ -4,6 +4,7 @@
     p #{report.comment}
     br
     form action="/sendviolation" method="post"
+      input type="text" name="reason"
       input type="submit" value="ban"
       input type="hidden" name="userid" value="#{report.user.id}"
       input type="hidden" name="id" value="#{report.id}"

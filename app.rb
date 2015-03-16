@@ -67,7 +67,7 @@ class App < Sinatra::Base
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
       session[:member] = nil
-      redirect '/banned'
+      redirect "/banned/#{user.id}"
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:alias] = user.alias
@@ -86,7 +86,7 @@ class App < Sinatra::Base
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
       session[:member] = nil
-      redirect '/banned'
+      redirect "/banned/#{user.id}"
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:alias] = user.alias
@@ -189,7 +189,7 @@ class App < Sinatra::Base
   end
 
   post '/sendreport' do
-    user = User.first(name: params['reportname'])
+    user = User.first(alias: params['reportname'])
     Report.create(comment: params['reportdescription'], user_id: user.id)
     redirect back
   end
@@ -253,7 +253,7 @@ class App < Sinatra::Base
 
 
   post '/sendviolation' do
-    Violation.create(end_date: params['date'],user_id: params['userid'])
+    Violation.create(reason: params['reason'],user_id: params['userid'])
     Report.first(id: params['id']).destroy
     RoomUser.all(user_id: params['userid']).destroy
     redirect back
@@ -262,6 +262,12 @@ class App < Sinatra::Base
   get '/fullroom' do
     slim :error
     @error = "Room is already full"
+  end
+
+  get '/banned/:id' do |userid|
+    @user = User.first(id: userid)
+    @violation = Violation.first(user_id: userid)
+    slim :banned
   end
 
 end

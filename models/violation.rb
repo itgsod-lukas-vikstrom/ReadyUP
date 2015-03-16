@@ -2,7 +2,7 @@ class Violation
   include DataMapper::Resource
 
   property :id, Serial
-  property :end_date, DateTime
+  property :reason, String
 
   belongs_to :user
 end
