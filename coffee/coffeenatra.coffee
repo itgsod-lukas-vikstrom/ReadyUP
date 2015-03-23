@@ -1,36 +1,29 @@
 $ ->
   $("#Members").load(location.href + " #Members")
+  #getJson(document.URL + '/users.json', renderRoomusers)
   window.runs = 0
-#CountDownTimer hund.innerHTML, "countdown"
 
-  #setInterval 'autoRefresh_div', 5000
-
-
-###CountDownTimer = (time, id) ->
-  selector = document.getElementById(id)
-  end = new Date("02/02/2015 #{time}" )
-  _second = 1000
-  _minute = _second * 60
-  _hour = _minute * 60
-  _day = _hour * 24
-  showRemaining = ->
-    now = new Date()
-    distance = end - now
-    if distance <= 0
-      clearInterval timer
-      alert 'Alla är redo'
-      return
-    hours = Math.floor((distance % _day) / _hour)
-    minutes = Math.floor((distance % _hour) / _minute)
-    seconds = Math.floor((distance % _minute) / _second)
-    if minutes < 10
-      minutes = "0" + minutes
-    selector.innerHTML = ("#{hours}:#{minutes}:#{seconds}");
-  timer = setInterval showRemaining, 1000###
+#getJson = (url, successFunction) ->
+#  $.ajax
+#    url: url,
+#    dataType: 'json',
+#    error: (jqXHR, textStatus, errorThrown) ->
+#      console.log("Error #{textStatus}, #{errorThrown}")
+#    success: successFunction
+#
+#renderRoomusers = (users) ->
+#  userList = "<ul id='memberlist'>"
+#  userList += ("<li><img src='#{user.avatar}'> #{user.name}</img></li>") for user in users
+#  userList += ("</ul>")
+#  console.log(users.length)
+#  newSize = "<p id='roomsize'>#{users.length}</p>"
+#  $('p#roomsize').replaceWith(newSize)
+#  $('#memberlist').replaceWith(userList)
 
 setInterval () ->
   $("#Members").load(location.href + " #Members")
-  console.log('reloaded')
+  #getJson(document.URL + '/users.json', renderRoomusers)
+  console.log('Reloaded')
   window.currentusers = document.getElementById("current").innerHTML
   window.roomsize = document.getElementById("roomsize").innerHTML
   fullroom(window.runs)
@@ -45,9 +38,3 @@ fullroom = (runs) ->
     alert("Alla är redo")
     document.getElementById('siren').pause()
     window.runs = 1
-
-#setInterval 'autoRefresh()', 5000
-
-#Popup = (name, time) ->
- # alert 'Name = ' + name + ' URL = ' + url
- # return
