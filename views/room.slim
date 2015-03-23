@@ -1,11 +1,15 @@
 script src="../js/private.js"
 
-div id="Members"
+/#Title
+#Members
   .title
     h1 #{@room.name}
     h1  #{@users.length} / #{@room.size}
     p id="current" #{@users.length}
     p id="roomsize" #{@room.size}
+
+
+  /ul id="memberlist"
 
   - for person in @users
     //Avatar image
@@ -22,7 +26,7 @@ div id="Members"
         img src="/img/flag.png" id="flag" style="cursor:pointer"
     //If you are the creator of the room, show a kick-button next to each player.
     - if @room.creator_id == session[:login_key]
-      form action='/removeplayer/#{person.id}' method='post' style='display:inline;'
+      form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
         input id='remove_button' type='image' src="/img/cross.png"
     - @amountofusers += 1
     //The time that each player are available to play.

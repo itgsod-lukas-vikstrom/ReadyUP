@@ -18,8 +18,17 @@ class App < Sinatra::Base
       halt 401, "Not authorized\n"
     end
 
+    def creator_protected!(creator_id)
+      return if creator_authorized?(creator_id)
+      halt 401, "Not authorized\n"
+    end
+
     def authorized?
       session[:admin] == true
+    end
+
+    def creator_authorized?(creator_id)
+      creator_id == session[:login_key]
     end
   end
 
@@ -234,8 +243,9 @@ class App < Sinatra::Base
 
   end
 
-  post '/removeplayer/:id' do |id|
-    protected!
+  post '/room/:room_url/removeplayer/:id' do |room_url, id|
+    creator_id = Room.first(url: room_url).creator_id
+    creator_protected!(creator_id)
     RoomUser.first(user_id: id).destroy
     redirect back
   end
@@ -262,6 +272,11 @@ class App < Sinatra::Base
   get '/fullroom' do
     slim :error
     @error = "Room is already full"
+  end
+
+  get '/room/:room_url/users.json' do |room_url|
+    @room = Room.first(url: room_url)
+    return JSON.generate(@room.users)
   end
 
 end
