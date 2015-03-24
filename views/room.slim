@@ -12,23 +12,26 @@ script src="../js/private.js"
   /ul id="memberlist"
 
   - for person in @users
-
     //Avatar image
     span
       img src="#{person.avatar}"
     span #{person.alias}
-    //If user logged in with steam, create an "add friend"-button next to their name.
-    - if person.login_provider == "Steam"
-      a href="steam://friends/add/#{person.login_key}" Add
-    //When clicking image, show/hide the report field.
-        Linked to private.js
-
-    //If you are the creator of the room, show a kick-button next to each player.
-    - if @room.creator_id == session[:login_key]
-      form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
-        input id='remove_button' type='image' src="/img/cross.png"
+    .dropdown id="userdropdown"
+      button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
+        span.caret
+      ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
+        - if person.login_provider == "Steam"
+        //If user logged in with steam, create an "add friend"-button next to their name.
+        li role="presentation"
+          a href="steam://friends/add/#{person.login_key}" Add on Steam
+        - if @room.creator_id == session[:login_key]
+        //If you are the creator of the room, show a kick-option for each player.
+        li role="presentation"
+          a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
+          /form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
+            /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
     - @amountofusers += 1
-    //The time that each player are available to play.
+    //The time that each player is available to play.
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
     br
