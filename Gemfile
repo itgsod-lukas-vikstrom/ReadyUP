@@ -12,6 +12,9 @@ gem 'omniauth-steam'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-facebook'
 gem 'em-websocket'
+gem 'rack-flash3'
+gem 'sinatra-flash'
+gem 'sinatra-redirect-with-flash'
 
 group :test do
   gem 'rspec'

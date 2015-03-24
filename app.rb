@@ -1,6 +1,8 @@
 class App < Sinatra::Base
   enable :sessions
+  require 'rack-flash'
   require 'pp'
+  use Rack::Flash
 
   use OmniAuth::Builder do
     provider :steam, '7086038880F2FF8DEA78BB990C3FCB3C'
@@ -60,7 +62,8 @@ class App < Sinatra::Base
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
       session[:member] = nil
-      redirect '/banned'
+      flash[:error] = "You are banned. Please contact administrators."
+      redirect '/'
     end
     session[:name] = env['omniauth.auth']['info']['nickname']
     session[:alias] = user.alias
@@ -68,6 +71,7 @@ class App < Sinatra::Base
     session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
     session[:member] = true
     session[:admin] = true if user.admin?
+    flash[:success] = "You are now logged in."
     redirect '/login/steam'
   end
 
@@ -80,7 +84,8 @@ class App < Sinatra::Base
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
       session[:member] = nil
-      redirect "/banned/#{user.id}"
+      flash[:error] = "You are banned. Please contact administrators."
+      redirect '/'
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:alias] = user.alias
@@ -88,6 +93,7 @@ class App < Sinatra::Base
     session[:avatar] = '/img/google_logo.png'
     session[:member] = true
     session[:admin] = true if user.admin?
+    flash[:success] = "You are now logged in."
     redirect '/login/google'
   end
 
@@ -99,7 +105,8 @@ class App < Sinatra::Base
     user = User.first(login_key: env['omniauth.auth']['uid'])
     if user.banned?
       session[:member] = nil
-      redirect "/banned/#{user.id}"
+      flash[:error] = "You are banned. Please contact administrators."
+      redirect '/'
     end
     session[:name] = env['omniauth.auth']['info']['first_name']
     session[:alias] = user.alias
@@ -107,16 +114,19 @@ class App < Sinatra::Base
     session[:avatar] = '/img/facebook_logo.png'
     session[:member] = true
     session[:admin] = true if user.admin?
+    flash[:success] = "You are now logged in."
     redirect '/login/facebook'
   end
 
   get '/auth/failure' do
+    flash[:error] = "Authentication failed. Please contact administrators."
     params[:message]
   end
 
   get '/logout' do
     RoomUser.all(user_id: (User.first(login_key: session[:login_key])).id).destroy
     session.clear
+    flash[:success] = "You are now logged out."
     redirect back
   end
 
@@ -125,8 +135,8 @@ class App < Sinatra::Base
   end
 
   get '/room/:url' do |url|
-
     if Room.first(:url => url) == nil
+      flash[:error] = "Room does not exist."
       redirect "/browse"
     end
     @room = Room.first(:url => url) #hämtar informationen om rummet
@@ -142,6 +152,7 @@ class App < Sinatra::Base
     @games = Game.all
     @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
     if session[:login_key] == nil
+      flash[:info] = "Please log in before creating a room."
       redirect '/login'
     else slim :create
     end
@@ -153,8 +164,11 @@ class App < Sinatra::Base
       newroom = Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
                   size: params['size'], public: params['publicity'],
                   game: params['game'], language: params['language'],creator_id: session[:login_key])
+      flash[:success] = 'Group successfully created'
       redirect "room/#{newroom.url}"
-    else redirect back
+    else
+      flash[:error] = "Invalid group parameters. Please try again."
+      redirect back
     end
 
   end
@@ -172,7 +186,6 @@ class App < Sinatra::Base
 
   post '/checkin' do
     room = Room.first(id: params['id'])
-
     if room.user.length < room.size
       time = params['hour'] + ':' + params['minute']
       RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
@@ -180,8 +193,8 @@ class App < Sinatra::Base
       @room_user.timezone_offset
       redirect back
     else
-      redirect '/fullroom'
-
+      flash[:error] = "Room is full."
+      redirect '/'
     end
   end
 
@@ -192,9 +205,9 @@ class App < Sinatra::Base
   end
 
   get '/login' do
-
     if session[:login_key] != nil
-      redirect '/create'
+      flash[:info] = "You are already logged in."
+      redirect back
     else
       slim :login
     end
@@ -211,39 +224,32 @@ class App < Sinatra::Base
       @currentalias = User.first(login_key:session[:login_key])
       slim :alias
     else redirect '/login'
+      flash[:info] = "Please log in before changing your alias."
     end
   end
 
   post '/createalias' do
     @user = (User.first(login_key: session[:login_key]))
-    p params['newalias']
     if params['newalias'].length <= 15
       @user.update(alias: params['newalias'])
       session[:alias] = params['newalias']
       redirect back
-    else redirect back
+    else
+      flash[:error] = "Invalid alias. Please try again."
+      redirect back
     end
-  end
-
-  error do
-    raise "ERROR!!!!!!"
   end
 
   get '/reports' do
     protected!
-    user = User.first(login_key: session[:login_key])
     @reports = Report.all
     slim :report
-
-
   end
 
   post '/removereport' do
     protected!
-    p params['hidden']
     Report.first(id: params['id']).destroy
     redirect back
-
   end
 
   get '/room/:room_url/removeplayer/:id' do |room_url, id|
@@ -270,11 +276,6 @@ class App < Sinatra::Base
     Report.first(id: params['id']).destroy
     RoomUser.all(user_id: params['userid']).destroy
     redirect back
-  end
-
-  get '/fullroom' do
-    slim :error
-    @error = "Room is already full"
   end
 
   get '/room/:room_url/users.json' do |room_url|

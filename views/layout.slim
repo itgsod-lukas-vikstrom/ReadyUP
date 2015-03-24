@@ -33,20 +33,21 @@ html lang="en"
                     img src='#{session[:avatar]}'
                     span Welcome
                     a href="/alias"  #{session[:alias]}
-
-
-
-
                     button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
             .navbar
               .navbar-inner
                 .container
                   ul.nav
-
                     li
                       a href="/create"  Create
                     li
                       a href="/browse"  Browse
-
-
+    - if flash[:success]
+      div class="alert alert-success" role="alert" #{flash[:success]}
+    - if flash[:info]
+      div class="alert alert-info" role="alert" #{flash[:info]}
+    - if flash[:warning]
+      div class="alert alert-warning" role="alert" #{flash[:warning]}
+    - if flash[:error]
+      div class="alert alert-danger" role="alert" #{flash[:error]}
     == yield
