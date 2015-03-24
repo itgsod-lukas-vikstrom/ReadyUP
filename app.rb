@@ -131,7 +131,7 @@ class App < Sinatra::Base
     end
     @room = Room.first(:url => url) #hämtar informationen om rummet
     @users = @room.user
-    @user= User.first(login_key:session[:login_key])
+    @user= User.first(login_key: session[:login_key])
     @name = @user.name if @user != nil
     @amountofusers = 0
     slim :room

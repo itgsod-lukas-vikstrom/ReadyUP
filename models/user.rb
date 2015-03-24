@@ -15,4 +15,8 @@ class User
   def banned?
     Violation.first(user_id: self.id)
   end
+
+  def in_room?(room)
+    RoomUser.first(room_id: room.id, user_id: self.id)
+  end
 end
