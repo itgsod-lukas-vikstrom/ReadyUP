@@ -13,6 +13,10 @@ class App < Sinatra::Base
       session[:member]
     end
 
+    def admin?
+      session[:admin]
+    end
+
     def protected!
       return if authorized?
       halt 401, "Not authorized\n"
@@ -28,7 +32,7 @@ class App < Sinatra::Base
     end
 
     def creator_authorized?(creator_id)
-      creator_id == session[:login_key]
+      creator_id == session[:login_key] || session[:admin]
     end
   end
 
@@ -37,8 +41,8 @@ class App < Sinatra::Base
   end
 
   get '/private' do
-    halt(401,'Not Authorized') unless member?
-    "This is the private page - members only"
+    halt(401,'Not Authorized') unless member? || admin?
+    "This is the private page - member: #{session[:member]}, admin: #{session[:admin]}"
   end
 
   get '/login/:login_provider' do |login_provider|
@@ -243,7 +247,7 @@ class App < Sinatra::Base
 
   end
 
-  post '/room/:room_url/removeplayer/:id' do |room_url, id|
+  get '/room/:room_url/removeplayer/:id' do |room_url, id|
     creator_id = Room.first(url: room_url).creator_id
     creator_protected!(creator_id)
     RoomUser.first(user_id: id).destroy
