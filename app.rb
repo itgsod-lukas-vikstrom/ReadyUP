@@ -150,10 +150,9 @@ class App < Sinatra::Base
 
   post '/createroom' do
     if params['size'].to_f >= 1 && params['size'].to_f <= 99 && params['groupname'].length <= 24 && params['groupname'].length >= 1
-      Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
+      newroom = Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
                   size: params['size'], public: params['publicity'],
                   game: params['game'], language: params['language'],creator_id: session[:login_key])
-      newroom = Room.first(name: params['groupname'])
       redirect "room/#{newroom.url}"
     else redirect back
     end
