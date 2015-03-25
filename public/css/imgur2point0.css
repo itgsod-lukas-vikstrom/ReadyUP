@@ -114,3 +114,15 @@ ul#memberlist {
     max-width: 30%;
     text-align: center;
 }
+
+.progress {
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#progressbar {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}

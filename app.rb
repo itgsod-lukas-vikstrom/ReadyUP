@@ -288,4 +288,9 @@ class App < Sinatra::Base
     slim :banned
   end
 
+  get '/admin' do
+    protected!
+    slim :admin
+  end
+
 end
