@@ -152,11 +152,11 @@ class App < Sinatra::Base
     @games = Game.all
     @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
     if session[:login_key] == nil
-      flash[:info] = "Please log in before creating a room."
-      redirect '/login'
-    else slim :create
+      flash[:error] = "Please log in before creating a room."
+      redirect '/'
+    else
+      slim :create
     end
-
   end
 
   post '/createroom' do
@@ -180,8 +180,6 @@ class App < Sinatra::Base
       @admin = true
     end
     slim :browse
-
-
   end
 
   post '/checkin' do
@@ -204,14 +202,15 @@ class App < Sinatra::Base
     redirect back
   end
 
-  get '/login' do
-    if session[:login_key] != nil
-      flash[:info] = "You are already logged in."
-      redirect back
-    else
-      slim :login
-    end
-  end
+  # get '/login' do
+  #   if session[:login_key] != nil
+  #     flash[:info] = "You are already logged in."
+  #     redirect '/'
+  #   else
+  #     flash[:error] = "Please log in before creating a room."
+  #     redirect back
+  #   end
+  # end
 
   post '/sendreport' do
     user = User.first(alias: params['reportname'])
