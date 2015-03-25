@@ -288,4 +288,8 @@ class App < Sinatra::Base
     slim :banned
   end
 
+  get '/testtest' do
+    slim :index
+  end
+
 end

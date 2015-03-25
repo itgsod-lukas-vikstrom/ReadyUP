@@ -1,4 +1,4 @@
-function hideA(x)
+function hide(x)
 {
     if (x.checked)
     {
@@ -7,7 +7,7 @@ function hideA(x)
     }
 }
 
-function hideB(x)
+function show(x)
 {
     if (x.checked)
     {

@@ -5,9 +5,9 @@ script src="../js/private.js"
 .doge
   form action='/createroom' method='post'
     .radio
-      input checked="" type="radio" name="publicity" onchange="hideA(this)" value="true"Public
+      input checked="" type="radio" name="publicity" onchange="hide(this)" value="true"Public
       br
-      input type="radio" name="publicity" onchange="hideB(this)" value="false"Private
+      input type="radio" name="publicity" onchange="show(this)" value="false"Private
     br
     input type='text' name='groupname' id='groupname' placeholder='Groupname' required="" autocomplete="off" maxlength="24"
     input type='number' min="1" max="99" name='size' id='size' placeholder='Group size' required="" autocomplete="off"
