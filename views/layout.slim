@@ -25,15 +25,15 @@ html lang="en"
                 .span6
                   h1.muted ReadyUP
                 .span4.offset2 style="margin-top:15px;"
-                  - if session[:member] == nil
-                    button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
-                    button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
-                    button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
-                  - else
+                  - unless session[:member] == nil
                     img src='#{session[:avatar]}'
                     span Welcome
                     a href="/alias"  #{session[:alias]}
                     button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
+                  - else
+                    button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
+                    button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
+                    button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
             .navbar
               .navbar-inner
                 .container
