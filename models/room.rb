@@ -47,6 +47,7 @@ class Room
     return redirect_url
   end
 
+
   def self.build(params, app)
 
     newroom = Room.create(url: rand(36**10).to_s(36),

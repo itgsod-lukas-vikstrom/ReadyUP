@@ -178,11 +178,9 @@ EventMachine.run do
     end
 
     get '/browse' do
+      @admin = User.admin?(self)
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
-      if session[:login_key] != nil && @user.admin == true
-        @admin = true
-      end
       slim :browse
     end
 
@@ -191,26 +189,13 @@ EventMachine.run do
       redirect_url = Room.checkin(params, self)
       @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
       @room_user.timezone_offset
-
       redirect redirect_url ||= back
-
     end
 
     post '/checkout' do
-      @room = Room.first(id: params['id'])
-      RoomUser.first(user: User.first(login_key: session[:login_key]), room: @room).destroy
+      RoomUser.checkout(params,self)
       redirect back
     end
-
-    # get '/login' do
-    #   if session[:login_key] != nil
-    #     flash[:info] = "You are already logged in."
-    #     redirect '/'
-    #   else
-    #     flash[:error] = "Please log in before creating a room."
-    #     redirect back
-    #   end
-    # end
 
     post '/sendreport' do
       user = User.first(alias: params['reportname'])

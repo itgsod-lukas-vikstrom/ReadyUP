@@ -36,6 +36,11 @@ class User
       return [false, "Incorrect avatar image."]
     end
   end
+  def self.admin?(app)
+    if app.session[:login_key] != nil && User.first(login_key: app.session[:login_key]).admin == true
+      return true
+    end
+  end
 
   def self.send_violation(params)
     user = User.first(id: params['userid'])

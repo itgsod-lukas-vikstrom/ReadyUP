@@ -13,6 +13,10 @@ class RoomUser
       self.destroy
     end
   end
+  def self.checkout(params,app)
+    @room = Room.first(id: params['id'])
+    RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
+  end
 
 
   def timezone_offset
