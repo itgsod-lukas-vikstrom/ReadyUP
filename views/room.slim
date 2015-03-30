@@ -15,19 +15,20 @@ script src="../js/private.js"
     //Avatar image
     span
       img src="#{person.avatar}"
-    span #{person.alias}
-    .dropdown id="userdropdown"
-      button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
-        span.caret
-      ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
-        - if person.login_provider == "Steam"
-          li role="presentation"
-            a href="steam://friends/add/#{person.login_key}" Add on Steam
-        - if @room.creator_id == session[:login_key] || session[:admin]
-          li role="presentation"
-            a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
-          /form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
-            /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
+    span  #{person.alias}
+    - if person.login_provider == "Steam" || @room.creator_id == session[:login_key] || session[:admin]
+      .dropdown id="userdropdown"
+        button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
+          span.caret
+        ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
+          - if person.login_provider == "Steam"
+            li role="presentation"
+              a href="steam://friends/add/#{person.login_key}" Add on Steam
+          - if @room.creator_id == session[:login_key] || session[:admin]
+            li role="presentation"
+              a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
+            /form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
+              /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
     - @amountofusers += 1
     /The time that each player is available to play.
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
