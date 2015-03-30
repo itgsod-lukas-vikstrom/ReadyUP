@@ -50,6 +50,58 @@ class User
     RoomUser.all(user_id: params['userid']).destroy
   end
 
+  def self.build(env, login_provider, app)
+    env ? app.session[:member] = true : halt(401,'Not Authorized')
+    if User.first(login_key: env['uid']).nil? && (login_provider == 'steam' || login_provider == 'google')
+      User.create(name: env['info']['nickname'],
+                  admin: FALSE,
+                  login_provider: 'Steam',
+                  login_key: env['uid'],
+                  avatar: env['extra']['raw_info']['avatar'],
+                  alias: env['info']['nickname']) if login_provider == 'steam'
+      User.create(name: env['info']['first_name'],
+                  admin: FALSE,
+                  login_provider: 'Google',
+                  login_key: env['uid'],
+                  avatar: '/img/google_logo.png',
+                  alias: env['info']['first_name']) if login_provider == 'google'
+    elsif User.first(login_key: env['extra']['raw_info']['id']).nil? && login_provider == 'facebook'
+      User.create(name: env['info']['first_name'],
+                  admin: FALSE,
+                  login_provider: 'Facebook',
+                  login_key: env['extra']['raw_info']['id'],
+                  avatar: '/img/facebook_logo.png',
+                  alias: env['info']['first_name'])
+    end
+    user = User.first(login_key: env['uid'])
+    if user.banned?
+      app.session[:member] = nil
+      app.flash[:error] = "You are banned. Please contact administrators."
+      redirect '/'
+    end
+    if login_provider == 'steam'
+      app.session[:name] = env['info']['nickname']
+      app.session[:login_key] = env['uid']
+      app.session[:avatar] = env['extra']['raw_info']['avatar']
+      redirect_url = '/login/steam'
+    elsif login_provider == 'google'
+      app.session[:name] = env['info']['first_name']
+      app.session[:login_key] = env['uid']
+      app.session[:avatar] = '/img/google_logo.png'
+      redirect_url = '/login/google'
+    elsif login_provider == 'facebook'
+      app.session[:name] = env['info']['first_name']
+      app.session[:login_key] = env['extra']['raw_info']['id']
+      app.session[:avatar] = '/img/facebook_logo.png'
+      redirect_url = '/login/facebook'
+    end
+    app.session[:alias] = user.alias
+    app.session[:member] = true
+    app.session[:admin] = true if user.admin?
+    app.flash[:success] = "You are now logged in."
+    return redirect_url
+  end
+
   def in_room?(room)
     RoomUser.first(room_id: room.id, user_id: self.id)
   end
