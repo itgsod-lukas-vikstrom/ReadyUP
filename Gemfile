@@ -15,6 +15,10 @@ gem 'em-websocket'
 gem 'rack-flash3'
 gem 'sinatra-flash'
 gem 'sinatra-redirect-with-flash'
+gem 'em-websocket'
+gem 'thin'
+gem 'em-hiredis'
+gem 'bson_ext'
 
 group :test do
   gem 'rspec'
