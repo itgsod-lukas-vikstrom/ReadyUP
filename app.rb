@@ -189,12 +189,8 @@ EventMachine.run do
 
     post '/removeroom/:id' do |id|
       protected!
-      @roomusers = RoomUser.all(room_id: id)
-      @roomusers.each do |user|
-        User.get(id: user.user_id)
-          user.destroy
-        end
-      Room.first(id: id).destroy
+      id = id
+      RoomUser.remove_room(id,self)
       redirect back
     end
 

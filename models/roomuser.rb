@@ -17,6 +17,13 @@ class RoomUser
     @room = Room.first(id: params['id'])
     RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
   end
+  def self.remove_room(id,app)
+    @roomusers = RoomUser.all(room_id: id)
+    @roomusers.each do |user|
+      user.destroy
+    end
+    Room.first(id: id).destroy
+  end
 
 
   def timezone_offset
