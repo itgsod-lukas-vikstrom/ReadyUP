@@ -103,7 +103,8 @@ ul#memberlist {
 }
 
 .dropdown#userdropdown {
-    float: left;
+    float: right;
+    display: inline-block;
 }
 
 .alert.alert-success, .alert.alert-info, .alert.alert-danger, .alert.alert-warning {
