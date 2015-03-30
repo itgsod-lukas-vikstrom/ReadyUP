@@ -15,8 +15,8 @@ class Seeder
     Room.create(url: "insj4ie8ul", name: 'Please join :(', size: 4, public: TRUE, game: 'Diablo 2', language: 'Russian', creator_id: 214891025801)
     Room.create(url: "jdwail32ld", name: 'HoN MM (3000+ MMR)', size: 5, public: FALSE, game: 'Heroes of Newerth', language: 'Icelandic', creator_id: 59302589032)
     Room.create(url: "ngui1dk2lo", name: 'Ludwig creator test', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 117555853306123120083)
-    Room.create(url: "ngui1dk2lo", name: 'Lukas creator test', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 109448850811394477033)
-    Room.create(url: "ngui1dk2lo", name: 'Albin creator test', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 76561198033810799)
+    Room.create(url: "kdwgregre4", name: 'Lukas creator test', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 109448850811394477033)
+    Room.create(url: "foeisjfoe1", name: 'Albin creator test', size: 8, public: TRUE, game: 'Call of Duty', language: 'English', creator_id: 76561198033810799)
   end
 
   def self.user
