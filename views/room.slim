@@ -74,7 +74,7 @@ script src="../js/private.js"
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
     input type="submit" id="submit" style="visibility: hidden" value="Send report"
 
-- if RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
+- if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
   .container
     form.form-stacked name ="chat"
       .form-actions
