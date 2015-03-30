@@ -37,8 +37,31 @@ class User
     end
   end
 
+  def self.send_violation(params)
+    user = User.first(id: params['userid'])
+    user.update(:banned => TRUE)
+    Violation.create(reason: params['reason'], user_id: params['userid'])
+    Report.first(id: params['id']).destroy
+    RoomUser.all(user_id: params['userid']).destroy
+  end
+
   def in_room?(room)
     RoomUser.first(room_id: room.id, user_id: self.id)
+  end
+  def self.logout(app)
+    RoomUser.all(user_id: (User.first(login_key: app.session[:login_key])).id).destroy
+    app.session.clear
+    app.flash[:success] = "You are now logged out."
+  end
+
+  def self.changealias(params,app)
+    @user = (User.first(login_key: app.session[:login_key]))
+    if params['newalias'].length <= 15
+      @user.update(alias: params['newalias'])
+      app.session[:alias] = params['newalias']
+    else
+      flash[:error] = "Invalid alias. Please try again."
+    end
   end
 
   def banned?

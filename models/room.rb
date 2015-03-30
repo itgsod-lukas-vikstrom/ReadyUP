@@ -35,6 +35,18 @@ class Room
     return users
   end
 
+  def self.checkin(params,app)
+    room = Room.first(id: params['id'])
+    if room.user.length < room.size
+      time = params['hour'] + ':' + params['minute']
+      RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: app.session[:login_key])).id, leader: TRUE, ready_until: time)
+    else
+      app.flash[:error] = "Room is full."
+      redirect_url = '/'
+    end
+    return redirect_url
+  end
+
   def self.build(params, app)
 
     newroom = Room.create(url: rand(36**10).to_s(36),

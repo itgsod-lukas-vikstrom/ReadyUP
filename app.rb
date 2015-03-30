@@ -131,9 +131,7 @@ EventMachine.run do
     end
 
     get '/logout' do
-      RoomUser.all(user_id: (User.first(login_key: session[:login_key])).id).destroy
-      session.clear
-      flash[:success] = "You are now logged out."
+      User.logout(self)
       redirect back
     end
 
@@ -150,8 +148,8 @@ EventMachine.run do
         flash[:error] = "Room does not exist."
         redirect "/browse"
       end
-      $roomurl = url
-      $usersroom ||= session[:room]
+      session[:room] = url
+      $usersroom = session[:room]
       $name = session[:alias]
       @room = Room.first(:url => url) #hämtar informationen om rummet
       @users = @room.user
@@ -189,18 +187,13 @@ EventMachine.run do
     end
 
     post '/checkin' do
-      room = Room.first(id: params['id'])
       $usersroom = session[:room]
-      if room.user.length < room.size
-        time = params['hour'] + ':' + params['minute']
-        RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id, leader: TRUE, ready_until: time)
-        @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
-        @room_user.timezone_offset
-        redirect back
-      else
-        flash[:error] = "Room is full."
-        redirect '/'
-      end
+      redirect_url = Room.checkin(params, self)
+      @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+      @room_user.timezone_offset
+
+      redirect redirect_url ||= back
+
     end
 
     post '/checkout' do
@@ -235,15 +228,8 @@ EventMachine.run do
     end
 
     post '/createalias' do
-      @user = (User.first(login_key: session[:login_key]))
-      if params['newalias'].length <= 15
-        @user.update(alias: params['newalias'])
-        session[:alias] = params['newalias']
-        redirect back
-      else
-        flash[:error] = "Invalid alias. Please try again."
-        redirect back
-      end
+      User.changealias(params, self)
+     redirect back
     end
 
     get '/reports' do
@@ -277,23 +263,13 @@ EventMachine.run do
     end
 
     post '/sendviolation' do
-      user = User.first(id: params['userid'])
-      user.update(:banned => TRUE)
-      Violation.create(reason: params['reason'], user_id: params['userid'])
-      Report.first(id: params['id']).destroy
-      RoomUser.all(user_id: params['userid']).destroy
+      User.send_violation(params)
       redirect back
     end
 
     get '/room/:room_url/users.json' do |room_url|
       @room = Room.first(url: room_url)
       return JSON.generate(@room.users)
-    end
-
-    get '/banned/:id' do |userid|
-      @user = User.first(id: userid)
-      @violation = Violation.first(user_id: userid)
-      slim :banned
     end
 
     get '/admin' do
@@ -306,7 +282,7 @@ EventMachine.run do
     if $name != nil
       ws.onopen {
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
-        $ids_in_room[mainchannel_id] = "#{$roomurl}"
+        $ids_in_room[mainchannel_id] = "#{$usersroom}"
         $id_to_name[mainchannel_id] = "#{$name}"
         id = $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].subscribe{ |msg| ws.send msg }
 
