@@ -10,6 +10,7 @@ class App < Sinatra::Base
     provider :facebook, '746174555501363', 'b50af27608013d97dea2035b0e444bde'
   end
 
+
   helpers do
     def member?
       session[:member]
@@ -55,67 +56,87 @@ class App < Sinatra::Base
   end
 
   post '/auth/steam/callback' do
-    env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'], alias: env['omniauth.auth']['info']['nickname'])
-    end
+    halt(401,'Not Authorized') unless env['omniauth.auth']
     user = User.first(login_key: env['omniauth.auth']['uid'])
+    if User.first(login_key: env['omniauth.auth']['uid']).nil?
+      user = User.create(name: env['omniauth.auth']['info']['nickname'], admin: FALSE, login_provider: 'Steam', login_key: env['omniauth.auth']['uid'], avatar: env['omniauth.auth']['extra']['raw_info']['avatar'], alias: env['omniauth.auth']['info']['nickname'], banned: FALSE)
+      unless user.save
+        user.errors.each do |e|
+          puts e
+        end
+        flash[:error] = "Invalid user parameters. Please contact administrators."
+        redirect '/'
+      end
+    end
     if user.banned?
-      session[:member] = nil
       flash[:error] = "You are banned. Please contact administrators."
       redirect '/'
+    else
+      session[:name] = env['omniauth.auth']['info']['nickname']
+      session[:alias] = user.alias
+      session[:login_key] = env['omniauth.auth']['uid']
+      session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
+      session[:member] = true
+      session[:admin] = true if user.admin?
+      flash[:success] = "You are now logged in."
+      redirect '/login/steam'
     end
-    session[:name] = env['omniauth.auth']['info']['nickname']
-    session[:alias] = user.alias
-    session[:login_key] = env['omniauth.auth']['uid']
-    session[:avatar] = env['omniauth.auth']['extra']['raw_info']['avatar']
-    session[:member] = true
-    session[:admin] = true if user.admin?
-    flash[:success] = "You are now logged in."
-    redirect '/login/steam'
   end
 
   get '/auth/google_oauth2/callback' do
-    env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    pp(env['omniauth.auth'])
-    if User.first(login_key: env['omniauth.auth']['uid']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
-    end
+    halt(401,'Not Authorized') unless env['omniauth.auth']
     user = User.first(login_key: env['omniauth.auth']['uid'])
+    if User.first(login_key: env['omniauth.auth']['uid']).nil?
+      user = User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Google', login_key: env['omniauth.auth']['uid'], avatar: '/img/google_logo.png', alias: env['omniauth.auth']['info']['first_name'])
+      unless user.save
+        user.errors.each do |e|
+          puts e
+        end
+        flash[:error] = "Invalid user parameters. Please contact administrators."
+        redirect '/'
+      end
+    end
     if user.banned?
-      session[:member] = nil
       flash[:error] = "You are banned. Please contact administrators."
       redirect '/'
+    else
+      session[:name] = env['omniauth.auth']['info']['first_name']
+      session[:alias] = user.alias
+      session[:login_key] = env['omniauth.auth']['uid']
+      session[:avatar] = '/img/google_logo.png'
+      session[:member] = true
+      session[:admin] = true if user.admin?
+      flash[:success] = "You are now logged in."
+      redirect '/login/google'
     end
-    session[:name] = env['omniauth.auth']['info']['first_name']
-    session[:alias] = user.alias
-    session[:login_key] = env['omniauth.auth']['uid']
-    session[:avatar] = '/img/google_logo.png'
-    session[:member] = true
-    session[:admin] = true if user.admin?
-    flash[:success] = "You are now logged in."
-    redirect '/login/google'
   end
 
   get '/auth/facebook/callback' do
-    env['omniauth.auth'] ? session[:member] = true : halt(401,'Not Authorized')
-    if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
-      User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/facebook_logo.png', alias: env['omniauth.auth']['info']['first_name'])
-    end
+    halt(401,'Not Authorized') unless env['omniauth.auth']
     user = User.first(login_key: env['omniauth.auth']['uid'])
+    if User.first(login_key: env['omniauth.auth']['extra']['raw_info']['id']).nil?
+      user = User.create(name: env['omniauth.auth']['info']['first_name'], admin: FALSE, login_provider: 'Facebook', login_key: env['omniauth.auth']['extra']['raw_info']['id'], avatar: '/img/facebook_logo.png', alias: env['omniauth.auth']['info']['first_name'])
+      unless user.save
+        user.errors.each do |e|
+          puts e
+        end
+        flash[:error] = "Invalid user parameters. Please contact administrators."
+        redirect '/'
+      end
+    end
     if user.banned?
-      session[:member] = nil
       flash[:error] = "You are banned. Please contact administrators."
       redirect '/'
+    else
+      session[:name] = env['omniauth.auth']['info']['first_name']
+      session[:alias] = user.alias
+      session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
+      session[:avatar] = '/img/facebook_logo.png'
+      session[:member] = true
+      session[:admin] = true if user.admin?
+      flash[:success] = "You are now logged in."
+      redirect '/login/facebook'
     end
-    session[:name] = env['omniauth.auth']['info']['first_name']
-    session[:alias] = user.alias
-    session[:login_key] = env['omniauth.auth']['extra']['raw_info']['id']
-    session[:avatar] = '/img/facebook_logo.png'
-    session[:member] = true
-    session[:admin] = true if user.admin?
-    flash[:success] = "You are now logged in."
-    redirect '/login/facebook'
   end
 
   get '/auth/failure' do
@@ -160,17 +181,8 @@ class App < Sinatra::Base
   end
 
   post '/createroom' do
-    if params['size'].to_f >= 1 && params['size'].to_f <= 99 && params['groupname'].length <= 24 && params['groupname'].length >= 1
-      newroom = Room.create(url: rand(36**10).to_s(36), name: params['groupname'],#skapar ett slumpmässigt token som URL
-                  size: params['size'], public: params['publicity'],
-                  game: params['game'], language: params['language'],creator_id: session[:login_key])
-      flash[:success] = 'Group successfully created'
-      redirect "room/#{newroom.url}"
-    else
-      flash[:error] = "Invalid group parameters. Please try again."
-      redirect back
-    end
-
+    redirect_url = Room.build(params, self)
+    redirect redirect_url ||= back
   end
 
   get '/browse' do
@@ -269,9 +281,10 @@ class App < Sinatra::Base
     redirect back
   end
 
-
   post '/sendviolation' do
-    Violation.create(reason: params['reason'],user_id: params['userid'])
+    user = User.first(id: params['userid'])
+    user.update(:banned => TRUE)
+    Violation.create(reason: params['reason'], user_id: params['userid'])
     Report.first(id: params['id']).destroy
     RoomUser.all(user_id: params['userid']).destroy
     redirect back
