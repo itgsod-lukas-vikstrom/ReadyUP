@@ -74,4 +74,22 @@ script src="../js/private.js"
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
     input type="submit" id="submit" style="visibility: hidden" value="Send report"
 
+- if RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
+  .container
+    form.form-stacked name ="chat"
+      .form-actions
+        .control-group
+          input#msg.input-xlarge placeholder=("Type something…") type="text"
+          input#server type="hidden" value="#{@room.url}"
+        div
+          input#send.btn type="submit" value="Send"
+          input#clear.btn type="button" value=("Clear Chat")
+    table#chat.table
+      tbody
+        tr
+          td
+  script src="http://code.jquery.com/jquery-1.7.2.min.js"
+  script src="/js/bootstrap.js"
+  script src="/js/app.js"
+  script charset="utf-8" type="text/javascript"
 
