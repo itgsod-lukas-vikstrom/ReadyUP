@@ -1,9 +1,9 @@
 EventMachine.run do
   $channels = {}
   $usersroom = "doge"
-  $userhash = {}
-  $idtoname = {}
-  $main = EM::Channel.new
+  $ids_in_room = {}
+  $id_to_name = {}
+  $main_channel = EM::Channel.new
 
   class App < Sinatra::Base
     enable :sessions
@@ -305,18 +305,18 @@ EventMachine.run do
   EventMachine::WebSocket.start(:host => '0.0.0.0', :port => 2000,:debug => true) do |ws|
     if $name != nil
       ws.onopen {
-        mainid = $main.subscribe{ |msg| ws.send msg }
-        $userhash[mainid] = "#{$roomurl}"
-        $idtoname[mainid] = "#{$name}"
-        id = $channels[("#{$userhash.fetch(mainid)}")].subscribe{ |msg| ws.send msg }
+        mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
+        $ids_in_room[mainchannel_id] = "#{$roomurl}"
+        $id_to_name[mainchannel_id] = "#{$name}"
+        id = $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].subscribe{ |msg| ws.send msg }
 
 
         ws.onmessage { |msg|
-          $channels[("#{$userhash.fetch(mainid)}")].push "#{$idtoname.fetch(mainid)}>:" + " #{msg}"
+          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)}:" + " #{msg}"
         }
 
         ws.onclose {
-          $channels[("#{$userhash.fetch(mainid)}")].unsubscribe(id)
+          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe(id)
         }
       }
     end
