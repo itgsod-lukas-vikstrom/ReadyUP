@@ -43,61 +43,70 @@ class User
   end
 
 
-  def self.build(env, login_provider, app)
+  def self.login(env, login_provider, app)
     env ? app.session[:member] = true : halt(401,'Not Authorized')
-    if User.first(login_key: env['uid']).nil? && (login_provider == 'steam' || login_provider == 'google')
-      User.create(name: env['info']['nickname'],
-                  admin: FALSE,
-                  login_provider: 'Steam',
-                  login_key: env['uid'],
-                  avatar: env['extra']['raw_info']['avatar'],
-                  alias: env['info']['nickname']) if login_provider == 'steam'
-      User.create(name: env['info']['first_name'],
-                  admin: FALSE,
-                  login_provider: 'Google',
-                  login_key: env['uid'],
-                  avatar: '/img/google_logo.png',
-                  alias: env['info']['first_name']) if login_provider == 'google'
-    elsif User.first(login_key: env['extra']['raw_info']['id']).nil? && login_provider == 'facebook'
-      User.create(name: env['info']['first_name'],
-                  admin: FALSE,
-                  login_provider: 'Facebook',
-                  login_key: env['extra']['raw_info']['id'],
-                  avatar: '/img/facebook_logo.png',
-                  alias: env['info']['first_name'])
-    end
-    user = User.first(login_key: env['uid'])
+    user = User.fetch_or_create(env, login_provider)
     if user.banned?
       app.session[:member] = nil
       app.flash[:error] = "You are banned. Please contact administrators."
-      redirect '/'
-    end
-    if login_provider == 'steam'
+      redirect_url = '/'
+    elsif login_provider == 'steam'
       app.session[:name] = env['info']['nickname']
       app.session[:login_key] = env['uid']
       app.session[:avatar] = env['extra']['raw_info']['avatar']
+      app.session[:alias] = user.alias
+      app.session[:member] = true
+      app.session[:admin] = true if user.admin?
+      app.flash[:success] = "You are now logged in."
       redirect_url = '/login/steam'
     elsif login_provider == 'google'
       app.session[:name] = env['info']['first_name']
       app.session[:login_key] = env['uid']
       app.session[:avatar] = '/img/google_logo.png'
+      app.session[:alias] = user.alias
+      app.session[:member] = true
+      app.session[:admin] = true if user.admin?
+      app.flash[:success] = "You are now logged in."
       redirect_url = '/login/google'
     elsif login_provider == 'facebook'
       app.session[:name] = env['info']['first_name']
       app.session[:login_key] = env['extra']['raw_info']['id']
       app.session[:avatar] = '/img/facebook_logo.png'
+      app.session[:alias] = user.alias
+      app.session[:member] = true
+      app.session[:admin] = true if user.admin?
+      app.flash[:success] = "You are now logged in."
       redirect_url = '/login/facebook'
     end
-    app.session[:alias] = user.alias
-    app.session[:member] = true
-    app.session[:admin] = true if user.admin?
-    app.flash[:success] = "You are now logged in."
     return redirect_url
+  end
+
+  def self.fetch_or_create(env, login_provider)
+    user = User.first_or_create(name: env['info']['nickname'],
+                                admin: FALSE,
+                                login_provider: 'Steam',
+                                login_key: env['uid'],
+                                avatar: env['extra']['raw_info']['avatar'],
+                                alias: env['info']['nickname']) if login_provider == 'steam'
+    user = User.first_or_create(name: env['info']['first_name'],
+                                admin: FALSE,
+                                login_provider: 'Google',
+                                login_key: env['uid'],
+                                avatar: '/img/google_logo.png',
+                                alias: env['info']['first_name']) if login_provider == 'google'
+    user = User.first_or_create(name: env['info']['first_name'],
+                                admin: FALSE,
+                                login_provider: 'Facebook',
+                                login_key: env['extra']['raw_info']['id'],
+                                avatar: '/img/facebook_logo.png',
+                                alias: env['info']['first_name']) if login_provider == 'facebook'
+    return user
   end
 
   def in_room?(room)
     RoomUser.first(room_id: room.id, user_id: self.id)
   end
+
   def self.logout(app)
     RoomUser.all(user_id: (User.first(login_key: app.session[:login_key])).id).destroy
     app.session.clear
@@ -114,11 +123,4 @@ class User
     end
   end
 
-  def banned?
-    if self.banned
-      return true
-    else
-      return false
-    end
-  end
 end

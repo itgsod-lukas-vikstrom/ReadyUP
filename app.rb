@@ -62,17 +62,17 @@ EventMachine.run do
     end
 
     post '/auth/steam/callback' do
-      redirect_url = User.build(env['omniauth.auth'], 'steam', self)
+      redirect_url = User.login(env['omniauth.auth'], 'steam', self)
       redirect redirect_url ||= back
     end
 
     get '/auth/google_oauth2/callback' do
-      redirect_url = User.build(env['omniauth.auth'], 'google', self)
+      redirect_url = User.login(env['omniauth.auth'], 'google', self)
       redirect redirect_url ||= back
     end
 
     get '/auth/facebook/callback' do
-      redirect_url = User.build(env['omniauth.auth'], 'facebook', self)
+      redirect_url = User.login(env['omniauth.auth'], 'facebook', self)
       redirect redirect_url ||= back
     end
 
