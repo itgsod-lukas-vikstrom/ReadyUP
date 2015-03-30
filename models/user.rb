@@ -42,13 +42,6 @@ class User
     end
   end
 
-  def self.send_violation(params)
-    user = User.first(id: params['userid'])
-    user.update(:banned => TRUE)
-    Violation.create(reason: params['reason'], user_id: params['userid'])
-    Report.first(id: params['id']).destroy
-    RoomUser.all(user_id: params['userid']).destroy
-  end
 
   def self.build(env, login_provider, app)
     env ? app.session[:member] = true : halt(401,'Not Authorized')

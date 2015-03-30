@@ -189,13 +189,12 @@ EventMachine.run do
 
     post '/removeroom/:id' do |id|
       protected!
-      id = id
       RoomUser.remove_room(id,self)
       redirect back
     end
 
     post '/sendviolation' do
-      User.send_violation(params)
+      Violation.send_violation(params)
       redirect back
     end
 
