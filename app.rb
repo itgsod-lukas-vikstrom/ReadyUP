@@ -3,6 +3,7 @@ EventMachine.run do
   $usersroom = "doge"
   $ids_in_room = {}
   $id_to_name = {}
+  $id_to_sessid = {}
   $main_channel = EM::Channel.new
 
   class App < Sinatra::Base
@@ -96,8 +97,7 @@ EventMachine.run do
         redirect "/browse"
       end
       if $channels.fetch(url) { nil} == nil
-        channelcreation = EM::Channel.new
-        $channels[url] = channelcreation
+        $channels[url] = EM::Channel.new
       end
       session[:room] = url
       $usersroom = session[:room]
@@ -215,11 +215,16 @@ EventMachine.run do
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
         $ids_in_room[mainchannel_id] = "#{$usersroom}"
         $id_to_name[mainchannel_id] = "#{$name}"
+        $id_to_sessid[mainchannel_id] = "#{}"
         id = $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].subscribe{ |msg| ws.send msg }
 
 
         ws.onmessage { |msg|
           $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)}:" + " #{msg}"
+          File.open("#{$ids_in_room.fetch(mainchannel_id)}" + ".txt", 'a') do |f|
+            f.write "\n"
+            f.write "#{}" "#{Time.now}" +"#{msg}"
+          end
         }
 
         ws.onclose {
