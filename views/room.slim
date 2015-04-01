@@ -1,6 +1,24 @@
 script src="../js/private.js"
+- if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
+  .chatwindow
+    table#chat.table
+      tbody
 
+  #chatcontrols
+    form.form-stacked name ="chat"
+      .form-actions
+        .control-group
+          input#msg.input-xlarge placeholder=("Type something…") type="text"
+        div
+          input#send.btn type="submit" value="Send"
+          input#clear.btn type="button" value=("Clear Chat")
+
+  script src="http://code.jquery.com/jquery-1.7.2.min.js"
+  script src="/js/bootstrap.js"
+  script src="/js/app.js"
+  script charset="utf-8" type="text/javascript"
 /#Title
+
 #Members
   .title
     h1 #{@room.name}
@@ -34,10 +52,11 @@ script src="../js/private.js"
     span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
     - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
     br
-- if session[:member]
-  a href="#" onclick="hidereport();"
-    img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
+
 .checkin
+  - if session[:member]
+    a href="#" onclick="hidereport();"
+      img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
 
   form action='/checkin' method='post'
     p #{session[:alias]}
@@ -73,22 +92,5 @@ script src="../js/private.js"
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
     input type="submit" id="submit" style="visibility: hidden" value="Send report"
 
-- if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
-  .container
-    form.form-stacked name ="chat"
-      .form-actions
-        .control-group
-          input#msg.input-xlarge placeholder=("Type something…") type="text"
-          input#server type="hidden" value="#{@room.url}"
-        div
-          input#send.btn type="submit" value="Send"
-          input#clear.btn type="button" value=("Clear Chat")
-    table#chat.table
-      tbody
-        tr
-          td
-  script src="http://code.jquery.com/jquery-1.7.2.min.js"
-  script src="/js/bootstrap.js"
-  script src="/js/app.js"
-  script charset="utf-8" type="text/javascript"
+
 

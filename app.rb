@@ -91,13 +91,13 @@ EventMachine.run do
     end
 
     get '/room/:url' do |url|
+      unless Room.first(:url => url)
+        flash[:error] = "Room does not exist."
+        redirect "/browse"
+      end
       if $channels.fetch(url) { nil} == nil
         channelcreation = EM::Channel.new
         $channels[url] = channelcreation
-      end
-      if Room.first(:url => url) == nil
-        flash[:error] = "Room does not exist."
-        redirect "/browse"
       end
       session[:room] = url
       $usersroom = session[:room]

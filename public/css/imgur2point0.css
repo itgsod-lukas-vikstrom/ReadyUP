@@ -30,7 +30,11 @@ body{
 }
 
 .checkin{
-    margin-top: 5%;
+    margin-top: -350px;
+    margin-right: 150px;
+    width: 200px;
+    float: right;
+
 }
 
 #hour,#minute{
@@ -41,14 +45,14 @@ body{
 
 
 #Members{
-    float: left;
     margin-top: -1%;
-    margin-left: 24%;
     padding-bottom: 400px;
-
-    width: 50%;
+    width: 45%;
     height: 400px;
     font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
 
 
 }
@@ -94,7 +98,8 @@ h1#title {
 ul#memberlist {
     float: left;
     margin-top: -1%;
-    margin-left: 24%;
+    margin-left: auto
+    margin-right: auto
     padding-bottom: 400px;
 
     width: 50%;
@@ -126,4 +131,21 @@ ul#memberlist {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+.chatwindow {
+    width: 290px;
+    float: left;
+    height: 15em;
+    overflow: auto;
+    margin-left: 100px;
+    margin-top: 70px;
+    
+}
+.control-group{
+
+}
+#chatcontrols {
+    float:left;
+    margin-top: 260px;
+    margin-left: -290px;
 }
