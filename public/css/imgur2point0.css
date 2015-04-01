@@ -30,7 +30,7 @@ body{
 }
 
 .checkin{
-    margin-top: -350px;
+    margin-top: -330px;
     margin-right: 150px;
     width: 200px;
     float: right;
@@ -139,7 +139,7 @@ ul#memberlist {
     overflow: auto;
     margin-left: 100px;
     margin-top: 70px;
-    
+
 }
 .control-group{
 
@@ -147,5 +147,5 @@ ul#memberlist {
 #chatcontrols {
     float:left;
     margin-top: 260px;
-    margin-left: -290px;
+    margin-left: -310px;
 }
