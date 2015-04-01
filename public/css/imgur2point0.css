@@ -149,3 +149,26 @@ ul#memberlist {
     margin-top: 260px;
     margin-left: -310px;
 }
+input#empty {
+    margin-left: 10px;
+
+}
+input#full {
+    margin-left: 10px;
+
+
+
+}
+#hide {
+
+    float: left;
+    margin-top: 30px;
+
+
+}
+#table_filter {
+    margin-top: -30px;
+    float: right;
+    margin-right: 10px;
+
+}

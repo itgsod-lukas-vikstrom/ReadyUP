@@ -5,8 +5,9 @@ script src="../js/list.js"
       .panel-heading
         h3.panel-title Rooms
       .pull-right
-      input name="no_empty_groups" type="checkbox" id="empty" Don't show empty groups
-      input name="no_full_groups" type="checkbox" id="full" Don't show full groups
+      #hide
+        input name="no_empty_groups" type="checkbox" id="empty" Hide empty groups
+        input name="no_full_groups" type="checkbox" id="full" Hide full groups
       table#table.display
           thead
             tr
