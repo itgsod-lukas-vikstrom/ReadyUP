@@ -60,6 +60,7 @@ script src="../js/private.js"
 
   form action='/checkin' method='post'
     p #{session[:alias]}
+    p Ready until:
 
     - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
       select name ='hour' id='hour'
