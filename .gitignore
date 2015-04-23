@@ -17,3 +17,7 @@ db/app-dev.sqlite
 *.sqlite
 
 db/app-dev.sqlite
+<<<<<<< HEAD
+=======
+db/app-dev.sqlite
+>>>>>>> origin/master
