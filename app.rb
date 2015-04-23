@@ -99,6 +99,7 @@ EventMachine.run do
         $channels[url] = EM::Channel.new
       end
       session[:room] = url
+      p $main_channel
       $usersroom = session[:room]
       $loginkey = session[:login_key]
       $name = session[:alias]
@@ -227,7 +228,7 @@ EventMachine.run do
     end
 
   end
-  EventMachine::WebSocket.start(:host => '0.0.0.0', :port => 2000,:debug => true) do |ws|
+  EventMachine::WebSocket.start(:host => '192.168.196.112', :port => 2000,:debug => true) do |ws|
     if $name
       ws.onopen {
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
@@ -254,5 +255,5 @@ EventMachine.run do
     end
   end
   DataMapper.finalize
-  Thin::Server.start App, '0.0.0.0', 9292
+  Thin::Server.start App, '192.168.196.112', 9292
 end
