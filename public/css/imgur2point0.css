@@ -24,14 +24,14 @@ body{
 }
 #game,#language{
     text-decoration-color: black;
-    color: black;
+    color: #333333;
     height: 30px;
     width: 200px;
     margin: 4px;
 }
 #groupname,#size{
     text-decoration-color: black;
-    color: black;
+    color: #333333;
     height: 30px;
     width: 200px;
     margin: 5.5px;
@@ -203,4 +203,13 @@ ul.nav navbar-nav navbar-right{
 
 #table_filter{
     color: white;
+}
+::-moz-selection {
+    background-color: #808080;
+    color: #ffffff;
+}
+
+::selection {
+    background-color: #808080;
+    color: #ffffff;
 }
