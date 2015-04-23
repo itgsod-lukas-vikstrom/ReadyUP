@@ -45,7 +45,7 @@ class Room
                           public: params['publicity'],
                           game: params['game'],
                           language: params['language'],
-                          alert_sound: 'alertljud.mp3',
+                          alert_sound: 'alertljud.mp3',background:'footer_lodyas.png',
                           creator_id: app.session[:login_key])
     if newroom.save
       app.flash[:success] = 'Group successfully created'
