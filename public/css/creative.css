@@ -181,6 +181,7 @@ header {
 
     background-image: url(/img/footer_lodyas.png);
     background-position: center;
+    background-repeat: repeat-y;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
