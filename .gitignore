@@ -17,3 +17,9 @@ db/app-dev.sqlite
 *.sqlite
 
 db/app-dev.sqlite
+
+public/js/app.js
+
+app.rb
+
+app.rb

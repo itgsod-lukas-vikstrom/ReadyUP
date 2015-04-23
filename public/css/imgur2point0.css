@@ -183,3 +183,7 @@ ul.nav navbar-nav navbar-right{
     margin-top: 10px;
     position:fixed;
 }
+
+#table_filter{
+    color: white;
+}
