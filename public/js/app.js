@@ -1,5 +1,5 @@
 $(function(){
-  ws = new WebSocket("ws://192.168.196.208:2000");
+  ws = new WebSocket("ws://192.168.197.22:2000");
   ws.onmessage = function(evt) {
     if ($('#chat tbody tr:last').length > 0){
       $('#chat tbody tr:last').after('<tr><td>' + evt.data + '</td></tr>');

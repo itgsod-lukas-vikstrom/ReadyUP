@@ -232,7 +232,7 @@ EventMachine.run do
     end
 
   end
-  EventMachine::WebSocket.start(:host => '192.168.196.208', :port => 2000,:debug => true) do |ws|
+  EventMachine::WebSocket.start(:host => '192.168.197.22', :port => 2000,:debug => true) do |ws|
     if $name
       ws.onopen {
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
@@ -259,5 +259,5 @@ EventMachine.run do
     end
   end
   DataMapper.finalize
-  Thin::Server.start App, '192.168.196.208', 9292
+  Thin::Server.start App, '192.168.197.22', 9292
 end

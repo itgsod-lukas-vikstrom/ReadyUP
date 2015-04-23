@@ -22,9 +22,25 @@ body{
     margin-left: 30%;
     margin-right: auto;
 }
-#groupname,#game,#size,#language{
+#white{   /* Makes the filter out full/empty rooms white!  */
+    color: white;
+}
+#game,#language{
     height: 30px;
     width: 200px;
+    margin: 4px;
+    color: #4d4d4d;
+}
+#groupname,#size{
+    height: 30px;
+    width: 200px;
+    margin: 5.5px;
+    color: #4d4d4d;
+
+}
+#createroom{
+    margin-top: 5px;
+    color: #4d4d4d;
 }
 
 .checkin{
@@ -197,4 +213,16 @@ ul.nav navbar-nav navbar-right{
 #welcome {
     color: #e6e6e6;
     margin-left: 5px;
+}
+::-moz-selection {
+    background-color: #e5e5e5;
+    color: #ffffff;
+}
+
+::selection {
+    background-color: #e5e5e5;
+    color: #ffffff;
+}
+#table_filter{
+    color:white;
 }
