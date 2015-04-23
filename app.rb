@@ -87,7 +87,7 @@ EventMachine.run do
     end
 
     get '/' do
-      redirect '/browse'
+      redirect '/home'
     end
 
     get '/room/:url' do |url|
@@ -110,6 +110,7 @@ EventMachine.run do
     end
 
 
+=begin
     get '/create' do
       @games = Game.all
       @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
@@ -117,21 +118,34 @@ EventMachine.run do
         flash[:error] = "Please sign in before creating a room."
         redirect '/'
       else
-        slim :create
+        slim :main
       end
     end
+=end
 
     post '/createroom' do
+
       redirect_url = Room.build(params, self)
       redirect redirect_url ||= back
     end
+    get '/home' do
+      @games = Game.all
+      admin = User.admin?(self)
+      @rooms = Room.all
+      @user = User.first(login_key: session[:login_key])
+      @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
 
+      slim :main
+    end
+
+=begin
     get '/browse' do
       @admin = User.admin?(self)
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
-      slim :browse
+      slim :main
     end
+=end
 
     post '/checkin' do
       $usersroom = session[:room]

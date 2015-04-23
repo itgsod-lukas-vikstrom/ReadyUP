@@ -16,32 +16,31 @@ html lang="en"
     script charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js" type="text/javascript"
     script type='text/javascript' src='/js/coffeenatra.js'
   body
-    .container
-      .row
-        .span12
-          .head
-            .row-fluid
-              .span12
-                .span6
-                  h1.muted ReadyUP
-                .span4.offset2 style="margin-top:15px;"
-                  - unless session[:member] == nil
-                    img src='#{session[:avatar]}'
-                    span Welcome
-                    a href="/alias"  #{session[:alias]}
-                    button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
-                  - else
-                    button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
-                    button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
-                    button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
-            .navbar
-              .navbar-inner
-                .container
-                  ul.nav
-                    li
-                      a href="/create"  Create
-                    li
-                      a href="/browse"  Browse
+    nav#mainNav.navbar.navbar-default.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle.collapsed data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand.page-scroll href="#page-top"  ReadyUP
+          #navigators
+            a href="#create" class="btn btn-primary btn-x page-scroll" Create
+            a href="header" class="btn btn-primary btn-x page-scroll" Browse
+
+
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          - unless session[:member] == nil
+            img src='#{session[:avatar]}'
+            span Welcome
+            a href="/alias"  #{session[:alias]}
+            button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
+          - else
+            button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
+            button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
+            button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
+
     - if flash[:success]
       div class="alert alert-success alert-dismissible" role="alert"
         button.close aria-label="Close" data-dismiss="alert" type="button"

@@ -165,3 +165,21 @@ input#full {
     margin-right: 10px;
 
 }
+th#titles{
+    color: white !important;
+}
+#header-content{
+    padding-top: 300px !important;
+}
+ul.nav navbar-nav navbar-right{
+    margin-top: 30px !important;
+}
+#create {
+    background-image: url(/img/footer_lodyas.png);
+}
+#navigators{
+    float:right;
+    margin-left: 120px;
+    margin-top: 10px;
+    position:fixed;
+}
