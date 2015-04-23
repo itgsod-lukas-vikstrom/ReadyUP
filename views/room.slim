@@ -1,4 +1,6 @@
 script src="../js/private.js"
+audio#siren preload="auto" src="/audio/#{@room.alert_sound}"
+
 - if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
   .chatwindow
     table#chat.table
@@ -92,6 +94,16 @@ script src="../js/private.js"
         option value="#{person.alias}" Report #{person.alias}
     input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
     input type="submit" id="submit" style="visibility: hidden" value="Send report"
+  - if @room.creator_id == session[:login_key] || session[:admin]
+    form action='/change_audio/#{@room.id}' method='post'
+      select name='audio' id='audio'
+        option value="alertljud.mp3"  Default
+        option value="glass_ping.mp3"  Ping
+        option value="news.mp3"  News
+        option value="bell.mp3"  Bell
+
+      input type="submit" id="submit"
+
 
 
 

@@ -199,6 +199,12 @@ EventMachine.run do
       redirect back
     end
 
+    post '/change_audio/:id' do |id|
+      @room = Room.first(id: id)
+      @room.change_audio(params, self)
+      redirect back
+    end
+
     post '/removeroom/:id' do |id|
       protected!
       RoomUser.remove_room(id,self)

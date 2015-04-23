@@ -8,6 +8,7 @@ class Room
   property :public, Boolean, :required => true
   property :game, String
   property :language, String
+  property :alert_sound, String, :required => true
   property :creator_id, String, :required => true
 
   has n, :user, :through => Resource
@@ -35,10 +36,6 @@ class Room
     return users
   end
 
-
-
-
-
   def self.build(params, app)
 
     newroom = Room.create(url: rand(36**10).to_s(36),
@@ -47,6 +44,7 @@ class Room
                           public: params['publicity'],
                           game: params['game'],
                           language: params['language'],
+                          alert_sound: 'alertljud.mp3',
                           creator_id: app.session[:login_key])
     if newroom.save
       app.flash[:success] = 'Group successfully created'
@@ -58,5 +56,18 @@ class Room
       app.flash[:error] = "Invalid group parameters. Please try again."
     end
     return redirect_url
+  end
+
+  def change_audio(params, app)
+    if app.session[:login_key] == self.creator_id
+      if self.alert_sound == params['audio']
+        app.flash[:error] = "Room alert sound already in use"
+      else
+        self.update(alert_sound: params['audio'])
+        app.flash[:success] = "Room alert sound changed."
+      end
+    else
+      app.flash[:error] = "Error changing room alert sound."
+    end
   end
 end
