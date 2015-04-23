@@ -33,40 +33,40 @@ html lang="en"
             span.icon-bar
           a.navbar-brand.page-scroll href="#page-top"  ReadyUP
           #navigators
+            a href="#page-top" class="btn btn-primary btn-x page-scroll" Browse
             a href="#create" class="btn btn-primary btn-x page-scroll" Create
-            a href="header" class="btn btn-primary btn-x page-scroll" Browse
-
 
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
           - unless session[:member] == nil
-            img src='#{session[:avatar]}'
-            span Welcome
-            a href="/alias"  #{session[:alias]}
-            button.btn.pull-right type="button" onclick="location.href='/logout'" Log out
+            #navbaruser
+              img id="" src='#{session[:avatar]}'
+              span id="welcome" Welcome
+              a href="/alias"  #{session[:alias]}
+            a.pull-right href="/logout" id="sign_out" class="btn btn-primary btn-x page-scroll" Sign out
           - else
             button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
             button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
             button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
 
-    - if flash[:success]
-      div class="alert alert-success alert-dismissible" role="alert"
-        button.close aria-label="Close" data-dismiss="alert" type="button"
-          span aria-hidden="true"  &times;
-        p #{flash[:success]}
-    - if flash[:info]
-      div class="alert alert-info alert-dismissible" role="alert"
-        button.close aria-label="Close" data-dismiss="alert" type="button"
-          span aria-hidden="true"  &times;
-        p #{flash[:info]}
-    - if flash[:warning]
-      div class="alert alert-warning alert-dismissible" role="alert"
-        button.close aria-label="Close" data-dismiss="alert" type="button"
-          span aria-hidden="true"  &times;
-        p #{flash[:warning]}
-    - if flash[:error]
-      div class="alert alert-danger alert-dismissible" role="alert"
-        button.close aria-label="Close" data-dismiss="alert" type="button"
-          span aria-hidden="true"  &times;
-        p #{flash[:error]}
+      - if flash[:success]
+        div class="alert alert-success alert-dismissible" role="alert"
+          button.close aria-label="Close" data-dismiss="alert" type="button"
+            span aria-hidden="true"  &times;
+          p #{flash[:success]}
+      - if flash[:info]
+        div class="alert alert-info alert-dismissible" role="alert"
+          button.close aria-label="Close" data-dismiss="alert" type="button"
+            span aria-hidden="true"  &times;
+          p #{flash[:info]}
+      - if flash[:warning]
+        div class="alert alert-warning alert-dismissible" role="alert"
+          button.close aria-label="Close" data-dismiss="alert" type="button"
+            span aria-hidden="true"  &times;
+          p #{flash[:warning]}
+      - if flash[:error]
+        div class="alert alert-danger alert-dismissible" role="alert"
+          button.close aria-label="Close" data-dismiss="alert" type="button"
+            span aria-hidden="true"  &times;
+          p #{flash[:error]}
     == yield
 
