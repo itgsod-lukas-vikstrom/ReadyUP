@@ -178,9 +178,23 @@ ul.nav navbar-nav navbar-right{
 
 
 }
-#navigators{
-    float:right;
+#navigators {
+    float: right;
     margin-left: 120px;
     margin-top: 10px;
-    position:fixed;
+    position: fixed;
+}
+
+#navbaruser{
+    float: right;
+    margin-top: 10px;
+}
+
+#sign_out {
+    margin-top: 10px;
+}
+
+#welcome {
+    color: #e6e6e6;
+    margin-left: 5px;
 }
