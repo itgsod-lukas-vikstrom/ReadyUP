@@ -141,7 +141,6 @@ EventMachine.run do
 
 =begin
     get '/browse' do
-      @admin = User.admin?(self)
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
       slim :main
