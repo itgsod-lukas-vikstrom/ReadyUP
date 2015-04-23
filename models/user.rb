@@ -36,12 +36,12 @@ class User
       return [false, "Incorrect avatar image."]
     end
   end
+
   def self.admin?(app)
     if app.session[:login_key] != nil && User.first(login_key: app.session[:login_key]).admin == true
       return true
     end
   end
-
 
   def self.login(env, login_provider, app)
     env ? app.session[:member] = true : halt(401,'Not Authorized')
@@ -57,7 +57,7 @@ class User
       app.session[:alias] = user.alias
       app.session[:member] = true
       app.session[:admin] = true if user.admin?
-      app.flash[:success] = "You are now logged in."
+      app.flash[:success] = "You are now signed in."
       redirect_url = '/login/steam'
     elsif login_provider == 'google'
       app.session[:name] = env['info']['first_name']
@@ -66,7 +66,7 @@ class User
       app.session[:alias] = user.alias
       app.session[:member] = true
       app.session[:admin] = true if user.admin?
-      app.flash[:success] = "You are now logged in."
+      app.flash[:success] = "You are now signed in."
       redirect_url = '/login/google'
     elsif login_provider == 'facebook'
       app.session[:name] = env['info']['first_name']
@@ -75,31 +75,36 @@ class User
       app.session[:alias] = user.alias
       app.session[:member] = true
       app.session[:admin] = true if user.admin?
-      app.flash[:success] = "You are now logged in."
+      app.flash[:success] = "You are now signed in."
       redirect_url = '/login/facebook'
     end
     return redirect_url
   end
 
   def self.fetch_or_create(env, login_provider)
-    user = User.first_or_create(name: env['info']['nickname'],
-                                admin: FALSE,
-                                login_provider: 'Steam',
-                                login_key: env['uid'],
-                                avatar: env['extra']['raw_info']['avatar'],
-                                alias: env['info']['nickname']) if login_provider == 'steam'
-    user = User.first_or_create(name: env['info']['first_name'],
-                                admin: FALSE,
-                                login_provider: 'Google',
-                                login_key: env['uid'],
-                                avatar: '/img/google_logo.png',
-                                alias: env['info']['first_name']) if login_provider == 'google'
-    user = User.first_or_create(name: env['info']['first_name'],
-                                admin: FALSE,
-                                login_provider: 'Facebook',
-                                login_key: env['extra']['raw_info']['id'],
-                                avatar: '/img/facebook_logo.png',
-                                alias: env['info']['first_name']) if login_provider == 'facebook'
+    case login_provider
+      when 'steam'
+        user = User.first_or_create(name: env['info']['nickname'],
+                                    admin: FALSE,
+                                    login_provider: 'Steam',
+                                    login_key: env['uid'],
+                                    avatar: env['extra']['raw_info']['avatar'],
+                                    alias: env['info']['nickname'])
+      when 'google'
+        user = User.first_or_create(name: env['info']['first_name'],
+                                    admin: FALSE,
+                                    login_provider: 'Google',
+                                    login_key: env['uid'],
+                                    avatar: '/img/google_logo.png',
+                                    alias: env['info']['first_name'])
+      when 'facebook'
+        user = User.first_or_create(name: env['info']['first_name'],
+                                    admin: FALSE,
+                                    login_provider: 'Facebook',
+                                    login_key: env['extra']['raw_info']['id'],
+                                    avatar: '/img/facebook_logo.png',
+                                    alias: env['info']['first_name'])
+    end
     return user
   end
 
@@ -110,10 +115,10 @@ class User
   def self.logout(app)
     RoomUser.all(user_id: (User.first(login_key: app.session[:login_key])).id).destroy
     app.session.clear
-    app.flash[:success] = "You are now logged out."
+    app.flash[:success] = "You are now signed out."
   end
 
-  def self.changealias(params,app)
+  def self.changealias(params, app)
     @user = (User.first(login_key: app.session[:login_key]))
     if params['newalias'].length <= 15
       @user.update(alias: params['newalias'])
