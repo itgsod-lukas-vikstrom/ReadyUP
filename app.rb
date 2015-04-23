@@ -114,13 +114,12 @@ EventMachine.run do
       @games = Game.all
       @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
       if session[:login_key] == nil
-        flash[:error] = "Please log in before creating a room."
+        flash[:error] = "Please sign in before creating a room."
         redirect '/'
       else
         slim :create
       end
     end
-
 
     post '/createroom' do
       redirect_url = Room.build(params, self)
@@ -158,7 +157,7 @@ EventMachine.run do
         @currentalias = User.first(login_key:session[:login_key])
         slim :alias
       else redirect '/login'
-        flash[:info] = "Please log in before changing your alias."
+        flash[:info] = "Please sign in before changing your alias."
       end
     end
 
