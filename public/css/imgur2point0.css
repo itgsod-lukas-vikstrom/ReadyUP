@@ -18,10 +18,7 @@ body{
 
     margin-left: 25%;
 }
-.doge{
-    margin-left: 30%;
-    margin-right: auto;
-}
+
 #white{   /* Makes the filter out full/empty rooms white!  */
     color: white;
 }
