@@ -4,8 +4,8 @@ $(document).ready(function() {
             { 'bSortable': false, 'aTargets': [ 4 ] }
         ],
         "info": false,
-        "bLengthChange": false
-
+        "bLengthChange": false,
+        responsive: true
     });
     $('#empty, #full').click( function() {
         table.draw();
