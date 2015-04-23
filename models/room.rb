@@ -9,6 +9,7 @@ class Room
   property :game, String
   property :language, String
   property :alert_sound, String, :required => true
+  property :background, String
   property :creator_id, String, :required => true
 
   has n, :user, :through => Resource
@@ -44,7 +45,7 @@ class Room
                           public: params['publicity'],
                           game: params['game'],
                           language: params['language'],
-                          alert_sound: 'alertljud.mp3',
+                          alert_sound: 'alertljud.mp3',background:'footer_lodyas.png',
                           creator_id: app.session[:login_key])
     if newroom.save
       app.flash[:success] = 'Group successfully created'
@@ -68,6 +69,19 @@ class Room
       end
     else
       app.flash[:error] = "Error changing room alert sound."
+    end
+  end
+
+  def change_background(params, app)
+    if app.session[:login_key] == self.creator_id
+      if self.background == params['audio']
+        app.flash[:error] = "Background sound already in use"
+      else
+        self.update(background: params['audio'])
+        app.flash[:success] = "Background changed."
+      end
+    else
+      app.flash[:error] = "Error changing Background."
     end
   end
 end
