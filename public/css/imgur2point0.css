@@ -13,7 +13,6 @@ body{
     height: auto;
 }
 
-
 .panel {
     width: 50%;
 
@@ -26,7 +25,6 @@ body{
 #groupname,#game,#size,#language{
     height: 30px;
     width: 200px;
-
 }
 
 .checkin{
@@ -34,7 +32,6 @@ body{
     margin-right: 150px;
     width: 200px;
     float: right;
-
 }
 
 #hour,#minute{
@@ -52,9 +49,6 @@ body{
     font-size: 20px;
     margin-left: auto;
     margin-right: auto;
-
-
-
 }
 #time{
     float: right;
@@ -160,7 +154,6 @@ input#full {
 
 }
 #hide {
-
     float: left;
     margin-top: 30px;
 
