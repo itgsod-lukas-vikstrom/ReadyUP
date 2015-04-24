@@ -191,6 +191,11 @@ ul.nav navbar-nav navbar-right{
     background-image: url(/img/footer_lodyas.png);
 
 }
+#alias {
+    background-image: url(/img/footer_lodyas.png);
+    height: 100%;
+
+}
 #navigators {
     float: right;
     margin-left: 120px;
@@ -251,4 +256,11 @@ ul.nav navbar-nav navbar-right{
 
 #alerts {
     padding-top: 120px;
+}
+input[type="text"] {
+    color: #333;
+
+}
+input[type="search"] {
+    color: #333;
 }
