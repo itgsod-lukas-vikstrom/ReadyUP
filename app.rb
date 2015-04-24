@@ -98,6 +98,7 @@ EventMachine.run do
       if $channels.fetch(url) { nil} == nil
         $channels[url] = EM::Channel.new
       end
+      p $main_channel
       session[:room] = url
       $usersroom = session[:room]
       $loginkey = session[:login_key]
@@ -233,7 +234,7 @@ EventMachine.run do
     end
 
   end
-  EventMachine::WebSocket.start(:host => '192.168.197.22', :port => 2000,:debug => true) do |ws|
+  EventMachine::WebSocket.start(:host => '192.168.196.112', :port => 2000,:debug => true) do |ws|
     if $name
       ws.onopen {
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
@@ -248,7 +249,7 @@ EventMachine.run do
           File.open("#{$ids_in_room.fetch(mainchannel_id)}" + ".txt", 'a') do |file|
             #count = %x{wc -l #{file}}.split.first.to_i
             file.write "\n"
-            file.write "#{$id_to_name.fetch(mainchannel_  id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
+            file.write "#{$id_to_name.fetch(mainchannel_id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
           end
 
         }
@@ -260,5 +261,5 @@ EventMachine.run do
     end
   end
   DataMapper.finalize
-  Thin::Server.start App, '192.168.197.22', 9292
+  Thin::Server.start App, '192.168.196.112', 9292
 end
