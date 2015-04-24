@@ -13,10 +13,12 @@ class RoomUser
       self.destroy
     end
   end
+
   def self.checkout(params,app)
     @room = Room.first(id: params['id'])
     RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
   end
+
   def self.remove_room(id,app)
     @roomusers = RoomUser.all(room_id: id)
     @roomusers.each do |user|
@@ -36,7 +38,6 @@ class RoomUser
     end
     return redirect_url
   end
-
 
   def timezone_offset
     if self.ready_until < DateTime.now + 1/24.to_f
