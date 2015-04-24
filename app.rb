@@ -99,10 +99,10 @@ EventMachine.run do
         $channels[url] = EM::Channel.new
       end
       session[:room] = url
-      p $main_channel
       $usersroom = session[:room]
       $loginkey = session[:login_key]
       $name = session[:alias]
+      @url = url
       @room = Room.first(:url => url) #hämtar informationen om rummet
       @users = @room.user
       @user= User.first(login_key: session[:login_key])
@@ -130,6 +130,7 @@ EventMachine.run do
       redirect redirect_url ||= back
     end
     get '/home' do
+      @home = TRUE
       @games = Game.all
       admin = User.admin?(self)
       @rooms = Room.all
