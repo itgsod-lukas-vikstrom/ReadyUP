@@ -9,34 +9,26 @@ script src="../js/list.js"
         input name="no_empty_groups" type="checkbox" id="empty" Hide empty groups
         input name="no_full_groups" type="checkbox" id="full" Hide full groups
       table#table.display
-          thead
-            tr
-              th Name
-              th Size
-              th Game
-              th Language
-              th
-
-          tbody
-            - for room in @rooms
-              - if room.public == true
-                tr
-                  td.name #{room.name}
-                  td.size #{room.user.length} / #{room.size}
-                  td.game #{room.game}
-                  td.language #{room.language}
-                  td
-                    button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
-                    -if @admin == true
-                      form action='/removeroom/#{room.id}' method='post' style='display:inline;'
-                        input type='image' src="/img/cross.png"
-
-                    - if @user != nil
-                      - if RoomUser.first(user_id: @user.id,room_id: room.id) != nil
-                        img src="/img/msn.png"
-
-
-
-
-
-
+        thead
+          tr
+            th Name
+            th Size
+            th Game
+            th Language
+            th
+        tbody
+          - for room in @rooms
+            - if room.public == true
+              tr
+                td.name #{room.name}
+                td.size #{room.user.length} / #{room.size}
+                td.game #{room.game}
+                td.language #{room.language}
+                td
+                  button.btn.pull-right type="button" onclick="location.href='/room/#{room.url}'" Join
+                  -if @admin == true
+                    form action='/removeroom/#{room.id}' method='post' style='display:inline;'
+                      input type='image' src="/img/cross.png"
+                  - if @user != nil
+                    - if RoomUser.first(user_id: @user.id,room_id: room.id) != nil
+                      img src="/img/msn.png"
