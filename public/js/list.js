@@ -7,6 +7,16 @@ $(document).ready(function() {
         "bLengthChange": false,
         responsive: true
     });
+    $('#members').DataTable({
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': [ 4 ] }
+        ],
+        "info": false,
+        "bLengthChange": false,
+        responsive: true,
+        searching: false,
+        ordering: false
+    });
     $('#empty, #full').click( function() {
         table.draw();
     } );
