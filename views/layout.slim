@@ -14,8 +14,8 @@ html lang="en"
     link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" /
     link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" /
     link href="http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic" rel="stylesheet" type="text/css" /
-    link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" /
-    link href="/css/animate.min.css" rel="stylesheet" type="text/css" /
+    /link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" /
+    /link href="/css/animate.min.css" rel="stylesheet" type="text/css" /
     link href="/css/creative.css" rel="stylesheet" type="text/css" /
     link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css" rel="stylesheet" type="text/css"
     script charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js" type="text/javascript"
@@ -31,7 +31,7 @@ html lang="en"
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand.page-scroll href="#page-top"  ReadyUP
+          a.navbar-brand.page-scroll href="/"  ReadyUP
           #navigators
             a href="#page-top" class="btn btn-primary btn-x page-scroll" Browse
             a href="#create" class="btn btn-primary btn-x page-scroll" Create
@@ -44,29 +44,8 @@ html lang="en"
               a href="/alias"  #{session[:alias]}
             a.pull-right href="/logout" id="sign_out" class="btn btn-primary btn-x page-scroll" Sign out
           - else
-            button.btn.pull-right type="button" id="steambutton" onclick="location.href='/login/steam'" Steam
-            button.btn.pull-right type="button" id="googlebutton" onclick="location.href='/login/google'" Google+
-            button.btn.pull-right type="button" id="facebookbutton" onclick="location.href='/login/facebook'" Facebook
-
-      - if flash[:success]
-        div class="alert alert-success alert-dismissible" role="alert"
-          button.close aria-label="Close" data-dismiss="alert" type="button"
-            span aria-hidden="true"  &times;
-          p #{flash[:success]}
-      - if flash[:info]
-        div class="alert alert-info alert-dismissible" role="alert"
-          button.close aria-label="Close" data-dismiss="alert" type="button"
-            span aria-hidden="true"  &times;
-          p #{flash[:info]}
-      - if flash[:warning]
-        div class="alert alert-warning alert-dismissible" role="alert"
-          button.close aria-label="Close" data-dismiss="alert" type="button"
-            span aria-hidden="true"  &times;
-          p #{flash[:warning]}
-      - if flash[:error]
-        div class="alert alert-danger alert-dismissible" role="alert"
-          button.close aria-label="Close" data-dismiss="alert" type="button"
-            span aria-hidden="true"  &times;
-          p #{flash[:error]}
+            #signin
+              button.btn.pull-right type="button" id="steambutton" class="btn btn-primary btn-x page-scroll" onclick="location.href='/login/steam'" Steam
+              button.btn.pull-right type="button" id="googlebutton" class="btn btn-primary btn-x page-scroll" onclick="location.href='/login/google'" Google+
+              button.btn.pull-right type="button" id="facebookbutton" class="btn btn-primary btn-x page-scroll" onclick="location.href='/login/facebook'" Facebook
     == yield
-
