@@ -16,7 +16,8 @@ class RoomUser
 
   def self.checkout(params,app)
     @room = Room.first(id: params['id'])
-    RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
+    roomuser = RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room)
+    roomuser.destroy if roomuser != nil
   end
 
   def self.remove_room(id,app)
