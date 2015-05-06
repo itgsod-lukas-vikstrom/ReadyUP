@@ -8,15 +8,14 @@ section#room.bg-primary
       .col-lg-8.col-lg-offset-2.text-center
 
 
+      .chatwindow
+        table#chat.table
+          tbody
 
-      - if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
-        .chatwindow
-          table#chat.table
-            tbody
-
-        #chatcontrols
-          form.form-stacked name ="chat"
-            .form-actions
+      #chatcontrols
+        form.form-stacked name ="chat"
+          .form-actions
+            - if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
               .control-group
                 input#msg.input-xlarge placeholder=("Type something…") type="text" maxlength="37"
               div
