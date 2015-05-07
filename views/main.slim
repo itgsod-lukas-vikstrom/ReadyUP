@@ -61,7 +61,10 @@ body#page-top
 
               input list="languages" id="language" type="text" name='language' autocomplete="off" placeholder='Language'
               br
-              input type='submit' value='Create room' id='createroom'
+              - if session[:login_key] != nil
+                input type='submit' value='Create room' id='createroom'
+              - else
+                H3 Please login in order to create a room
 
   section#contact
     .container
