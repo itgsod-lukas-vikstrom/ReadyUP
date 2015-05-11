@@ -3,6 +3,7 @@ EventMachine.run do
   $ids_in_room = {}
   $id_to_name = {}
   $id_to_sessid = {}
+  $sessionid_to_room ={}
   $main_channel = EM::Channel.new
 
   class App < Sinatra::Base
@@ -98,11 +99,12 @@ EventMachine.run do
       if $channels.fetch(url) { nil} == nil
         $channels[url] = EM::Channel.new
       end
-      session[:room] = url
       p $main_channel
+      session[:room] = url
       $usersroom = session[:room]
       $loginkey = session[:login_key]
       $name = session[:alias]
+      @url = url
       @room = Room.first(:url => url) #hämtar informationen om rummet
       @users = @room.user
       @user = User.first(login_key: session[:login_key])
@@ -117,6 +119,7 @@ EventMachine.run do
     end
 
     get '/home' do
+      @home = TRUE
       @games = Game.all
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
@@ -146,7 +149,7 @@ EventMachine.run do
 
     get '/alias' do
       if session[:member] == true
-        @currentalias = User.first(login_key:session[:login_key])
+        @currentalias = session[:alias]
         slim :alias
       else redirect '/login'
         flash[:info] = "Please sign in before changing your alias."
@@ -167,6 +170,7 @@ EventMachine.run do
     post '/removereport' do
       protected!
       Report.first(id: params['id']).destroy
+
       redirect back
     end
 
@@ -217,24 +221,46 @@ EventMachine.run do
         $ids_in_room[mainchannel_id] = "#{$usersroom}"
         $id_to_name[mainchannel_id] = "#{$name}"
         $id_to_sessid[mainchannel_id] = "#{$loginkey}"
+        p $sessionid_to_room.has_key?($id_to_sessid[mainchannel_id]) == true && $sessionid_to_room.has_value?($usersroom) == true
+        p "__________________"
+=begin
+        if $sessionid_to_room.has_key?($id_to_sessid[mainchannel_id]) == true && $sessionid_to_room.has_value?($usersroom) == true
+          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe($id_to_sessid.key($loginkey))
+
+        end
+=end
+        $sessionid_to_room[$id_to_sessid[mainchannel_id]] = $ids_in_room[mainchannel_id] = "#{$usersroom}"
+        name = "#{$id_to_name.fetch(mainchannel_id)}"
         id = $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].subscribe{ |msg| ws.send msg }
+        if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
+          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{name} Checked in"
+        end
+
 
 
         ws.onmessage { |msg|
-          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)}:" + " #{msg}"
+          p $channels[("#{$ids_in_room.fetch(mainchannel_id)}")]
+          if $channels[("#{$ids_in_room.fetch(mainchannel_id)}")]
+           $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)}:" + " #{msg}"
           File.open("#{$ids_in_room.fetch(mainchannel_id)}" + ".txt", 'a') do |file|
             #count = %x{wc -l #{file}}.split.first.to_i
             file.write "\n"
             file.write "#{$id_to_name.fetch(mainchannel_id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
+            end
           end
 
         }
-
-        ws.onclose {
-          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe(id)
-        }
+        if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
+          ws.onclose {
+            $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)} Checked out"
+            userroom = RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
+            userroom.destroy! if userroom != nil
+            $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe(id)
+          }
+        end
       }
     end
+
   end
   DataMapper.finalize
   Thin::Server.start App, '0.0.0.0', 9292

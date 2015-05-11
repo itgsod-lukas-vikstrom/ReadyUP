@@ -34,8 +34,12 @@ html lang="en"
             span.icon-bar
           a.navbar-brand.page-scroll href="/"  ReadyUP
           #navigators
-            a href="#page-top" class="btn btn-primary btn-x page-scroll" Browse
-            a href="#create" class="btn btn-primary btn-x page-scroll" Create
+            - if @home == TRUE
+              a href="#page-top" class="btn btn-primary btn-x page-scroll" Browse
+              a href="#create" class="btn btn-primary btn-x page-scroll" Create
+            - else
+              a href="/home#page-top" class="btn btn-primary btn-x page-scroll" Browse
+              a href="/home#create" class="btn btn-primary btn-x page-scroll" Create
 
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
           - unless session[:member] == nil

@@ -191,6 +191,11 @@ ul.nav navbar-nav navbar-right{
     background-image: url(/img/footer_lodyas.png);
 
 }
+#alias {
+    background-image: url(/img/footer_lodyas.png);
+    height: 100%;
+
+}
 #navigators {
     float: right;
     margin-left: 120px;
@@ -307,4 +312,12 @@ td.room_size {
 #chatcontrols {
     max-width: 100%;
     display: inline-block;
+}
+
+input[type="text"] {
+    color: #333;
+
+}
+input[type="search"] {
+    color: #333;
 }

@@ -16,7 +16,8 @@ class RoomUser
 
   def self.checkout(url, app)
     @room = Room.first(url: url)
-    RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
+    roomuser = RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room)
+    roomuser.destroy if roomuser != nil
     redirect_url = '/room/' + url
     return redirect_url
   end
