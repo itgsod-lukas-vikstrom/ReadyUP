@@ -105,59 +105,37 @@ EventMachine.run do
       $name = session[:alias]
       @room = Room.first(:url => url) #hämtar informationen om rummet
       @users = @room.user
-      @user= User.first(login_key: session[:login_key])
+      @user = User.first(login_key: session[:login_key])
       @amountofusers = 0
       slim :room
     end
-
-
-=begin
-    get '/create' do
-      @games = Game.all
-      @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
-      if session[:login_key] == nil
-        flash[:error] = "Please sign in before creating a room."
-        redirect '/'
-      else
-        slim :main
-      end
-    end
-=end
 
     post '/createroom' do
 
       redirect_url = Room.build(params, self)
       redirect redirect_url ||= back
     end
+
     get '/home' do
       @games = Game.all
-      admin = User.admin?(self)
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
       @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
-
       slim :main
     end
 
-=begin
-    get '/browse' do
-      @rooms = Room.all
-      @user = User.first(login_key: session[:login_key])
-      slim :main
-    end
-=end
-
-    post '/checkin' do
+    post '/room/checkin/:url' do |url|
+      room = Room.first(url: url)
       $usersroom = session[:room]
-      redirect_url = RoomUser.checkin(params, self)
-      @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+      redirect_url = RoomUser.checkin(params, url, self)
+      @room_user = RoomUser.first(room_id: room.id, user_id: (User.first(login_key: session[:login_key])).id)
       @room_user.timezone_offset
       redirect redirect_url ||= back
     end
 
-    post '/checkout' do
-      RoomUser.checkout(params,self)
-      redirect back
+    get '/room/checkout/:url' do |url|
+      RoomUser.checkout(url, self)
+      redirect redirect_url ||= back
     end
 
     post '/sendreport' do
@@ -232,7 +210,7 @@ EventMachine.run do
     end
 
   end
-  EventMachine::WebSocket.start(:host => '192.168.197.22', :port => 2000,:debug => true) do |ws|
+  EventMachine::WebSocket.start(:host => '0.0.0.0', :port => 2000,:debug => true) do |ws|
     if $name
       ws.onopen {
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
@@ -247,7 +225,7 @@ EventMachine.run do
           File.open("#{$ids_in_room.fetch(mainchannel_id)}" + ".txt", 'a') do |file|
             #count = %x{wc -l #{file}}.split.first.to_i
             file.write "\n"
-            file.write "#{$id_to_name.fetch(mainchannel_  id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
+            file.write "#{$id_to_name.fetch(mainchannel_id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
           end
 
         }
@@ -259,5 +237,5 @@ EventMachine.run do
     end
   end
   DataMapper.finalize
-  Thin::Server.start App, '192.168.197.22', 9292
+  Thin::Server.start App, '0.0.0.0', 9292
 end

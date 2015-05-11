@@ -14,9 +14,11 @@ class RoomUser
     end
   end
 
-  def self.checkout(params,app)
-    @room = Room.first(id: params['id'])
+  def self.checkout(url, app)
+    @room = Room.first(url: url)
     RoomUser.first(user: User.first(login_key: app.session[:login_key]), room: @room).destroy
+    redirect_url = '/room/' + url
+    return redirect_url
   end
 
   def self.remove_room(id,app)
@@ -27,11 +29,12 @@ class RoomUser
     Room.first(id: id).destroy
   end
 
-  def self.checkin(params,app)
-    room = Room.first(id: params['id'])
+  def self.checkin(params, url, app)
+    room = Room.first(url: url)
     if room.user.length < room.size
       time = params['hour'] + ':' + params['minute']
-      RoomUser.create(room_id: params['id'], user_id: (User.first(login_key: app.session[:login_key])).id, leader: TRUE, ready_until: time)
+      RoomUser.create(room_id: room.id, user_id: (User.first(login_key: app.session[:login_key])).id, leader: TRUE, ready_until: time)
+      redirect_url = '/room/' + url
     else
       app.flash[:error] = "Room is full."
       redirect_url = '/'

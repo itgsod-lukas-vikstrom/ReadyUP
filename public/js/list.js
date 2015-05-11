@@ -56,4 +56,5 @@ $.fn.dataTable.ext.search.push(
         return true;
 
     }
+
 );

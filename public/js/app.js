@@ -1,9 +1,9 @@
 $(function(){
-  ws = new WebSocket("ws://192.168.197.22:2000");
+  ws = new WebSocket("ws://0.0.0.0:2000");
   ws.onmessage = function(evt) {
     if ($('#chat tbody tr:last').length > 0){
       $('#chat tbody tr:last').after('<tr><td>' + evt.data + '</td></tr>');
-      $('.chatwindow').scrollTop($('.chatwindow')[0].scrollHeight);
+      $('#chatmessages').scrollTop($('#chatmessages')[0].scrollHeight);
     } else {
       $('#chat tbody').append('<tr><td>' + evt.data + '</td></tr>');
     }

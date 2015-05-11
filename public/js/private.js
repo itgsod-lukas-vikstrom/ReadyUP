@@ -19,14 +19,14 @@ function show(x)
 var visible = false
 function hidereport() {
     if(visible){
-        document.getElementById("reportname").style.visibility="hidden";
-        document.getElementById("reportdescription").style.visibility="hidden";
-        document.getElementById("submit").style.visibility="hidden";
+        document.getElementById("reportname").style.display="none";
+        document.getElementById("reportdescription").style.display="none";
+        document.getElementById("submit").style.display="none";
         visible = false
     } else {
-        document.getElementById("reportname").style.visibility="visible";
-        document.getElementById("reportdescription").style.visibility="visible";
-        document.getElementById("submit").style.visibility="visible";
+        document.getElementById("reportname").style.display="block";
+        document.getElementById("reportdescription").style.display="block";
+        document.getElementById("submit").style.display="block";
         visible = true
     }
 console.log(visible)

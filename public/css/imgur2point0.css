@@ -229,13 +229,18 @@ ul.nav navbar-nav navbar-right{
 }
 
 #roomcontainer {
-    max-width: 40%;
-    background-color: dimgrey;
+    max-width: 35%;
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+    /*float: left;*/
+    display: inline-block;
+    /*background-color: dimgrey;*/
 }
 
 #roomtitle {
-    max-width: 40%;
-    background-color: gray;
+    max-width: 30%;
+    max-height: 70px;
+    /*background-color: gray;*/
 }
 
 #titletable{
@@ -251,4 +256,55 @@ ul.nav navbar-nav navbar-right{
 
 #alerts {
     padding-top: 120px;
+}
+
+td.username, td.ready_until {
+    color: #333;
+}
+
+td.ready_until {
+    text-align: right;
+    margin-top: 5px;
+}
+
+th.header_readyuntil {
+    text-align: right;
+}
+
+td.room_size {
+    text-align: center;
+}
+
+#optionscontainer {
+    float: right;
+    max-width: 20%;
+    display: inline-block;
+    margin-right: 10%;
+    margin-top: 1.5%;
+    padding-left: 6%;
+}
+
+#wrapper {
+    width: 100% !important;
+    height: 100%;
+}
+
+#chatwrapper {
+    float: left;
+    max-width: 30%;
+    margin-top: 9%;
+    margin-left: 3%;
+    display: inline-block;
+}
+
+#chatmessages {
+    height: 15em;
+    overflow: auto;
+    max-width: 100%;
+    display: inline-block;
+}
+
+#chatcontrols {
+    max-width: 100%;
+    display: inline-block;
 }
