@@ -21,15 +21,12 @@ $ ->
 #  $('#memberlist').replaceWith(userList)
 
 setInterval () ->
-  $("#Members").load(location.href + " #Members")
   #getJson(document.URL + '/users.json', renderRoomusers)
-  console.log('Reloaded')
   window.currentusers = document.getElementById("current").innerHTML
   window.roomsize = document.getElementById("roomsize").innerHTML
   fullroom(window.runs)
   if window.currentusers != window.roomsize
     window.runs = 0
-
 ,2000
 
 fullroom = (runs) ->
