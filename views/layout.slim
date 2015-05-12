@@ -45,7 +45,7 @@ html lang="en"
             #navbaruser
               img id="" src='#{session[:avatar]}'
               span id="welcome" Welcome
-              a href="/alias"  #{session[:alias]}
+              a href="/alias"  #{$name}
             a.pull-right href="/logout" id="sign_out" class="btn btn-primary btn-x page-scroll" Sign out
           - else
             #signin
