@@ -58,8 +58,7 @@ section#room.bg-primary
                     /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
           - @amountofusers += 1
           /The time that each player is available to play.
-          span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
-          - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
+          span id='time'  #{RoomUser.ready_until(person.id, @room.id)}
           br
 
       .checkin
@@ -70,6 +69,7 @@ section#room.bg-primary
         form action='/checkin' method='post'
           p #{session[:alias]}
           p Ready until:
+
 
           - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
             select name ='hour' id='hour'
@@ -85,6 +85,7 @@ section#room.bg-primary
                 - y = "%02d" % x
                 option value="#{y}"  #{y}
                 - x += 5
+
             br
             - if @room.size > @amountofusers
               input type='submit' id='checkin_button'  value='Check in!'
