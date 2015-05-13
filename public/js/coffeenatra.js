@@ -3,7 +3,7 @@
   var fullroom;
 
   $(function() {
-    $("#roomcontainer").load(location.href + " #roomcontainer");
+    $("table#members").load(location.href + " table#members");
     return window.runs = 0;
   });
 
