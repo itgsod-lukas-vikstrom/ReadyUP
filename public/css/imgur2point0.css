@@ -52,17 +52,6 @@ body{
     margin-left: 2px;
 }
 
-
-
-#Members{
-    margin-top: -1%;
-    padding-bottom: 400px;
-    width: 45%;
-    height: 400px;
-    font-size: 20px;
-    margin-left: auto;
-    margin-right: auto;
-}
 #time{
     float: right;
 }
@@ -184,7 +173,7 @@ th#titles{
 ul.nav navbar-nav navbar-right{
     margin-top: 30px !important;
 }
-#create, #createbg {
+#create, #createbg, #flasherrors {
     background-image: url(/img/footer_lodyas.png);
 
 }
@@ -231,9 +220,9 @@ ul.nav navbar-nav navbar-right{
 }
 
 #roomcontainer {
-    max-width: 35%;
-    /*margin-right: auto;*/
-    /*margin-left: auto;*/
+    max-width: 29%;
+    margin-right: auto;
+    margin-left: 3%;
     float: left;
     display: inline-block;
     /*background-color: dimgrey;*/
@@ -241,7 +230,7 @@ ul.nav navbar-nav navbar-right{
 
 #roomtitle {
     max-width: 30%;
-    max-height: 70px;
+    max-height: 100px;
     /*background-color: gray;*/
 }
 
@@ -275,6 +264,7 @@ th.header_readyuntil {
 
 td.room_size {
     text-align: center;
+    align-content: center;
 }
 
 #optionscontainer {
@@ -320,9 +310,18 @@ input[type="search"] {
 }
 
 #tablewrapper {
-    margin-top: 15%;
+    margin-top: 10%;
 }
 
 .createwrapper {
     margin-top: -30%;
 }
+
+div#mainalert {
+    height: 80px;
+    width: 300px;
+    display: inline-block;
+    margin-top: 15%;
+    color: #3c763d;
+}
+
