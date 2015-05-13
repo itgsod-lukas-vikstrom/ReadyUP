@@ -55,7 +55,6 @@ body#page-top
                   - for  game in @games
                     option value="#{game.game}"
 
-
                 input list="games" id="game" type="text" name='game' autocomplete="off" placeholder='Game'
                 datalist id="languages"
                   - @languages.each do |language|
@@ -67,7 +66,6 @@ body#page-top
                   input type='submit' value='Create room' id='createroom'
                 - else
                   H3 Please sign in to create a room
-
   section#contact
     .container
       .row

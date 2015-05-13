@@ -2,7 +2,8 @@ section#alias.bg-primary
   .container
     .row
       .col-lg-8.col-lg-offset-2.text-center
-        p Current Alias: #{@currentalias}
+        p Current Alias: #{User.first(login_key: session[:login_key]).alias}
         form action='/createalias' method='post'
           input type="text" name="newalias" id="newalias" maxlength="15"
           input type="submit"class="btn btn-primary btn-x page-scroll" value="submit"
+

@@ -9,8 +9,15 @@ class RoomUser
   belongs_to :user
 
   def check_time
-    if self.ready_until <= DateTime.now + 1/24.to_f
+    if self.ready_until.strftime("%d:%H:%M") <= DateTime.now.strftime("%d:%H:%M")
       self.destroy
+    end
+  end
+
+  def self.ready_until(user_id, room_id)
+    roomuser = RoomUser.first(user_id: user_id, room_id: room_id)
+    if roomuser != nil
+      return roomuser.ready_until
     end
   end
 
@@ -31,10 +38,27 @@ class RoomUser
   end
 
   def self.checkin(params, url, app)
+    puts "VAOKDLAWINDAOWNDOUAWDNOIAWHJDIAWJDOIAWHDA"
+    puts "_____________"
     room = Room.first(url: url)
     if room.user.length < room.size
-      time = params['hour'] + ':' + params['minute']
-      RoomUser.create(room_id: room.id, user_id: (User.first(login_key: app.session[:login_key])).id, leader: TRUE, ready_until: time)
+      if params['hour'].to_i <= Time.now.hour.to_i && params['minute'].to_i <= Time.now.min.to_i
+        timedate= DateTime.new(Time.now.year,
+                               Time.now.month,
+                               (Time.now.day+1),
+                               params['hour'].to_i,
+                               params['minute'].to_i)
+      else
+        timedate= DateTime.new(Time.now.year,
+                               Time.now.month,
+                               (Time.now.day+0),
+                               params['hour'].to_i,
+                               params['minute'].to_i)
+      end
+      RoomUser.create(room_id: room.id,
+                      user_id: (User.first(login_key: app.session[:login_key])).id,
+                      leader: FALSE,
+                      ready_until: timedate)
       redirect_url = '/room/' + url
     else
       app.flash[:error] = "Room is full."
@@ -43,9 +67,5 @@ class RoomUser
     return redirect_url
   end
 
-  def timezone_offset
-    if self.ready_until < DateTime.now + 1/24.to_f
-      self.update(ready_until: (self.ready_until) + 1)
-    end
-  end
+
 end

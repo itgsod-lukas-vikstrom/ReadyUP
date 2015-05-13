@@ -15,11 +15,11 @@ class User
   has n, :room, :through => :roomusers
   has 1, :report
 
-  validates_length_of :name, :within => 4..14
+  validates_length_of :name, :within => 1..25
   validates_with_method :login_provider, :method => :valid_login_provider?
   validates_numericality_of :login_key
   validates_with_method :avatar, :method => :valid_avatar?
-  validates_length_of :alias, :within => 4..14
+  validates_length_of :alias, :within => 1..25
 
   def valid_login_provider?
     if @login_provider == "Steam" || @login_provider == "Google" || @login_provider == "Facebook"

@@ -1,11 +1,11 @@
-EventMachine.run do
+
   $channels = {}
   $ids_in_room = {}
   $id_to_name = {}
   $id_to_sessid = {}
   $sessionid_to_room ={}
   $main_channel = EM::Channel.new
-
+  $chat_online = false
   class App < Sinatra::Base
     enable :sessions
     require 'rack-flash'
@@ -92,6 +92,10 @@ EventMachine.run do
     end
 
     get '/room/:url' do |url|
+      if $chat_online == false
+        chat
+
+      end
       unless Room.first(:url => url)
         flash[:error] = "Room does not exist."
         redirect "/browse"
@@ -99,16 +103,18 @@ EventMachine.run do
       if $channels.fetch(url) { nil} == nil
         $channels[url] = EM::Channel.new
       end
-      p $main_channel
       session[:room] = url
       $usersroom = session[:room]
       $loginkey = session[:login_key]
-      $name = session[:alias]
       @url = url
       @room = Room.first(:url => url) #hämtar informationen om rummet
       @users = @room.user
-      @user = User.first(login_key: session[:login_key])
+      @user= User.first(login_key: session[:login_key])
+      $name = @user.alias if @user != nil
       @amountofusers = 0
+      @users.each do |person|
+        (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
+      end
       slim :room
     end
 
@@ -128,11 +134,15 @@ EventMachine.run do
     end
 
     post '/room/checkin/:url' do |url|
+      puts "JODPAWJDOWAPDADWD"
       room = Room.first(url: url)
       $usersroom = session[:room]
+
       redirect_url = RoomUser.checkin(params, url, self)
       @room_user = RoomUser.first(room_id: room.id, user_id: (User.first(login_key: session[:login_key])).id)
+=begin
       @room_user.timezone_offset
+=end
       redirect redirect_url ||= back
     end
 
@@ -151,7 +161,7 @@ EventMachine.run do
       if session[:member] == true
         @currentalias = session[:alias]
         slim :alias
-      else redirect '/login'
+      else redirect '/home'
         flash[:info] = "Please sign in before changing your alias."
       end
     end
@@ -214,32 +224,30 @@ EventMachine.run do
     end
 
   end
+def chat
   EventMachine::WebSocket.start(:host => '0.0.0.0', :port => 2000,:debug => true) do |ws|
+    $chat_online = true
     if $name
       ws.onopen {
+=begin //Alpha version of attempt to fix multiple tab related bugs
+        if $sessionid_to_room.has_key?($loginkey) == true && $sessionid_to_room.has_value?($usersroom) == true
+          p "_________x___________"
+          $channels[("#{$ids_in_room.fetch($id_to_sessid.key($loginkey))}")].unsubscribe($id_to_sessid.key($loginkey))
+          p $channels[("#{$ids_in_room.fetch($id_to_sessid.key($loginkey))}")]
+        end
+=end
         mainchannel_id = $main_channel.subscribe{ |msg| ws.send msg }
         $ids_in_room[mainchannel_id] = "#{$usersroom}"
         $id_to_name[mainchannel_id] = "#{$name}"
         $id_to_sessid[mainchannel_id] = "#{$loginkey}"
-        p $sessionid_to_room.has_key?($id_to_sessid[mainchannel_id]) == true && $sessionid_to_room.has_value?($usersroom) == true
-        p "__________________"
-=begin
-        if $sessionid_to_room.has_key?($id_to_sessid[mainchannel_id]) == true && $sessionid_to_room.has_value?($usersroom) == true
-          $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe($id_to_sessid.key($loginkey))
-
-        end
-=end
         $sessionid_to_room[$id_to_sessid[mainchannel_id]] = $ids_in_room[mainchannel_id] = "#{$usersroom}"
         name = "#{$id_to_name.fetch(mainchannel_id)}"
         id = $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].subscribe{ |msg| ws.send msg }
-        if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
+        if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id){}).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
           $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{name} Checked in"
         end
 
-
-
         ws.onmessage { |msg|
-          p $channels[("#{$ids_in_room.fetch(mainchannel_id)}")]
           if $channels[("#{$ids_in_room.fetch(mainchannel_id)}")]
            $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)}:" + " #{msg}"
           File.open("#{$ids_in_room.fetch(mainchannel_id)}" + ".txt", 'a') do |file|
@@ -248,20 +256,21 @@ EventMachine.run do
             file.write "#{$id_to_name.fetch(mainchannel_id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
             end
           end
-
         }
+
         if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
           ws.onclose {
             $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)} Checked out"
             userroom = RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
             userroom.destroy! if userroom != nil
             $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe(id)
+            $main_channel.unsubscribe(mainchannel_id)
+            $sessionid_to_room.delete($id_to_sessid[mainchannel_id])
+
           }
         end
       }
     end
 
   end
-  DataMapper.finalize
-  Thin::Server.start App, '0.0.0.0', 9292
 end

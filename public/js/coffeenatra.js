@@ -3,7 +3,7 @@
   var fullroom;
 
   $(function() {
-    $("#Members").load(location.href + " #Members");
+    $("#roomcontainer").load(location.href + " #roomcontainer");
     return window.runs = 0;
   });
 
@@ -15,10 +15,13 @@
       return window.runs = 0;
     }
   }, 2000);
+    setInterval(function() {
+        $("#Members").load(location.href + " #Members");
+        console.log('Timed refresh')
+    }, 180000);
 
   fullroom = function(runs) {
     if (window.currentusers === window.roomsize && runs === 0) {
-      document.getElementById('siren').loop = true;
       document.getElementById('siren').play();
       alert("Alla är redo");
       document.getElementById('siren').pause();
