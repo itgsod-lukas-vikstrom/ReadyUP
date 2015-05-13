@@ -162,16 +162,13 @@ input#empty {
 }
 input#full {
     margin-left: 10px;
-
-
-
 }
+
 #hide {
     float: left;
     margin-top: 30px;
-
-
 }
+
 #table_filter {
     margin-top: -30px;
     float: right;
@@ -182,12 +179,12 @@ th#titles{
     color: white !important;
 }
 #header-content{
-    padding-top: 300px !important;
+    padding-top: 400px !important;
 }
 ul.nav navbar-nav navbar-right{
     margin-top: 30px !important;
 }
-#create {
+#create, #createbg {
     background-image: url(/img/footer_lodyas.png);
 
 }
@@ -237,7 +234,7 @@ ul.nav navbar-nav navbar-right{
     max-width: 35%;
     /*margin-right: auto;*/
     /*margin-left: auto;*/
-    /*float: left;*/
+    float: left;
     display: inline-block;
     /*background-color: dimgrey;*/
 }
@@ -320,4 +317,12 @@ input[type="text"] {
 }
 input[type="search"] {
     color: #333;
+}
+
+#tablewrapper {
+    margin-top: 15%;
+}
+
+.createwrapper {
+    margin-top: -30%;
 }
