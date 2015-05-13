@@ -4,7 +4,9 @@ $(function(){
         console.log(evt.data)
         if( evt.data.indexOf('Checked') >= 0){
             console.log('Refreshed members')
-            $("#Members").load(location.href + " #Members");
+            $("#roomtitle").load(location.href + " #roomtitle");
+            $("#roomcontainer").load(location.href + " #roomcontainer");
+            $("#optionscontainer").load(location.href + " #optionscontainer");
         }
         if ($('#chat tbody tr:last').length > 0){
             $('#chat tbody tr:last').after('<tr><td>' + evt.data + '</td></tr>');
