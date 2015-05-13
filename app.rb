@@ -124,6 +124,7 @@
     end
 
     get '/home' do
+      @admin = session[:admin]
 
       @home = TRUE
       @games = Game.all
