@@ -33,11 +33,11 @@ html lang="en"
           a.navbar-brand.page-scroll href="/"  ReadyUP
           #navigators
             - if @home == TRUE
-              a href="#page-top" class="btn btn-primary btn-x page-scroll" Browse
-              a href="#create" class="btn btn-primary btn-x page-scroll" Create
+              a href="#page-top" id='browse1' class="btn btn-primary btn-x page-scroll" Browse
+              a href="#create" id='create1' class="btn btn-primary btn-x page-scroll" Create
             - else
-              a href="/home#page-top" class="btn btn-primary btn-x page-scroll" Browse
-              a href="/home#create" class="btn btn-primary btn-x page-scroll" Create
+              a href="/home#page-top" id='browse2' class="btn btn-primary btn-x page-scroll" Browse
+              a href="/home#create" id='create2' class="btn btn-primary btn-x page-scroll" Create
 
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
           - unless session[:member] == nil

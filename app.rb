@@ -94,7 +94,6 @@
     get '/room/:url' do |url|
       if $chat_online == false
         chat
-
       end
       unless Room.first(:url => url)
         flash[:error] = "Room does not exist."
@@ -125,10 +124,12 @@
     end
 
     get '/home' do
+
       @home = TRUE
       @games = Game.all
       @rooms = Room.all
       @user = User.first(login_key: session[:login_key])
+      $name = @user.alias if @user != nil
       @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
       slim :main
     end
@@ -159,7 +160,7 @@
 
     get '/alias' do
       if session[:member] == true
-        @currentalias = session[:alias]
+        $name = session[:alias]
         slim :alias
       else redirect '/home'
         flash[:info] = "Please sign in before changing your alias."

@@ -77,7 +77,6 @@ section#createbg.bg-primary
               datalist id="languages"
                 - @languages.each do |language|
                   option value="#{language}"#{language}
-
               input list="languages" id="language" type="text" name='language' autocomplete="off" placeholder='Language'
               br
               - if session[:login_key] != nil
