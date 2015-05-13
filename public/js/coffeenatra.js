@@ -22,9 +22,11 @@
 
   fullroom = function(runs) {
     if (window.currentusers === window.roomsize && runs === 0) {
-      document.getElementById('siren').play();
+      var sound = document.getElementById('siren')
+      sound.loop = true
+      sound.play();
       alert("Alla är redo");
-      document.getElementById('siren').pause();
+      sound.pause();
       return window.runs = 1;
     }
   };
