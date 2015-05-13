@@ -80,7 +80,7 @@ body{
 p#current, p#roomsize{
     visibility: hidden;
 }
-#steambutton, #googlebutton, #facebookbutton{
+#steambutton, #googlebutton, #facebookbutton, #sign_out, #create1, #create2, #browse1, #browse2{
     margin-right: 5px;
 }
 
