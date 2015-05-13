@@ -37,7 +37,6 @@ body{
 }
 #createroom{
     margin-top: 5px;
-    color: #4d4d4d;
 }
 
 .checkin{
@@ -79,8 +78,7 @@ body{
 p#current, p#roomsize{
     visibility: hidden;
 }
-
-button.btn.pull-right{
+#steambutton, #googlebutton, #facebookbutton{
     margin-right: 5px;
 }
 
