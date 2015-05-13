@@ -4,7 +4,7 @@ $(function(){
         console.log(evt.data)
         if( evt.data.indexOf('Checked') >= 0){
             console.log('Refreshed members')
-            $("#roomtitle").load(location.href + " #roomtitle");
+            $("table#titletable").load(location.href + " table#titletable");
             $("table#members").load(location.href + " table#members");
             $("#optionscontainer").load(location.href + " #optionscontainer");
         }
