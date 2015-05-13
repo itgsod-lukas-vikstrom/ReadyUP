@@ -147,6 +147,7 @@ section#room.bg-primary
           tr
             td #{@users.length} / #{@room.size} Users
     .container id="optionscontainer"
+
       - if session[:member]
         a href="#" onclick="hidereport();"
           img src="/img/flag.png" id="flag" style="cursor:pointer" Report
@@ -162,17 +163,18 @@ section#room.bg-primary
           table#check_in
             tbody
               tr
-                td Ready until:
+                td
+                  h5 Ready until:
               tr
                 td
-                  select class="btn btn-default dropdown-toggle" form="check_in" name='hour' id='hour'
+                  select class="btn btn-default btn-sm dropdown-toggle" form="check_in" name='hour' id='hour'
                     - x = 0
                     - 24.times do
                       - y = "%02d" % x
                       option value="#{y}"  #{y}
                       - x += 1
                 td
-                  select class="btn btn-default dropdown-toggle" form="check_in" name ='minute' id='minute'
+                  select class="btn btn-default btn-sm dropdown-toggle" form="check_in" name ='minute' id='minute'
                     - x = 0
                     - 12.times do
                       - y = "%02d" % x
@@ -189,6 +191,23 @@ section#room.bg-primary
               tr
                 td
                   input type='submit' id='checkout_button' class="btn btn-primary btn-x page-scroll" form="check_out" value='Check out!'
+      - if @room.creator_id == session[:login_key]
+        h5 Alert sound:
+        form action='/change_audio/#{@room.id}' method='post'
+          select class="btn btn-default btn-sm dropdown-toggle" name='audio' id='audio'
+            option value="alertljud.mp3"  Default
+            option value="glass_ping.mp3"  Ping
+            option value="news.mp3"  News
+            option value="bell.mp3"  Bell
+
+          input class="btn btn-primary btn-x page-scroll" type="submit" id="submit"
+        h5 Background image:
+        form action='/change_background/#{@room.id}' method='post'
+          select class="btn btn-default btn-sm dropdown-toggle" name='audio' id='audio'
+            option value="footer_lodyas.png"  Default
+            option value="triangular.png" Triangular
+            option value="escheresque_ste.png"  Escheresque
+          input class="btn btn-primary btn-x page-scroll" type="submit" id="submit"
     .container id="roomcontainer"
       table#members.display
         thead
@@ -220,6 +239,7 @@ section#room.bg-primary
                       a No options available
   p id="current" #{@users.length}
   p id="roomsize" #{@room.size}
+
 
 script src='../js/app.js'
 script src="../js/private.js"

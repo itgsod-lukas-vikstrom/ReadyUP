@@ -286,6 +286,9 @@ td.room_size {
     width: 100% !important;
     height: 100%;
 }
+#submit{
+    margin-top: 5px;
+}
 
 #chatwrapper {
     float: left;
