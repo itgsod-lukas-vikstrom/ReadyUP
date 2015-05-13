@@ -1,13 +1,17 @@
-.reports
-  - for report in @reports
-    h4 #{report.user.name}
-    p #{report.comment}
-    br
-    form action="/sendviolation" method="post"
-      input type="text" name="reason"
-      input type="submit" value="ban"
-      input type="hidden" name="userid" value="#{report.user.id}"
-      input type="hidden" name="id" value="#{report.id}"
-    form action="/removereport" method="post"
-      input type="submit" value="no ban"
-      input type="hidden" name="id" value="#{report.id}"
+
+section#alias.bg-primary
+  .container
+    .row
+      .col-lg-8.col-lg-offset-2.text-center.reports
+        - for report in @reports
+          h4 #{report.user.name}
+          p #{report.comment}
+          br
+          form action="/sendviolation" method="post"
+            input type="text" name="reason"
+            input type="submit" value="ban" class="btn btn-primary btn-x page-scroll"
+            input type="hidden" name="userid" value="#{report.user.id}"
+            input type="hidden" name="id" value="#{report.id}"
+          form action="/removereport" method="post"
+            input type="submit" class="btn btn-primary btn-x page-scroll" value="no ban"
+            input type="hidden" name="id" value="#{report.id}"
