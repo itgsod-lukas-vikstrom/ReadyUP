@@ -1,89 +1,107 @@
-body#page-top
-  header
-    .header-content
-      .header-content-inner
-        #tablewrapper
-          #hide
-            input name="no_empty_groups" type="checkbox" id="empty"
-            span id='white' Hide empty groups
-            input name="no_full_groups" type="checkbox" id="full"
-            span id='white' Hide full groups
-          table#table.display
-            thead
-              tr
-                th id="titles" Name
-                th id="titles" Size
-                th id="titles" Game
-                th id="titles" Language
-                th id="titles"
-            tbody
-              - for room in @rooms
-                - if room.public == true
-                  tr
-                    td.name #{room.name}
-                    td.size #{room.user.length} / #{room.size}
-                    td.game #{room.game}
-                    td.language #{room.language}
-                    td
-                      button.btn.pull-right type="button" class="btn btn-primary btn-x page-scroll" onclick="location.href='/room/#{room.url}'" Join
-                      -if @admin == true
-                        form action='/removeroom/#{room.id}' method='post' style='display:inline;'
-                          input type='image' src="/img/cross.png"
-                      - if @user != nil
-                        - if RoomUser.first(user_id: @user.id,room_id: room.id) != nil
-                          img src="/img/msn.png"
-
-
-  section#createbg.bg-primary
-    .container
-      .row
-        .col-lg-8.col-lg-offset-2.text-center
-          #create
-            .createwrapper
-              h2 Create a room
-              form action='/createroom' method='post'
-                .radio
-                  input checked="" type="radio" name="publicity" onchange="hide(this)" value="true"Public
-                  br
-                  input type="radio" name="publicity" onchange="show(this)" value="false"Private
+header#body-top
+  .header-content
+    .header-content-inner
+      #tablewrapper
+        #flasherrors
+          - if flash[:success]
+            div id="mainalert" class="alert alert-success alert-dismissible" role="alert"
+              button.close aria-label="Close" data-dismiss="alert" type="button"
+                span aria-hidden="true"  &times;
+              p #{flash[:success]}
+            - if flash[:info]
+              div id="mainalert" class="alert alert-info alert-dismissible" role="alert"
+                button.close aria-label="Close" data-dismiss="alert" type="button"
+                  span aria-hidden="true"  &times;
+                p #{flash[:info]}
+            - if flash[:warning]
+              div id="mainalert" class="alert alert-warning alert-dismissible" role="alert"
+                button.close aria-label="Close" data-dismiss="alert" type="button"
+                  span aria-hidden="true"  &times;
+                p #{flash[:warning]}
+            - if flash[:error]
+              div id="mainalert" class="alert alert-danger alert-dismissible" role="alert"
+                button.close aria-label="Close" data-dismiss="alert" type="button"
+                  span aria-hidden="true"  &times;
+                p #{flash[:error]}
+        #hide
+          input name="no_empty_groups" type="checkbox" id="empty"
+          span id='white' Hide empty groups
+          input name="no_full_groups" type="checkbox" id="full"
+          span id='white' Hide full groups
+        table#table.display
+          thead
+            tr
+              th id="titles" Name
+              th id="titles" Size
+              th id="titles" Game
+              th id="titles" Language
+              th id="titles"
+          tbody
+            - for room in @rooms
+              - if room.public == true
+                tr
+                  td.name #{room.name}
+                  td.size #{room.user.length} / #{room.size}
+                  td.game #{room.game}
+                  td.language #{room.language}
+                  td
+                    button.btn.pull-right type="button" class="btn btn-primary btn-x page-scroll" onclick="location.href='/room/#{room.url}'" Join
+                    -if @admin == true
+                      form action='/removeroom/#{room.id}' method='post' style='display:inline;'
+                        input type='image' src="/img/cross.png"
+                    - if @user != nil
+                      - if RoomUser.first(user_id: @user.id,room_id: room.id) != nil
+                        img src="/img/msn.png"
+section#createbg.bg-primary
+  .container
+    .row
+      .col-lg-8.col-lg-offset-2.text-center
+        #create
+          .createwrapper
+            h2 Create a room
+            form action='/createroom' method='post'
+              .radio
+                input checked="" type="radio" name="publicity" onchange="hide(this)" value="true"Public
                 br
-                input type='text' name='groupname' id='groupname' placeholder='Groupname' required="" autocomplete="off" maxlength="24"
-                input type='number' min="1" max="99" name='size' id='size' placeholder='Group size' required="" autocomplete="off"
-                br
+                input type="radio" name="publicity" onchange="show(this)" value="false"Private
+              br
+              input type='text' name='groupname' id='groupname' placeholder='Groupname' required="" autocomplete="off" maxlength="24"
+              input type='number' min="1" max="99" name='size' id='size' placeholder='Group size' required="" autocomplete="off"
+              br
 
-                datalist id="games"
-                  - for  game in @games
-                    option value="#{game.game}"
+              datalist id="games"
+                - for  game in @games
+                  option value="#{game.game}"
 
-                input list="games" id="game" type="text" name='game' autocomplete="off" placeholder='Game'
-                datalist id="languages"
-                  - @languages.each do |language|
-                    option value="#{language}"#{language}
+              input list="games" id="game" type="text" name='game' autocomplete="off" placeholder='Game'
+              datalist id="languages"
+                - @languages.each do |language|
+                  option value="#{language}"#{language}
 
-                input list="languages" id="language" type="text" name='language' autocomplete="off" placeholder='Language'
-                br
-                - if session[:login_key] != nil
-                  input type='submit' value='Create room' id='createroom'
-                - else
-                  H3 Please sign in to create a room
-  section#contact
-    .container
-      .row
-        .col-lg-8.col-lg-offset-2.text-center
-          h2.section-heading Feedback?
-          hr.primary
-          p That's great! Don't hesitate to send us an email.
-        .col-lg-4.col-lg-offset-2.text-center
-          i.fa.fa-phone.fa-3x.wow.bounceIn
-          p 123-456-6789
-        .col-lg-4.text-center
-          i.fa.fa-envelope-o.fa-3x.wow.bounceIn data-wow-delay=".1s"
-          p
-            a href="mailto:your-email@your-domain.com"  feedback@readyup.me
+              input list="languages" id="language" type="text" name='language' autocomplete="off" placeholder='Language'
+              br
+              - if session[:login_key] != nil
+                input type='submit' value='Create room' id='createroom'
+              - else
+                H3 Please sign in to create a room
+section#contact
+  .container
+    .row
+      .col-lg-8.col-lg-offset-2.text-center
+        h2.section-heading Feedback?
+        hr.primary
+        p That's great! Don't hesitate to send us an email.
+      .col-lg-4.col-lg-offset-2.text-center
+        i.fa.fa-phone.fa-3x.wow.bounceIn
+        p 123-456-6789
+      .col-lg-4.text-center
+        i.fa.fa-envelope-o.fa-3x.wow.bounceIn data-wow-delay=".1s"
+        p
+          a href="mailto:your-email@your-domain.com"  feedback@readyup.me
 
 
-  script src="/js/jquery.easing.min.js"
-  script src="/js/jquery.fittext.js"
-  script src="/js/wow.min.js"
-  script src="/js/creative.js"
-  script src="/js/list.js"
+script src="/js/jquery.easing.min.js"
+script src="/js/jquery.fittext.js"
+script src="/js/wow.min.js"
+script src="/js/creative.js"
+script src="/js/list.js"
