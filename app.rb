@@ -263,8 +263,10 @@ def chat
         if RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
           ws.onclose {
             $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].push "#{$id_to_name.fetch(mainchannel_id)} Checked out"
+=begin
             userroom = RoomUser.first(user_id: (User.first(login_key: $id_to_sessid.fetch(mainchannel_id)).id), room_id: (Room.first(url: $ids_in_room.fetch(mainchannel_id)).id))
             userroom.destroy! if userroom != nil
+=end
             $channels[("#{$ids_in_room.fetch(mainchannel_id)}")].unsubscribe(id)
             $main_channel.unsubscribe(mainchannel_id)
             $sessionid_to_room.delete($id_to_sessid[mainchannel_id])
