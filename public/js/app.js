@@ -6,7 +6,7 @@ $(function(){
             console.log('Refreshed members')
             $("table#titletable").load(location.href + " table#titletable");
             $("table#members").load(location.href + " table#members");
-            $("#optionscontainer").load(location.href + " #optionscontainer");
+
         }
         if ($('#chat tbody tr:last').length > 0){
             $('#chat tbody tr:last').after('<tr><td>' + evt.data + '</td></tr>');
