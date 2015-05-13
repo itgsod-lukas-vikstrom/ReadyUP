@@ -8,13 +8,13 @@ $(function(){
         }
         if ($('#chat tbody tr:last').length > 0){
             $('#chat tbody tr:last').after('<tr><td>' + evt.data + '</td></tr>');
-            $('.chatwindow').scrollTop($('.chatwindow')[0].scrollHeight);
+            $('#chatmessages').scrollTop($('#chatmessages')[0].scrollHeight);
         } else {
             $('#chat tbody').append('<tr><td>' + evt.data + '</td></tr>');
         }
     };
-/*
-    ws.onclose = function() {
+
+  /*  ws.onclose = function() {
 
     };
 

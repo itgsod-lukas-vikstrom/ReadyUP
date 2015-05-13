@@ -40,6 +40,10 @@ class Seeder
     RoomUser.create(room_id: 4, user_id: 5, ready_until: "16:50", leader: FALSE)
     RoomUser.create(room_id: 5, user_id: 6, ready_until: "22:30", leader: TRUE)
     RoomUser.create(room_id: 6, user_id: 7, ready_until: "23:40", leader: TRUE)
+    RoomUser.create(room_id: 7, user_id: 1, ready_until: "19:40", leader: FALSE)
+    RoomUser.create(room_id: 7, user_id: 3, ready_until: "20:40", leader: FALSE)
+    RoomUser.create(room_id: 7, user_id: 4, ready_until: "21:40", leader: FALSE)
+    RoomUser.create(room_id: 7, user_id: 6, ready_until: "22:40", leader: FALSE)
   end
 
   def self.game

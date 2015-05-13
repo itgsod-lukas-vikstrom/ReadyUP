@@ -1,6 +1,107 @@
-script src="../js/private.js"
 audio#siren preload="auto" src="/audio/#{@room.alert_sound}"
 body background="/img/#{@room.background}"
+
+/section#room.bg-primary
+/  .container
+/    .row
+/      .col-lg-8.col-lg-offset-2.text-center
+/      - if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
+/        .chatwindow
+/          table#chat.table
+/            tbody
+/        #chatcontrols
+/          form.form-stacked name ="chat"
+/            .form-actions
+/              .control-group
+/                input#msg.input-xlarge placeholder=("Type something…") type="text" maxlength="37"
+/              div
+/                input#send.btn type="submit" value="Send"
+/                input#clear.btn type="button" value=("Clear Chat")
+/      /#Title
+/      #Members
+/        .title
+/          h1 #{@room.name}
+/          h1  #{@users.length} / #{@room.size}
+/          p id="current" #{@users.length}
+/          p id="roomsize" #{@room.size}
+/        /ul id="memberlist"
+/        - for person in @users
+/          //Avatar image
+/          span
+/            img src="#{person.avatar}"
+/          span  #{person.alias}
+/          - if person.login_provider == "Steam" || @room.creator_id == session[:login_key] || session[:admin]
+/            .dropdown id="userdropdown"
+/              button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
+/                span.caret
+/              ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
+/                - if person.login_provider == "Steam"
+/                  li role="presentation"
+/                    a href="steam://friends/add/#{person.login_key}" Add on Steam
+/                - if @room.creator_id == session[:login_key] || session[:admin]
+/                  li role="presentation"
+/                    a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
+/                  /form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
+/                    /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
+/          - @amountofusers += 1
+/          /The time that each player is available to play.
+/          span id='time'  #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
+/          - (RoomUser.first(user_id: person.id, room_id: @room.id)).check_time
+/          br
+/
+/      .checkin
+/        - if session[:member]
+/          a href="#" onclick="hidereport();"
+/            img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
+/
+/        form action='/checkin' method='post'
+/          p #{session[:alias]}
+/          p Ready until:
+/
+/          - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
+/            select name ='hour' id='hour'
+/              - x = 0
+/              - 24.times do
+/                - y = "%02d" % x
+/                option value="#{y}"  #{y}
+/                - x += 1
+/
+/            select name ='minute' id='minute'
+/              - x = 0
+/              - 12.times do
+/                - y = "%02d" % x
+/                option value="#{y}"  #{y}
+/                - x += 5
+/            br
+/              input type='submit' id='checkin_button'  value='Check in!'
+/            - else
+/              h1 Room is full!
+/          input type="hidden" name="id" value="#{@room.id}"
+/        form action='/checkout' method='post'
+/          - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
+/            input id='checkout_button' type='submit' value='Check out!'
+/          input type="hidden" name="id" value="#{@room.id}"
+/        form action='/sendreport' method='post'
+/          select name='reportname' id='reportname' style="visibility: hidden"
+/            -for person in @users
+/              option value="#{person.alias}" Report #{person.alias}
+/          input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
+/          input type="submit" id="submit" style="visibility: hidden" value="Send report"
+/        - if @room.creator_id == session[:login_key] || session[:admin]
+/          form action='/change_audio/#{@room.id}' method='post'
+/            select name='audio' id='audio'
+/              option value="alertljud.mp3"  Default
+/              option value="glass_ping.mp3"  Ping
+/              option value="news.mp3"  News
+/              option value="bell.mp3"  Bell
+/
+/            input type="submit" id="submit"
+/          form action='/change_background/#{@room.id}' method='post'
+/            select name='audio' id='audio'
+/              option value="footer_lodyas.png"  Default
+/              option value="triangular.png" Triangular
+/              option value="escheresque_ste.png"  Escheresque
+/            input type="submit" id="submit"
 
 section#room.bg-primary
   .container
@@ -21,104 +122,87 @@ section#room.bg-primary
               div
                 input#send.btn type="submit" value="Send"
                 input#clear.btn type="button" value=("Clear Chat")
-
-        script src="http://code.jquery.com/jquery-1.7.2.min.js"
-        script src="/js/bootstrap.js"
-        script src="/js/app.js"
-        script charset="utf-8" type="text/javascript"
-      /#Title
-
-      #Members
-        .title
-          h1 #{@room.name}
-          h1  #{@users.length} / #{@room.size}
-          p id="current" #{@users.length}
-          p id="roomsize" #{@room.size}
-
-
-        /ul id="memberlist"
-
-        - for person in @users
-          //Avatar image
-          span
-            img src="#{person.avatar}"
-          span  #{person.alias}
-          - if person.login_provider == "Steam" || @room.creator_id == session[:login_key] || session[:admin]
-            .dropdown id="userdropdown"
-              button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
-                span.caret
-              ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
-                - if person.login_provider == "Steam"
-                  li role="presentation"
-                    a href="steam://friends/add/#{person.login_key}" Add on Steam
-                - if @room.creator_id == session[:login_key] || session[:admin]
-                  li role="presentation"
-                    a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
-                  /form action='#{@room.url}/removeplayer/#{person.id}' method='post' style='display:inline;'
-                    /input id='remove_button' type='image' src="/img/cross.png //When clicking image, show/hide the report field. Linked to private.
-          - @amountofusers += 1
-          /The time that each player is available to play.
-          span id='time'  #{RoomUser.ready_until(person.id, @room.id)}
-          br
-
-      .checkin
-        - if session[:member]
-          a href="#" onclick="hidereport();"
-            img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
-
-        form action='/checkin' method='post'
-          p #{session[:alias]}
-          p Ready until:
-
-
-          - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
-            select name ='hour' id='hour'
-              - x = 0
-              - 24.times do
-                - y = "%02d" % x
-                option value="#{y}"  #{y}
-                - x += 1
-
-            select name ='minute' id='minute'
-              - x = 0
-              - 12.times do
-                - y = "%02d" % x
-                option value="#{y}"  #{y}
-                - x += 5
-
-            br
-            - if @room.size > @amountofusers
-              input type='submit' id='checkin_button'  value='Check in!'
-            - else
-              h1 Room is full!
-          input type="hidden" name="id" value="#{@room.id}"
-        form action='/checkout' method='post'
-          - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
-            input id='checkout_button' type='submit' value='Check out!'
-          input type="hidden" name="id" value="#{@room.id}"
+    .container id="roomtitle"
+      table#titletable
+        tbody
+          tr
+            td.room_name #{@room.name}
+          tr
+            td.room_size #{@users.length} / #{@room.size} Users
+    .container id="optionscontainer"
+      - if session[:member]
+        a href="#" onclick="hidereport();"
+          img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
         form action='/sendreport' method='post'
-          select name='reportname' id='reportname' style="visibility: hidden"
+          select name='reportname' id='reportname' style="display: none;"
             -for person in @users
               option value="#{person.alias}" Report #{person.alias}
-          input type="text" id='reportdescription' name='reportdescription' style="visibility: hidden; height:25px "
-          input type="submit" id="submit" style="visibility: hidden" value="Send report"
-        - if @room.creator_id == session[:login_key] || session[:admin]
-          form action='/change_audio/#{@room.id}' method='post'
-            select name='audio' id='audio'
-              option value="alertljud.mp3"  Default
-              option value="glass_ping.mp3"  Ping
-              option value="news.mp3"  News
-              option value="bell.mp3"  Bell
+          input type="text" id='reportdescription' name='reportdescription' style="display: none; height:25px "
+          input type="submit" id="submit" style="display: none;" value="Send report"
+      h3 #{session[:alias]}
+      - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
+        form action='/room/checkin/#{@room.url}' method='post' id="check_in"
+          table#check_in
+            tbody
+              tr
+                td Ready until:
+              tr
+                td
+                  select class="selectpicker" form="check_in" name='hour' id='hour'
+                    - x = 0
+                    - 24.times do
+                      - y = "%02d" % x
+                      option value="#{y}"  #{y}
+                      - x += 1
+                td
+                  select form="check_in" name ='minute' id='minute'
+                    - x = 0
+                    - 12.times do
+                      - y = "%02d" % x
+                      option value="#{y}"  #{y}
+                      - x += 5
+                  br
+              tr
+                td
+                  input type='submit' id='checkin_button' class="btn btn-primary btn-x page-scroll" form="check_in" value='Check in!'
+      - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
+        form action='/room/checkout/#{@room.url}' method='get' id="check_out"
+          table#check_out
+            thead
+              tr
+                td
+                  input type='submit' id='checkout_button' class="btn btn-primary btn-x page-scroll" form="check_out" value='Check out!'
+    .container id="roomcontainer"
+      table#members.display
+        thead
+          tr
+            th id="titles" Avatar
+            th id="titles" Name
+            th id="header_readyuntil" Ready Until
+            th id="titles"
+        tbody
+        - for person in @users
+          tr
+            td.avatar
+              img src="#{person.avatar}"
+            td.username #{person.alias}
+            td.ready_until #{(RoomUser.first(user_id: person.id, room_id: @room.id)).ready_until.strftime("%H:%M")}
+            td.options
+              .dropdown id="userdropdown"
+                button#dropdownMenu1.btn.btn-default.dropdown-toggle aria-expanded="true" data-toggle="dropdown" type="button"
+                  span.caret
+                ul.dropdown-menu aria-labelledby="dropdownMenu1" role="menu"
+                  - if person.login_provider == "Steam"
+                    li role="presentation"
+                      a href="steam://friends/add/#{person.login_key}" Add on Steam
+                  - elsif @room.creator_id == session[:login_key] || session[:admin]
+                    li role="presentation"
+                      a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
+                  - else
+                    li role="presentation"
+                      a No options available
+  p id="current" #{@users.length}
+  p id="roomsize" #{@room.size}
 
-            input type="submit" id="submit"
-          form action='/change_background/#{@room.id}' method='post'
-            select name='audio' id='audio'
-              option value="footer_lodyas.png"  Default
-              option value="triangular.png" Triangular
-              option value="escheresque_ste.png"  Escheresque
-
-            input type="submit" id="submit"
-
-
-
-
+script src="../js/private.js"
+script src="../js/list.js"

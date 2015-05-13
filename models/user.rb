@@ -84,26 +84,26 @@ class User
   def self.fetch_or_create(env, login_provider)
     case login_provider
       when 'steam'
-        user = User.first_or_create(name: env['info']['nickname'],
+        user = User.first_or_create({login_key: env['uid']},
+                                    {name: env['info']['nickname'],
                                     admin: FALSE,
                                     login_provider: 'Steam',
-                                    login_key: env['uid'],
                                     avatar: env['extra']['raw_info']['avatar'],
-                                    alias: env['info']['nickname'])
+                                    alias: env['info']['nickname']})
       when 'google'
-        user = User.first_or_create(name: env['info']['first_name'],
+        user = User.first_or_create({login_key: env['uid']},
+                                    {name: env['info']['first_name'],
                                     admin: FALSE,
                                     login_provider: 'Google',
-                                    login_key: env['uid'],
                                     avatar: '/img/google_logo.png',
-                                    alias: env['info']['first_name'])
+                                    alias: env['info']['first_name']})
       when 'facebook'
-        user = User.first_or_create(name: env['info']['first_name'],
+        user = User.first_or_create({login_key: env['extra']['raw_info']['id']},
+                                    {name: env['info']['first_name'],
                                     admin: FALSE,
                                     login_provider: 'Facebook',
-                                    login_key: env['extra']['raw_info']['id'],
                                     avatar: '/img/facebook_logo.png',
-                                    alias: env['info']['first_name'])
+                                    alias: env['info']['first_name']})
     end
     return user
   end

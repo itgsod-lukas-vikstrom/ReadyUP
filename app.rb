@@ -118,25 +118,12 @@
       slim :room
     end
 
-
-=begin
-    get '/create' do
-      @games = Game.all
-      @languages = ["Albanian","Arabic","Armenian","Bosnian","Bulgarian","Chinese","Croatian","Czech","Danish","Dutch","Estonian","English","Finnish","French","Georgian","German","Greek","Hindi","Hungarian","Icelandic","Indonesian","Irish","Italian","Japanese","Korean","Indonesian","Mandarin","Persian","Polish","Portuguese","Punjabi","Russian","Spanish","Swedish","Thai","Turkish","Ukrainan","Vietnamese"]
-      if session[:login_key] == nil
-        flash[:error] = "Please sign in before creating a room."
-        redirect '/'
-      else
-        slim :main
-      end
-    end
-=end
-
     post '/createroom' do
 
       redirect_url = Room.build(params, self)
       redirect redirect_url ||= back
     end
+
     get '/home' do
       @home = TRUE
       @games = Game.all
@@ -146,27 +133,22 @@
       slim :main
     end
 
-=begin
-    get '/browse' do
-      @rooms = Room.all
-      @user = User.first(login_key: session[:login_key])
-      slim :main
-    end
-=end
-
-    post '/checkin' do
+    post '/room/checkin/:url' do |url|
+      puts "JODPAWJDOWAPDADWD"
+      room = Room.first(url: url)
       $usersroom = session[:room]
-      redirect_url = RoomUser.checkin(params, self)
-      @room_user = RoomUser.first(room_id: params['id'], user_id: (User.first(login_key: session[:login_key])).id)
+
+      redirect_url = RoomUser.checkin(params, url, self)
+      @room_user = RoomUser.first(room_id: room.id, user_id: (User.first(login_key: session[:login_key])).id)
 =begin
       @room_user.timezone_offset
 =end
       redirect redirect_url ||= back
     end
 
-    post '/checkout' do
-      RoomUser.checkout(params,self)
-      redirect back
+    get '/room/checkout/:url' do |url|
+      RoomUser.checkout(url, self)
+      redirect redirect_url ||= back
     end
 
     post '/sendreport' do
@@ -272,7 +254,7 @@ def chat
             #count = %x{wc -l #{file}}.split.first.to_i
             file.write "\n"
             file.write "#{$id_to_name.fetch(mainchannel_id)}" + " | " + "#{$id_to_sessid.fetch(mainchannel_id)}" + " | " + "#{Time.now}" + " | " +"#{msg}"
-          end
+            end
           end
         }
 
