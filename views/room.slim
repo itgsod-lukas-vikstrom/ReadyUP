@@ -149,13 +149,13 @@ section#room.bg-primary
     .container id="optionscontainer"
       - if session[:member]
         a href="#" onclick="hidereport();"
-          img src="/img/flag.png" id="flag" style="cursor:pointer" Report abusive behavior
+          img src="/img/flag.png" id="flag" style="cursor:pointer" Report
         form action='/sendreport' method='post'
-          select name='reportname' id='reportname' style="display: none;"
+          select name='reportname' class="btn btn-default dropdown-toggle" id='reportname' style="display: none;"
             -for person in @users
               option value="#{person.alias}" Report #{person.alias}
           input type="text" id='reportdescription' name='reportdescription' style="display: none; height:25px "
-          input type="submit" id="submit" style="display: none;" value="Send report"
+          input type="submit" class='btn btn btn-primary btn-x page-scroll' id="submit" style="display: none;" value="Send report"
       h3 #{session[:alias]}
       - if session[:member] == true && !@user.in_room?(@room) && @room.size > @amountofusers
         form action='/room/checkin/#{@room.url}' method='post' id="check_in"
@@ -165,14 +165,14 @@ section#room.bg-primary
                 td Ready until:
               tr
                 td
-                  select class="selectpicker" form="check_in" name='hour' id='hour'
+                  select class="btn btn-default dropdown-toggle" form="check_in" name='hour' id='hour'
                     - x = 0
                     - 24.times do
                       - y = "%02d" % x
                       option value="#{y}"  #{y}
                       - x += 1
                 td
-                  select form="check_in" name ='minute' id='minute'
+                  select class="btn btn-default dropdown-toggle" form="check_in" name ='minute' id='minute'
                     - x = 0
                     - 12.times do
                       - y = "%02d" % x

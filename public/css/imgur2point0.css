@@ -24,6 +24,9 @@ body{
 #white{   /* Makes the filter out full/empty rooms white!  */
     color: white;
 }
+#game{
+
+}
 #game,#language{
     height: 30px;
     width: 200px;
@@ -49,12 +52,14 @@ body{
 }
 
 #hour,#minute{
-    width: 50px;
-    margin-left: 2px;
+
 }
 
 #time{
     float: right;
+}
+#reportname, #reportdescription{
+    margin-bottom: 10px;
 }
 .btn-toolbar{
     width: 400px;
