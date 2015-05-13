@@ -212,10 +212,10 @@ section#room.bg-primary
                   - if person.login_provider == "Steam"
                     li role="presentation"
                       a href="steam://friends/add/#{person.login_key}" Add on Steam
-                  - elsif @room.creator_id == session[:login_key] || session[:admin]
+                  - if @room.creator_id == session[:login_key] || session[:admin]
                     li role="presentation"
                       a href="#{@room.url}/removeplayer/#{person.id}" Remove from group
-                  - else
+                  - unless person.login_provider == "Steam" || @room.creator_id == session[:login_key] || session[:admin]
                     li role="presentation"
                       a No options available
   p id="current" #{@users.length}
