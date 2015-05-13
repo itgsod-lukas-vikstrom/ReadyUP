@@ -104,18 +104,15 @@ body background="/img/#{@room.background}"
 /            input type="submit" id="submit"
 
 section#room.bg-primary
-  .container
-    .row
-      .col-lg-8.col-lg-offset-2.text-center
-
-
-      .chatwindow
+  .container id="wrapper"
+    .container id="chatwrapper"
+      .container id="chatmessages"
         table#chat.table
           tbody
-
-      #chatcontrols
-        form.form-stacked name ="chat"
-          .form-actions
+      - if session[:member] == true && RoomUser.first(room_id: @room.id, user_id: (User.first(login_key: session[:login_key])).id) != nil
+        .container id="chatcontrol"
+          form.form-stacked name ="chat"
+            .form-actions
             - if session[:login_key] != nil && RoomUser.first(room_id: @room.id, user_id: User.first(login_key: session[:login_key]).id)
               .control-group
                 input#msg.input-xlarge placeholder=("Type something…") type="text" maxlength="37"
