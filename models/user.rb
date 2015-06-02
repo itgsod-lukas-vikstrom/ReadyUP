@@ -48,8 +48,8 @@ class User
     user = User.fetch_or_create(env, login_provider)
     if user.banned?
       app.session[:member] = nil
-      app.flash[:error] = "You are banned. Please contact administrators."
-      redirect_url = '/'
+      app.flash[:alert] = "You are banned. Please contact administrators."
+      redirect_url = '/home'
     elsif login_provider == 'steam'
       app.session[:name] = env['info']['nickname']
       app.session[:login_key] = env['uid']
